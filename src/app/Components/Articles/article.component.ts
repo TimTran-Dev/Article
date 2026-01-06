@@ -8,7 +8,7 @@ import { ContentStatus } from '../../Models/common.enum';
 
 @Component({
   selector: 'app-article',
-  templateUrl: './article.html',
+  templateUrl: './article.component.html',
   standalone: true,
   imports: [RouterModule, DropdownComponent],
 })

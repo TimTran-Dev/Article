@@ -6,7 +6,7 @@ import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-homepage',
-  templateUrl: './homepage.html',
+  templateUrl: './homepage.component.html',
   standalone: true,
   imports: [RouterModule],
   // styleUrls: ['./homepage.component.css']
