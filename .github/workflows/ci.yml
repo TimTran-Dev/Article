@@ -31,14 +31,3 @@ jobs:
       # Build Angular app
       - name: Build
         run: pnpm run build
-
-      # Run tests with coverage
-      - name: Test + Coverage
-        run: pnpm run coverage
-
-      # Upload coverage folder as artifact
-      - name: Upload coverage
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-report
-          path: coverage/

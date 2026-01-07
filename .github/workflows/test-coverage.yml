@@ -1,8 +1,6 @@
-name: Test and Coverage
+name: Test & Coverage
 
 on:
-  push:
-    branches: [main, develop]
   pull_request:
     branches: [main, develop]
 
@@ -11,29 +9,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v5
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v6
         with:
-          node-version: '20.x'
+          node-version: '20'
           cache: 'pnpm'
           cache-dependency-path: pnpm-lock.yaml
-
-      # ✅ Make sure pnpm is activated
-      - name: Enable PNPM
-        run: |
-          corepack enable
-          corepack prepare pnpm@latest --activate
 
       - name: Install dependencies
         run: pnpm install
 
-      - name: Run tests
-        run: pnpm run test:coverage
+      - name: Run Vitest + coverage
+        run: pnpm run coverage
 
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v4
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: true
+          name: coverage-report
+          path: coverage/
