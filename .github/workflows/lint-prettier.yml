@@ -7,7 +7,7 @@ on:
     branches: [main, develop]
 
 jobs:
-  lint-and-format:
+  lint-prettier:
     runs-on: ubuntu-latest
 
     steps:
@@ -18,9 +18,9 @@ jobs:
         with:
           node-version: '20.x'
           cache: 'pnpm'
-          check-latest: true
           cache-dependency-path: pnpm-lock.yaml
 
+      # ✅ Make sure pnpm is activated
       - name: Enable PNPM
         run: |
           corepack enable
