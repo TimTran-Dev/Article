@@ -9,16 +9,17 @@
     </nav>
     <h1>Featured Products</h1>
     @for (product of article(); track product.id) {
-      <tap-dropdown 
-      [options]="contentStatus"
-      [selectedValue]="product.contentStatusSignal()"
-      (selectionChange)="product.contentStatusSignal.set($event)">
+      <tap-dropdown
+        [options]="contentStatus"
+        [selectedValue]="product.contentStatusSignal()"
+        (selectionChange)="product.contentStatusSignal.set($event)"
+      >
       </tap-dropdown>
       <div>
         <h2>{{ product.content }}</h2>
         <p>{{ product.description }}</p>
       </div>
-      }
+    }
   </div>
 
   <router-outlet></router-outlet>
