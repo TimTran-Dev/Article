@@ -8,6 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "vitest",
     "coverage": "vitest run --coverage",
+    "test:coverage": "pnpm run coverage",
     "lint": "eslint 'src/**/*.{ts,html}'",
     "format:check": "prettier --check .",
     "lint:fix": "eslint 'src/**/*.{ts,html}' --fix",
