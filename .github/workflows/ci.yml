@@ -15,37 +15,34 @@ jobs:
         node-version: [20.x]
 
     steps:
-      # 1️⃣ Checkout repository
       - uses: actions/checkout@v3
 
-      # 2️⃣ Setup Node.js with cache
-      - name: Setup Node.js ${{ matrix.node-version }}
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
-          check-latest: true
           cache-dependency-path: pnpm-lock.yaml
 
-      # 3️⃣ Enable PNPM via Corepack (guarantees pnpm is in PATH)
+      # ✅ Activate pnpm
       - name: Enable PNPM
         run: |
           corepack enable
           corepack prepare pnpm@latest --activate
 
-      # 4️⃣ Install dependencies
+      # Install project dependencies
       - name: Install dependencies
         run: pnpm install
 
-      # 5️⃣ Build Angular project
+      # Build Angular app
       - name: Build Angular app
         run: pnpm run build
 
-      # 6️⃣ Run tests with coverage
-      - name: Run tests and coverage
+      # Run tests and coverage
+      - name: Run tests
         run: pnpm run test:coverage
 
-      # 7️⃣ Upload coverage to Codecov
+      # Upload coverage
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
         with:
