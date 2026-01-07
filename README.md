@@ -1,59 +1,82 @@
-# FrontEndApp
+# Front-End App
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.4.
+An Angular 21 front-end application using **pnpm**, **Vitest**, **ESLint**, **Prettier**, and **Husky**. This project enforces consistent code style, automated testing, code coverage, and version control.
 
-## Development server
+![CI](https://github.com/TimTran-Dev/Article/actions/workflows/build-and-test.yml/badge.svg)
+![Coverage](https://img.shields.io/badge/coverage-85%25-brightgreen)
 
-To start a local development server, run:
+---
 
-```bash
-ng serve
-```
+## Table of Contents:
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- [Project Setup](#project-setup)
+- [Available Scripts](#available-scripts)
+- [Branching & PR Guidelines](#branching--pr-guidelines)
+- [Versioning](#versioning)
+- [Code Quality](#code-quality)
+- [Testing](#testing)
+- [Security](#security)
+- [Contributing](#contributing)
 
-## Code scaffolding
+---
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Project Setup:
 
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+Clone the repository and install dependencies:
 
 ```bash
-ng build
+git clone <repo-url>
+cd front-end-app
+pnpm install
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+---
 
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+## Start development server:
 
 ```bash
-ng test
+pnpm start
 ```
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
+## Build the application:
 
 ```bash
-ng e2e
+pnpm build
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+## Watch for development changes:
 
-## Additional Resources
+```bash
+pnpm watch
+```
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+---
+
+## Branching & Pull Request Guidelines
+
+To maintain a consistent workflow and ensure proper versioning, please follow these branching and PR rules:
+
+### Branch Naming
+
+- **Feature branches**:
+
+Example: `feature/user-auth`
+
+- **Hotfix branches**:
+
+Example: `hotfix/login-bug`
+
+- **Protected branches**:
+- `main`
+- `feature/*`
+- `hotfix/*`
+
+### Pull Request Requirements
+
+1. PRs **must be created from a feature or hotfix branch**.
+2. Each PR **must include a version bump** in `version.json` (or `package.json` if applicable).  
+   Use the script:
+
+```bash
+pnpm increment-version {major|minor|patch}
+```

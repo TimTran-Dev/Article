@@ -1,0 +1,11 @@
+version: 2
+updates:
+  - package-ecosystem: 'npm'
+    directory: '/' # location of package.json
+    schedule:
+      interval: 'weekly'
+    commit-message:
+      prefix: 'chore(deps)'
+    ignore:
+      - dependency-name: 'pnpm'
+        versions: ['10.0.0']
