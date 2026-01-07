@@ -2,7 +2,7 @@
 
 An Angular 21 front-end application using **pnpm**, **Vitest**, **ESLint**, **Prettier**, and **Husky**. This project enforces consistent code style, automated testing, code coverage, and version control.
 
-![CI](https://github.com/TimTran-Dev/Article/actions/workflows/build-and-test.yml/badge.svg)
+[![Build and Test](https://github.com/TimTran-Dev/Article/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/TimTran-Dev/Article/actions/workflows/ci.yml)
 ![Coverage](https://img.shields.io/badge/coverage-85%25-brightgreen)
 
 ---
