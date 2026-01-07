@@ -1,4 +1,4 @@
-name: CI
+name: Lint and Prettier
 
 on:
   push:
@@ -7,13 +7,8 @@ on:
     branches: [main, develop]
 
 jobs:
-  # 1️⃣ Build job (optional, ensures Angular compiles)
-  build:
+  lint-and-format:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [20.x]
 
     steps:
       - uses: actions/checkout@v3
@@ -21,7 +16,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: '20.x'
           cache: 'pnpm'
           check-latest: true
           cache-dependency-path: pnpm-lock.yaml
@@ -34,5 +29,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Run Angular build
-        run: pnpm run build
+      - name: Run Prettier
+        run: pnpm prettier --write .
+
+      - name: Run lint
+        run: pnpm run lint
