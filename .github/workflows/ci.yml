@@ -11,8 +11,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1️⃣ Checkout repo
       - uses: actions/checkout@v3
 
+      # 2️⃣ Setup Node
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
@@ -20,21 +22,25 @@ jobs:
           cache: 'pnpm'
           cache-dependency-path: pnpm-lock.yaml
 
-      # ✅ Corepack ensures pnpm exists
+      # 3️⃣ Enable pnpm
       - name: Enable PNPM
         run: |
           corepack enable
           corepack prepare pnpm@latest --activate
 
+      # 4️⃣ Install dependencies
       - name: Install dependencies
         run: pnpm install
 
+      # 5️⃣ Build Angular app
       - name: Build Angular app
         run: pnpm run build
 
-      - name: Run tests
+      # 6️⃣ Run tests with coverage
+      - name: Run tests & coverage
         run: pnpm run test:coverage
 
+      # 7️⃣ Upload coverage
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
         with:
