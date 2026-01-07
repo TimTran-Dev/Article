@@ -15,7 +15,7 @@ jobs:
           echo "Checking branch name: $BRANCH_NAME"
 
           # Allow feature/* and hotfix/*
-          if [[ ! "$BRANCH_NAME" =~ ^(feature|hotfix)/[a-z0-9_-]+$ ]]; then
+          if [[ ! "$BRANCH_NAME" =~ ^(feature|hotfix)/[A-Za-z0-9_-]+$ ]]; then
             echo "❌ Branch name does not follow naming convention."
             echo "Allowed patterns: feature/{name}, hotfix/{name}"
             exit 1
