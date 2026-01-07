@@ -16,8 +16,6 @@ jobs:
 
       # 2️⃣ Install pnpm globally using the official action
       - uses: pnpm/action-setup@v4
-        with:
-          version: 10
 
       # 3️⃣ Setup Node.js (with pnpm cache)
       - uses: actions/setup-node@v6
