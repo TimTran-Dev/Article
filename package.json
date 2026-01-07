@@ -9,9 +9,10 @@
     "test": "vitest",
     "coverage": "vitest run --coverage",
     "test:coverage": "pnpm run coverage",
-    "lint": "eslint 'src/**/*.{ts,html}'",
+    "lint": "eslint \"src/**/*.{ts,html}\"",
     "format:check": "prettier --check .",
     "lint:fix": "eslint 'src/**/*.{ts,html}' --fix",
+    "prettier:write": "prettier --write \"src/**/*.{ts,html,json,css,scss}\"",
     "format": "prettier --write .",
     "increment-version": "pnpm dlx ts-node --project tsconfig.scripts.json scripts/bump-version.ts"
   },

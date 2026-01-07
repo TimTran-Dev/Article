@@ -11,34 +11,34 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout repository
+      # Checkout repo
       - uses: actions/checkout@v5
 
-      # 2️⃣ Install pnpm globally using the official action
+      # Install pnpm from package.json
       - uses: pnpm/action-setup@v4
 
-      # 3️⃣ Setup Node.js (with pnpm cache)
+      # Setup Node.js
       - uses: actions/setup-node@v6
         with:
           node-version: '20'
           cache: 'pnpm'
           cache-dependency-path: pnpm-lock.yaml
 
-      # 4️⃣ Install project dependencies
+      # Install dependencies
       - name: Install dependencies
         run: pnpm install
 
-      # 5️⃣ Build Angular application
-      - name: Build Angular app
+      # Build Angular app
+      - name: Build
         run: pnpm run build
 
-      # 6️⃣ Run tests with coverage
-      - name: Run tests & coverage
-        run: pnpm run test:coverage
+      # Run tests with coverage
+      - name: Test + Coverage
+        run: pnpm run coverage
 
-      # 7️⃣ Upload coverage to Codecov
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
+      # Upload coverage folder as artifact
+      - name: Upload coverage
+        uses: actions/upload-artifact@v3
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: true
+          name: coverage-report
+          path: coverage/
