@@ -1,15 +1,46 @@
-- name: Check for version bump
-  run: |
-    echo "🔍 Checking for version bump in PR..."
+name: Check Version Bump & Branch Name
 
-    # Ensure we have the main branch locally for comparison
-    git fetch origin main
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+      - hotfix/*
 
-    # Check if version.json was modified in the PR
-    if ! git diff --name-only origin/main...HEAD | grep -q "version.json"; then
-      echo "❌ PR must include a version bump in version.json"
-      exit 1
-    else
-      echo "✅ Version bump found"
-    fi
-  shell: bash
+jobs:
+  validate-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0 # Ensure full git history for diff
+
+      - name: Validate branch name and version bump
+        run: |
+          echo "🔍 Validating branch name and version bump..."
+
+          # Get current branch name (use GITHUB_HEAD_REF for PRs)
+          BRANCH_NAME="${GITHUB_HEAD_REF:-$(git rev-parse --abbrev-ref HEAD)}"
+          echo "Checking branch name: $BRANCH_NAME"
+
+          # Branch name must start with feature/ or hotfix/ and be lowercase with numbers, _ or -
+          if [[ ! "$BRANCH_NAME" =~ ^(feature|hotfix)/[a-z0-9_-]+$ ]]; then
+            echo "❌ Branch name does not follow naming convention."
+            echo "Allowed patterns: feature/{name}, hotfix/{name}"
+            exit 1
+          else
+            echo "✅ Branch name is valid"
+          fi
+
+          # Ensure main branch exists locally for diff
+          git fetch origin main
+
+          # Check if version.json was modified in the PR
+          if ! git diff --name-only origin/main...HEAD | grep -q "version.json"; then
+            echo "❌ PR must include a version bump in version.json"
+            exit 1
+          else
+            echo "✅ Version bump found"
+          fi
+        shell: bash
