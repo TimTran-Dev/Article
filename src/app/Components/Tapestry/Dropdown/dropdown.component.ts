@@ -3,9 +3,23 @@ import { Component, EventEmitter, input, Output, signal } from '@angular/core';
 
 @Component({
   selector: 'tap-dropdown',
-  templateUrl: './dropdown.component.html',
+  template: `
+    <div>
+      <button (click)="toggleDropdown()">
+        {{ selectedValue() || 'Select an option' }}
+      </button>
+      @if (isOpen()) {
+        <ul>
+          @for (option of options(); track option) {
+            <li>
+              <button (click)="selectOption(option)">{{ option }}</button>
+            </li>
+          }
+        </ul>
+      }
+    </div>
+  `,
   imports: [CommonModule],
-  //   styleUrls: ['./dropdown.component.css'],
   standalone: true,
 })
 export class DropdownComponent<T extends string | number = string> {

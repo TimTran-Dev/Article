@@ -6,10 +6,37 @@ import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-homepage',
-  templateUrl: './homepage.component.html',
+  template: `
+    @if (isLoading()) {
+      <p>Loading...</p>
+    }
+    @if (!isLoading()) {
+      <div>
+        <nav><a routerLink="/">Home</a> | <a routerLink="/articles">Articles</a></nav>
+        <h1>Featured Products</h1>
+        @for (product of featuredProducts(); track product.id) {
+          <ul></ul>
+          <h2>{{ product.contentType }}</h2>
+          @if (
+            product.contentType === 'Article' && product.content && 'author' in product.content
+          ) {
+            <ul>
+              <li>
+                {{ product.description }}
+              </li>
+              <li>
+                {{ product.content.author }}
+              </li>
+            </ul>
+          }
+        }
+      </div>
+
+      <router-outlet></router-outlet>
+    }
+  `,
   standalone: true,
   imports: [RouterModule],
-  // styleUrls: ['./homepage.component.css']
 })
 export class HomePageComponent implements OnInit, OnDestroy {
   featuredProducts = signal<Content[]>([]);

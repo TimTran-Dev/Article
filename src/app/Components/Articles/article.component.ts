@@ -8,7 +8,31 @@ import { ContentStatus } from '../../Models/common.enum';
 
 @Component({
   selector: 'app-article',
-  templateUrl: './article.component.html',
+  template: `
+    @if (isLoading()) {
+      <p>Loading...</p>
+    }
+    @if (!isLoading()) {
+      <div>
+        <nav><a routerLink="/">Home</a> | <a routerLink="/articles">Articles</a></nav>
+        <h1>Featured Products</h1>
+        @for (product of article(); track product.id) {
+          <tap-dropdown
+            [options]="contentStatus"
+            [selectedValue]="product.contentStatusSignal()"
+            (selectionChange)="product.contentStatusSignal.set($event)"
+          >
+          </tap-dropdown>
+          <div>
+            <h2>{{ product.content }}</h2>
+            <p>{{ product.description }}</p>
+          </div>
+        }
+      </div>
+
+      <router-outlet></router-outlet>
+    }
+  `,
   standalone: true,
   imports: [RouterModule, DropdownComponent],
 })
