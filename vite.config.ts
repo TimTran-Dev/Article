@@ -12,6 +12,7 @@ export default defineConfig({
     coverage: {
       enabled: true,
       reporter: ['html', 'lcov', 'text'],
+      provider: 'v8',
     },
     // Use the Vitest UI for interactive testing (requires @vitest/ui package)
     ui: false,
