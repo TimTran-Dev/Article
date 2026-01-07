@@ -6,6 +6,7 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['src/test-setup.ts'],
     include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+    exclude: ['node_modules', 'dist', 'coverage', '**/mocks/**', '**/*.mock.ts'],
     // Configure reporters
     reporters: ['default'],
     // Enable code coverage with the --coverage flag
