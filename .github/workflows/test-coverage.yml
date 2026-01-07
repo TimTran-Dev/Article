@@ -1,33 +1,32 @@
-name: Build and Test
+name: Test & Coverage
 
 on:
-  push:
-    branches: [main, develop]
   pull_request:
     branches: [main, develop]
 
 jobs:
-  build-and-test:
+  test-coverage:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout repo
       - uses: actions/checkout@v5
 
-      # Install pnpm from package.json
       - uses: pnpm/action-setup@v4
 
-      # Setup Node.js
       - uses: actions/setup-node@v6
         with:
           node-version: '20'
           cache: 'pnpm'
           cache-dependency-path: pnpm-lock.yaml
 
-      # Install dependencies
       - name: Install dependencies
         run: pnpm install
 
-      # Build Angular app
-      - name: Build
-        run: pnpm run build
+      - name: Run Vitest + coverage
+        run: pnpm run coverage
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/

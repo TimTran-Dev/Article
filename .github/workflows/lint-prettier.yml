@@ -1,33 +1,27 @@
-name: Build and Test
+name: Lint & Prettier
 
 on:
-  push:
-    branches: [main, develop]
   pull_request:
     branches: [main, develop]
 
 jobs:
-  build-and-test:
+  lint-prettier:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout repo
       - uses: actions/checkout@v5
-
-      # Install pnpm from package.json
       - uses: pnpm/action-setup@v4
-
-      # Setup Node.js
       - uses: actions/setup-node@v6
         with:
           node-version: '20'
           cache: 'pnpm'
           cache-dependency-path: pnpm-lock.yaml
 
-      # Install dependencies
       - name: Install dependencies
         run: pnpm install
 
-      # Build Angular app
-      - name: Build
-        run: pnpm run build
+      - name: Run Lint
+        run: pnpm run lint
+
+      - name: Run Prettier
+        run: pnpm run prettier:write

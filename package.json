@@ -1,6 +1,6 @@
 {
   "name": "front-end-app",
-  "version": "0.0.0",
+  "version": "1.1.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -8,10 +8,13 @@
     "watch": "ng build --watch --configuration development",
     "test": "vitest",
     "coverage": "vitest run --coverage",
-    "lint": "eslint 'src/**/*.{ts,html}'",
+    "test:coverage": "pnpm run coverage",
+    "lint": "eslint \"src/**/*.{ts,html}\"",
     "format:check": "prettier --check .",
     "lint:fix": "eslint 'src/**/*.{ts,html}' --fix",
-    "format": "prettier --write ."
+    "prettier:write": "prettier --write \"src/**/*.{ts,html,json,css,scss}\"",
+    "format": "prettier --write .",
+    "increment-version": "pnpm dlx ts-node --project tsconfig.scripts.json scripts/bump-version.ts"
   },
   "prettier": {
     "printWidth": 100,
@@ -26,7 +29,7 @@
     ]
   },
   "private": true,
-  "packageManager": "pnpm@9.0.0",
+  "packageManager": "pnpm@10.0.0",
   "dependencies": {
     "@angular/common": "^21.0.0",
     "@angular/compiler": "^21.0.0",
@@ -48,6 +51,7 @@
     "@angular/build": "^21.0.4",
     "@angular/cli": "^21.0.4",
     "@angular/compiler-cli": "^21.0.0",
+    "@types/node": "^25.0.3",
     "@typescript-eslint/eslint-plugin": "^8.52.0",
     "@typescript-eslint/parser": "^8.52.0",
     "@vitest/coverage-v8": "4.0.16",
