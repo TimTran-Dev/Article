@@ -18,8 +18,11 @@
     "increment-version": "pnpm dlx ts-node --project tsconfig.scripts.json scripts/bump-version.ts"
   },
   "lint-staged": {
-    "src/**/*.{ts,html,scss,json,css}": [
+    "src/**/*.{ts}": [
       "pnpm lint",
+      "git add"
+    ],
+    "src/**/*.{ts,html,scss,json,css,md,yml,yaml}": [
       "pnpm prettier:write",
       "git add"
     ]
