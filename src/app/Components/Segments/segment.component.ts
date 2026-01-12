@@ -1,19 +1,18 @@
 import { Component, inject, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
-import { Content } from '../../Models/content.interface';
-import { map, Subject, takeUntil } from 'rxjs';
-import { ProductsService } from '../../Services/products.service';
-import { RouterModule } from '@angular/router';
 import { DropdownComponent } from '../Tapestry/Dropdown/dropdown.component';
-import { ContentStatus } from '../../Models/common.enum';
+import { RouterModule } from '@angular/router';
 import { LoadingComponent } from '../Tapestry/Loading/loading.component';
+import { ContentStatus } from '../../Models/common.enum';
+import { Content } from '../../Models/content.interface';
+import { ProductsService } from '../../Services/products.service';
+import { map, Subject, takeUntil } from 'rxjs';
 
 @Component({
-  selector: 'app-article',
-  template: `
-    <!-- article.component.html -->
+  selector: 'app-segment',
+  template: ` <!-- segment.component.html -->
 
     @if (isLoading()) {
-      <tap-loading loadingText="Loading articles..."></tap-loading>
+      <tap-loading loadingText="Loading segments..."></tap-loading>
     }
 
     @if (!isLoading()) {
@@ -64,7 +63,7 @@ import { LoadingComponent } from '../Tapestry/Loading/loading.component';
                 <button
                   class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
                 >
-                  New Article
+                  New Segments
                 </button>
               </div>
             </div>
@@ -75,8 +74,8 @@ import { LoadingComponent } from '../Tapestry/Loading/loading.component';
         <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <!-- Header Section -->
           <div class="mb-8">
-            <h1 class="text-4xl font-bold text-gray-900 mb-2">Articles</h1>
-            <p class="text-gray-600 text-lg">Manage and review your article content</p>
+            <h1 class="text-4xl font-bold text-gray-900 mb-2">Segments</h1>
+            <p class="text-gray-600 text-lg">Manage and review your segment content</p>
           </div>
 
           <!-- Filter/Actions Bar -->
@@ -106,38 +105,38 @@ import { LoadingComponent } from '../Tapestry/Loading/loading.component';
                 Published
               </button>
             </div>
-            <span class="text-sm text-gray-500">{{ article().length }} articles</span>
+            <span class="text-sm text-gray-500">{{ segment().length }} segments</span>
           </div>
 
-          <!-- Articles List -->
+          <!-- Segment List -->
           <div class="space-y-4">
-            @for (product of article(); track product.id) {
-              @if ('author' in product.content) {
+            @for (product of segment(); track product.id) {
+              @if ('name' in product.content) {
                 <article
                   class="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow"
                 >
                   <div class="p-6">
-                    <!-- Article Header -->
+                    <!-- Segment Header -->
                     <div class="flex items-start justify-between mb-4">
                       <div class="flex-1">
                         <div class="flex items-center space-x-3 mb-2">
                           <span
                             class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
                           >
-                            Article
+                            Segment
                           </span>
                           <span class="text-xs text-gray-500">ID: {{ product.id }}</span>
                         </div>
                         <h2 class="text-2xl font-bold text-gray-900 mb-2">
-                          {{ product.content.title }}
+                          {{ product.content.name }}
                         </h2>
                         <div class="flex items-center space-x-2 text-sm text-gray-600">
                           <div
-                            class="flex items-center justify-center w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 text-white text-xs font-medium"
+                            class="flex items-center justify-center w-6 h-6 rounded-full bg-linear-to-br from-blue-500 to-blue-600 text-white text-xs font-medium"
                           >
-                            {{ product.content.author.charAt(0).toUpperCase() }}
+                            {{ product.content.host.charAt(0).toUpperCase() }}
                           </div>
-                          <span>{{ product.content.author }}</span>
+                          <span>{{ product.content.host }}</span>
                         </div>
                       </div>
 
@@ -151,24 +150,24 @@ import { LoadingComponent } from '../Tapestry/Loading/loading.component';
                       </div>
                     </div>
 
-                    <!-- Article Description -->
+                    <!-- Segment Description -->
                     <p class="text-gray-700 mb-4 leading-relaxed">
                       {{ product.description }}
                     </p>
 
-                    <!-- Article Preview/Body (truncated) -->
-                    @if (product.content.body) {
+                    <!-- Segment Preview/Body (truncated) -->
+                    <!-- @if (product.content.body) {
                       <div class="mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
                         <p class="text-sm text-gray-600 line-clamp-3">
                           {{ product.content.body }}
                         </p>
                       </div>
-                    }
+                    } -->
 
-                    <!-- Article Footer -->
+                    <!-- Segment Footer -->
                     <div class="flex items-center justify-between pt-4 border-t border-gray-200">
                       <div class="flex items-center space-x-4">
-                        @if (product.content.imageUrl) {
+                        <!-- @if (product.content.imageUrl) {
                           <div class="flex items-center space-x-2 text-sm text-gray-500">
                             <svg
                               class="w-4 h-4"
@@ -185,7 +184,7 @@ import { LoadingComponent } from '../Tapestry/Loading/loading.component';
                             </svg>
                             <span>Has image</span>
                           </div>
-                        }
+                        } -->
                         @if (product.ownerId) {
                           <span class="text-sm text-gray-500">Owner ID: {{ product.ownerId }}</span>
                         }
@@ -200,7 +199,7 @@ import { LoadingComponent } from '../Tapestry/Loading/loading.component';
                         <button
                           class="px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors"
                         >
-                          View Full Article →
+                          View Full Segment →
                         </button>
                       </div>
                     </div>
@@ -211,7 +210,7 @@ import { LoadingComponent } from '../Tapestry/Loading/loading.component';
           </div>
 
           <!-- Empty State -->
-          @if (article().length === 0) {
+          @if (segment().length === 0) {
             <div class="text-center py-12 bg-white rounded-lg shadow-sm border border-gray-200">
               <div
                 class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-100 mb-4"
@@ -230,12 +229,12 @@ import { LoadingComponent } from '../Tapestry/Loading/loading.component';
                   ></path>
                 </svg>
               </div>
-              <h3 class="text-lg font-medium text-gray-900 mb-2">No articles yet</h3>
-              <p class="text-gray-500 mb-6">Start by creating your first article.</p>
+              <h3 class="text-lg font-medium text-gray-900 mb-2">No segments yet</h3>
+              <p class="text-gray-500 mb-6">Start by creating your first segment.</p>
               <button
                 class="px-6 py-3 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
               >
-                Create Article
+                Create Segment
               </button>
             </div>
           }
@@ -244,13 +243,12 @@ import { LoadingComponent } from '../Tapestry/Loading/loading.component';
         <!-- Router Outlet for Child Routes -->
         <router-outlet></router-outlet>
       </div>
-    }
-  `,
+    }`,
   standalone: true,
   imports: [RouterModule, DropdownComponent, LoadingComponent],
 })
-export class ArticleComponent implements OnInit, OnDestroy {
-  article = signal<(Content & { contentStatusSignal: WritableSignal<ContentStatus> })[]>([]);
+export class SegmentComponent implements OnInit, OnDestroy {
+  segment = signal<(Content & { contentStatusSignal: WritableSignal<ContentStatus> })[]>([]);
   isLoading = signal(false);
   contentStatus: ContentStatus[] = Object.values(ContentStatus);
 
@@ -259,34 +257,33 @@ export class ArticleComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   ngOnInit(): void {
-    // Initialization logic here
-    this.initializeArticles();
+    this.initializeSegments();
   }
 
   onStatusChange(newStatus: string): void {
     console.log('Status changed:', newStatus);
   }
 
-  private initializeArticles(): void {
+  private initializeSegments(): void {
     this.isLoading.set(true);
 
     this.productService
       .getFeaturedProducts()
       .pipe(
         takeUntil(this.destroy$),
-        map((items) => items.filter((item) => item.contentType === 'Article')),
+        map((items) => items.filter((item) => item.contentType === 'Segment')),
       )
       .subscribe({
-        next: (articleItems) => {
-          const reactiveArticles = articleItems.map((content) => ({
+        next: (segmentItems) => {
+          const reactiveSegments = segmentItems.map((content) => ({
             ...content,
             contentStatusSignal: signal(content.contentStatus),
           }));
-          this.article.set(reactiveArticles);
+          this.segment.set(reactiveSegments);
           this.isLoading.set(false);
         },
         error: (error) => {
-          console.error('Error fetching articles:', error);
+          console.log('Error fetching segments:', error);
           this.isLoading.set(false);
         },
       });
