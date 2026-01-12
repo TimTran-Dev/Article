@@ -1,22 +1,22 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ArticleComponent } from './article.component';
 import { ProductsService } from '../../Services/products.service';
+import { SegmentComponent } from './segment.component';
 import { provideRouter } from '@angular/router';
 import { mockProductsService } from '../../Mocks/product.service.mock';
 import { throwError } from 'rxjs';
 import { vi } from 'vitest';
 
-describe('Article Component', () => {
-  let fixture: ComponentFixture<ArticleComponent>;
-  let component: ArticleComponent;
+describe('Segment Component', () => {
+  let fixture: ComponentFixture<SegmentComponent>;
+  let component: SegmentComponent;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ArticleComponent],
+      imports: [SegmentComponent],
       providers: [{ provide: ProductsService, useValue: mockProductsService }, provideRouter([])],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ArticleComponent);
+    fixture = TestBed.createComponent(SegmentComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -29,12 +29,12 @@ describe('Article Component', () => {
     expect(component.isLoading()).toBeFalsy();
   });
 
-  it('should load articles on initialization', () => {
-    expect(component.article().length).toBeGreaterThan(0);
-    expect(component.article()[0].contentType).toBe('Article');
+  it('should load segments on initialization', () => {
+    expect(component.segment().length).toBeGreaterThan(0);
+    expect(component.segment()[0].contentType).toBe('Segment');
   });
 
-  it('should handle error during article loading', () => {
+  it('should handle error during segment loading', () => {
     const productService = TestBed.inject(ProductsService);
     vi.spyOn(productService, 'getFeaturedProducts').mockReturnValue(
       throwError(() => new Error('Service error')),

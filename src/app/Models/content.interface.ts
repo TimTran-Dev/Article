@@ -22,12 +22,15 @@ export interface Segment {
   id: number;
   ownerId?: number;
   name: string;
+  host: string;
   contents: Content[];
 }
 
 export interface Episode {
   id: number;
   ownerId?: number;
+  host: string;
+  airDate: Date;
   title: string;
   segments: Segment[];
 }
