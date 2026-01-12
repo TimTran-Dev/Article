@@ -1,4 +1,4 @@
-name: Check Version Bump & Branch Name
+name: Check Version Bump
 
 on:
   pull_request:
@@ -23,15 +23,6 @@ jobs:
           # Get current branch name (use GITHUB_HEAD_REF for PRs)
           BRANCH_NAME="${GITHUB_HEAD_REF:-$(git rev-parse --abbrev-ref HEAD)}"
           echo "Checking branch name: $BRANCH_NAME"
-
-          # Branch name must start with feature/ or hotfix/ and be lowercase with numbers, _ or -
-          if [[ ! "$BRANCH_NAME" =~ ^(feature|hotfix)/[a-z0-9_-]+$ ]]; then
-            echo "❌ Branch name does not follow naming convention."
-            echo "Allowed patterns: feature/{name}, hotfix/{name}"
-            exit 1
-          else
-            echo "✅ Branch name is valid"
-          fi
 
           # Ensure main branch exists locally for diff
           git fetch origin main
