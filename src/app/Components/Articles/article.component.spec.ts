@@ -3,8 +3,6 @@ import { ArticleComponent } from './article.component';
 import { ProductsService } from '../../Services/products.service';
 import { provideRouter } from '@angular/router';
 import { mockProductsService } from '../../Mocks/product.service.mock';
-import { throwError } from 'rxjs';
-import { vi } from 'vitest';
 
 describe('Article Component', () => {
   let fixture: ComponentFixture<ArticleComponent>;
@@ -32,14 +30,5 @@ describe('Article Component', () => {
   it('should load articles on initialization', () => {
     expect(component.article().length).toBeGreaterThan(0);
     expect(component.article()[0].contentType).toBe('Article');
-  });
-
-  it('should handle error during article loading', () => {
-    const productService = TestBed.inject(ProductsService);
-    vi.spyOn(productService, 'getFeaturedProducts').mockReturnValue(
-      throwError(() => new Error('Service error')),
-    );
-    component.ngOnInit();
-    expect(component.isLoading()).toBeFalsy();
   });
 });

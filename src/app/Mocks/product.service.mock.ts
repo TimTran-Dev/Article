@@ -10,4 +10,10 @@ export const mockProductsService = {
     ...content,
     contentStatus: status,
   }),
+  getArticles: (page: number, pageSize: number, searchTerm: string) => {
+    return of({
+      items: mockContent, // Returns your full mock array regardless of params
+      totalCount: mockContent.length,
+    });
+  },
 };
