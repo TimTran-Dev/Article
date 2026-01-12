@@ -6,6 +6,7 @@ export const mockDraftContent: Content = {
   id: 1,
   contentType: 'Article',
   ownerId: 0,
+  url: 'test-url',
   content: {
     id: 1,
     ownerId: 0,
@@ -13,6 +14,9 @@ export const mockDraftContent: Content = {
     author: 'Sample Author',
     body: 'Sample Body',
     imageUrl: 'sample-url',
+    content: 'test-content',
+    sourceId: 'test-id',
+    sourceName: 'test-name',
   },
   description: 'Sample Description',
   contentStatus: ContentStatus.Draft,
@@ -23,6 +27,7 @@ export const mockProducts: Content[] = [
     id: 1,
     contentType: 'Article',
     ownerId: 0,
+    url: 'test-url',
     content: {
       id: 1,
       ownerId: 0,
@@ -30,6 +35,9 @@ export const mockProducts: Content[] = [
       author: 'Featured Author',
       body: 'Featured Body',
       imageUrl: 'featured-url',
+      content: 'test-content',
+      sourceId: 'test-id',
+      sourceName: 'test-name',
     },
     description: 'Featured Article Description',
     contentStatus: ContentStatus.Published,
@@ -41,6 +49,7 @@ export const mockContent: Content[] = [
     id: 1,
     contentType: 'Article',
     description: 'Test Article',
+    url: 'test-url',
     content: {
       id: 1,
       ownerId: 1,
@@ -55,6 +64,7 @@ export const mockContent: Content[] = [
     id: 2,
     contentType: 'Segment',
     description: 'Test Segment',
+    url: 'test-url',
     content: {
       id: 2,
       ownerId: 2,
@@ -68,6 +78,7 @@ export const mockContent: Content[] = [
     id: 3,
     contentType: 'Episode',
     description: 'Test Episode',
+    url: 'test-url',
     content: {
       id: 3,
       ownerId: 3,

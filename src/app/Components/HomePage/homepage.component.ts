@@ -114,10 +114,10 @@ import { LoadingComponent } from '../Tapestry/Loading/loading.component';
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @for (product of featuredProducts(); track product.id) {
               <article
-                class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow cursor-pointer"
+                class="flex flex-col h-full bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow cursor-pointer"
               >
                 <!-- Content Type Badge -->
-                <div class="p-4 pb-3">
+                <div class="p-4 pb-3 flex-grow">
                   <div class="flex items-center justify-between mb-3">
                     <span
                       class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium
@@ -167,7 +167,6 @@ import { LoadingComponent } from '../Tapestry/Loading/loading.component';
                         <p class="text-sm font-medium text-gray-900">
                           {{ product.content.author }}
                         </p>
-                        <p class="text-xs text-gray-500">Author</p>
                       </div>
                     </div>
                   }
@@ -218,14 +217,15 @@ import { LoadingComponent } from '../Tapestry/Loading/loading.component';
                 </div>
 
                 <!-- Card Footer -->
-                <div class="px-4 py-3 bg-gray-50 border-t border-gray-100">
-                  <div class="flex items-center justify-between">
-                    <span class="text-xs text-gray-500"> ID: {{ product.id }} </span>
-                    <button
-                      class="text-sm text-blue-600 hover:text-blue-700 font-medium transition-colors"
+                <div class="px-4 py-3 bg-gray-50 border-t border-gray-100 mt-auto">
+                  <div class="flex items-center justify-end">
+                    <a
+                      class="px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors"
+                      [href]="product.url"
+                      target="_blank"
                     >
-                      View Details →
-                    </button>
+                      View Full Article →
+                    </a>
                   </div>
                 </div>
               </article>

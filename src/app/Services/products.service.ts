@@ -1,71 +1,77 @@
-import { Injectable } from '@angular/core';
-import { Content } from '../Models/content.interface';
-import { delay, Observable, of } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, map } from 'rxjs';
+import { Content, Article } from '../Models/content.interface';
 import { ContentStatus } from '../Models/common.enum';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductsService {
-  constructor() {}
+  private readonly http = inject(HttpClient);
+  private readonly baseUrl = environment.apiUrl;
+
+  /**
+   * Fetches paginated articles and maps them to the Content interface.
+   * Includes the total count from the custom backend header.
+   */
+  public getArticles(
+    page: number,
+    pageSize: number,
+    searchTerm: string,
+  ): Observable<{ items: Content[]; totalCount: number }> {
+    const params = { page: page.toString(), pageSize: pageSize.toString(), searchTerm };
+
+    return this.http.get<any[]>(`${this.baseUrl}/news`, { params, observe: 'response' }).pipe(
+      map((response) => {
+        // Read the custom header we exposed in ASP.NET Core
+        const totalCount = Number(response.headers.get('X-Total-Count') || 0);
+
+        const items: Content[] = (response.body || []).map((apiItem) => ({
+          id: apiItem.id,
+          contentType: 'Article',
+          description: apiItem.description || 'No description provided.',
+          contentStatus: ContentStatus.Published,
+          url: apiItem.url,
+          content: {
+            id: apiItem.id,
+            title: apiItem.title,
+            author: apiItem.author || 'News Source',
+            body: apiItem.description,
+            imageUrl: apiItem.urlToImage,
+            content: apiItem.content,
+            sourceId: apiItem.sourceId,
+            sourceName: apiItem.sourceName,
+          } as Article,
+        }));
+
+        return { items, totalCount };
+      }),
+    );
+  }
+
+  // Keep your existing getFeaturedProducts if needed for the Home page
   public getFeaturedProducts(): Observable<Content[]> {
-    // Simulate an API call with a Promise
-    const products: Content[] = [
-      {
-        id: 1,
-        contentType: 'Article',
-        ownerId: 10,
-        content: {
-          id: 1,
-          ownerId: 10,
-          title: 'Understanding Angular Services',
-          author: 'John Doe',
-          body: 'This article explains how Angular services work.',
-          imageUrl: 'https://via.placeholder.com/150',
-        },
-        description: 'Article about Angular Services',
-        contentStatus: ContentStatus.Published,
-      },
-      {
-        id: 2,
-        contentType: 'Segment',
-        ownerId: 11,
-        content: {
-          id: 1,
-          ownerId: 11,
-          name: 'TypeScript Basics',
-          host: 'John Doe',
-          contents: [],
-        },
-        description: 'Segment on TypeScript Basics',
-        contentStatus: ContentStatus.Review,
-      },
-      {
-        id: 3,
-        contentType: 'Episode',
-        ownerId: 12,
-        content: {
-          id: 1,
-          ownerId: 12,
-          title: 'Getting Started with Angular',
-          host: 'John Doe',
-          airDate: new Date(),
-          segments: [],
-        },
-        description: 'Episode on Angular Components',
-        contentStatus: ContentStatus.Draft,
-      },
-    ];
-    return of(products).pipe(delay(2000)); // Simulate 2 seconds delay
+    return this.http
+      .get<any[]>(`${this.baseUrl}/news`)
+      .pipe(map((apiArticles) => apiArticles.map(this.mapToContent)));
   }
 
-  public assignOwnerToProduct(content: Content, ownerId: number): Content {
-    content.ownerId = ownerId;
-    return content;
-  }
-
-  public updateContentStatus(content: Content, status: ContentStatus): Content {
-    content.contentStatus = status;
-    return content;
+  private mapToContent(apiItem: any): Content {
+    return {
+      id: apiItem.id,
+      contentType: 'Article',
+      description: apiItem.description || '',
+      url: apiItem.url,
+      contentStatus: ContentStatus.Published,
+      content: {
+        id: apiItem.id,
+        title: apiItem.title,
+        author: apiItem.author || 'News Source',
+        body: apiItem.description,
+        imageUrl: apiItem.urlToImage || 'https://via.placeholder.com/150',
+      } as Article,
+    };
   }
 }
