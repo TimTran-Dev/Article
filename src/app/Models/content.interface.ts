@@ -6,6 +6,7 @@ export interface Content {
   contentType: ContentType;
   content: Article | Segment | Episode;
   description: string;
+  url?: string;
   contentStatus: ContentStatus;
 }
 
@@ -16,6 +17,9 @@ export interface Article {
   author: string;
   body: string;
   imageUrl: string;
+  content: string;
+  sourceId: string;
+  sourceName: string;
 }
 
 export interface Segment {
