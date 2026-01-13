@@ -41,7 +41,8 @@
   },
   "pnpm": {
     "overrides": {
-      "@modelcontextprotocol/sdk": "1.25.2"
+      "@modelcontextprotocol/sdk": "1.25.2",
+      "hono@<4.11.4": ">=4.11.4"
     }
   },
   "private": true,
