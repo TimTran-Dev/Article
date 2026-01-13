@@ -1,18 +1,23 @@
 import { ContentStatus } from './common.enum';
 
-export interface Content {
+// 1. Define the Type Alias first
+export type ContentType = 'Article' | 'Segment' | 'Episode';
+
+// 2. Define the Union for all possible data shapes
+export type ContentData = Article | Segment | Episode;
+
+export interface BaseContent {
   id: number;
   ownerId?: number;
-  contentType: ContentType;
-  content: Article | Segment | Episode;
+  contentType: ContentType; // Now this will be found
   description: string;
   url?: string;
   contentStatus: ContentStatus;
+  isDeleted: boolean;
 }
 
-export interface Article {
-  id: number;
-  ownerId?: number;
+export interface Article extends BaseContent {
+  contentType: 'Article'; // More specific literal for narrowing
   title: string;
   author: string;
   body: string;
@@ -22,21 +27,10 @@ export interface Article {
   sourceName: string;
 }
 
-export interface Segment {
-  id: number;
-  ownerId?: number;
-  name: string;
-  host: string;
-  contents: Content[];
+export interface Segment extends BaseContent {
+  contentType: 'Segment';
 }
 
-export interface Episode {
-  id: number;
-  ownerId?: number;
-  host: string;
-  airDate: Date;
-  title: string;
-  segments: Segment[];
+export interface Episode extends BaseContent {
+  contentType: 'Episode';
 }
-
-export type ContentType = 'Article' | 'Segment' | 'Episode';

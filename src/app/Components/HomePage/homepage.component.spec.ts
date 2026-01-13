@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HomePageComponent } from './homepage.component';
-import { ProductsService } from '../../Services/products.service';
-import { mockContent } from '../../Mocks/content.mock';
+import { ProductsService } from '../../Services/Products/products.service';
 import { of, throwError } from 'rxjs';
 import { vi } from 'vitest';
 import { provideRouter } from '@angular/router';
@@ -10,6 +9,8 @@ import { mockProductsService } from '../../Mocks/product.service.mock';
 // 2. Import child components to fix binding errors
 import { DropdownComponent } from '../Tapestry/Dropdown/dropdown.component';
 import { LoadingComponent } from '../Tapestry/Loading/loading.component';
+import { Article } from '../../Models/content.interface';
+import { ContentStatus } from '../../Models/common.enum';
 
 describe('HomePage Component', () => {
   let fixture: ComponentFixture<HomePageComponent>;
@@ -48,10 +49,36 @@ describe('HomePage Component', () => {
   });
 
   it('should load featured products', () => {
-    vi.spyOn(productService, 'getFeaturedProducts').mockReturnValue(of(mockContent));
+    // 1. Arrange: Create strict mock data that matches the Article interface
+    const mockArticles: Article[] = [
+      {
+        id: 1,
+        ownerId: 0,
+        contentType: 'Article',
+        contentStatus: ContentStatus.Published,
+        isDeleted: false,
+        title: 'Featured Tech News',
+        author: 'Author Name',
+        description: 'Description here',
+        body: 'Body content',
+        imageUrl: 'image-url',
+        url: 'test-url',
+        content: 'test-content',
+        sourceId: 'src-1',
+        sourceName: 'Source 1',
+      },
+    ];
+
+    // 2. Setup the spy BEFORE calling detectChanges
+    vi.spyOn(productService, 'getFeaturedProducts').mockReturnValue(of(mockArticles));
+
+    // 3. Act: Trigger ngOnInit
     fixture.detectChanges();
-    expect(component.featuredProducts()).toEqual(mockContent);
-    expect(component.isLoading()).toBeFalsy();
+
+    // 4. Assert: Access the signal and check the values
+    expect(component.featuredProducts()).toEqual(mockArticles);
+    expect(component.featuredProducts().length).toBe(1);
+    expect(component.isLoading()).toBe(false);
   });
 
   it('should handle error loading featured products', () => {

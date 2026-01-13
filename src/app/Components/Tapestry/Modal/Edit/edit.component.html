@@ -1,0 +1,170 @@
+<div
+  class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200"
+>
+  <div
+    class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden transform transition-all animate-[slideIn_0.3s_ease-out]"
+  >
+    <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+      <h3 class="text-lg font-bold text-gray-900">
+        {{ editArticle() ? 'Edit Article' : 'Create New Article' }}
+      </h3>
+      <button
+        (click)="closeModal.emit()"
+        class="text-gray-400 hover:text-gray-600 transition-colors"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+    </div>
+
+    <form [formGroup]="editForm" (ngSubmit)="submitForm()" class="p-6 max-h-[80vh] overflow-y-auto">
+      <div class="space-y-5">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Title</label>
+            <input
+              formControlName="title"
+              type="text"
+              placeholder="Enter article title"
+              [class.border-red-500]="getFieldError('title')"
+              class="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all"
+            />
+            @if (getFieldError('title'); as errorMessage) {
+              <p class="text-xs text-red-500 mt-1 animate-in fade-in slide-in-from-top-1">
+                {{ errorMessage }}
+              </p>
+            }
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Author</label>
+            <input
+              formControlName="author"
+              type="text"
+              placeholder="Name of the author"
+              class="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all"
+            />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Article URL</label>
+            <input
+              formControlName="url"
+              type="text"
+              placeholder="https://..."
+              [class.border-red-500]="getFieldError('url')"
+              class="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all"
+            />
+            @if (getFieldError('url'); as errorMessage) {
+              <p class="text-xs text-red-500 mt-1 animate-in fade-in slide-in-from-top-1">
+                {{ errorMessage }}
+              </p>
+            }
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Image URL</label>
+            <input
+              formControlName="urlToImage"
+              type="text"
+              placeholder="Link to thumbnail image"
+              class="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all"
+            />
+          </div>
+        </div>
+
+        @if (!editArticle()) {
+          <div
+            class="grid grid-cols-1 md:grid-cols-2 gap-4 animate-in slide-in-from-top-2 duration-300"
+          >
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-1.5">Source ID</label>
+              <input
+                formControlName="sourceId"
+                type="text"
+                placeholder="e.g. general-news"
+                class="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-1.5">Source Name</label>
+              <input
+                formControlName="sourceName"
+                type="text"
+                placeholder="e.g. My News App"
+                class="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all"
+              />
+            </div>
+          </div>
+        }
+
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">Short Description</label>
+          <textarea
+            formControlName="description"
+            rows="2"
+            placeholder="A brief summary for the list view..."
+            class="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all resize-none"
+          ></textarea>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">Article Body</label>
+          <textarea
+            formControlName="content"
+            rows="6"
+            placeholder="The full content of the article..."
+            class="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all resize-y"
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between mt-8 pt-6 border-t border-gray-100">
+        <div>
+          @if (!editArticle()) {
+            <button
+              type="button"
+              (click)="resetForm()"
+              class="text-sm font-medium text-gray-400 hover:text-red-500 transition-colors flex items-center px-2 py-1"
+            >
+              <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                />
+              </svg>
+              Clear Form
+            </button>
+          }
+        </div>
+
+        <div class="flex items-center space-x-3">
+          <tap-button
+            buttonText="Cancel"
+            variant="secondary"
+            type="button"
+            (click)="closeModal.emit()"
+          ></tap-button>
+
+          <tap-button
+            [buttonText]="
+              isLoading() ? 'Processing...' : editArticle() ? 'Save Changes' : 'Create Article'
+            "
+            variant="primary"
+            type="submit"
+            [disabled]="editForm.invalid || (editArticle() && editForm.pristine) || isLoading()"
+          >
+          </tap-button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

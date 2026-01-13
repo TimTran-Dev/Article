@@ -1,6 +1,6 @@
 {
   "name": "front-end-app",
-  "version": "1.8.4",
+  "version": "1.9.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -41,7 +41,8 @@
   },
   "pnpm": {
     "overrides": {
-      "@modelcontextprotocol/sdk": "1.25.2"
+      "@modelcontextprotocol/sdk": "1.25.2",
+      "hono@<4.11.4": ">=4.11.4"
     }
   },
   "private": true,
@@ -62,6 +63,7 @@
     "zone.js": "^0.16.0"
   },
   "devDependencies": {
+    "@analogjs/vite-plugin-angular": "^2.2.1",
     "@angular-eslint/builder": "21.1.0",
     "@angular-eslint/eslint-plugin": "21.1.0",
     "@angular-eslint/eslint-plugin-template": "21.1.0",

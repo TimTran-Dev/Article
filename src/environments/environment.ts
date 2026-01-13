@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: 'https://localhost:7164/api', // Or whatever your local port is
+  apiUrl: 'https://my-news-backend-ategd4fkehazh8d4.centralus-01.azurewebsites.net/api',
 };

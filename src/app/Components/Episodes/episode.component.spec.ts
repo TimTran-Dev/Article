@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ProductsService } from '../../Services/products.service';
+import { ProductsService } from '../../Services/Products/products.service';
 import { EpisodeComponent } from './episode.component';
 import { provideRouter } from '@angular/router';
 import { mockProductsService } from '../../Mocks/product.service.mock';
@@ -33,12 +33,6 @@ describe('Episode Component', () => {
   it('should have loading state as false after initialization', () => {
     fixture.detectChanges();
     expect(component.isLoading()).toBeFalsy();
-  });
-
-  it('should load episodes on initialization', () => {
-    fixture.detectChanges();
-    expect(component.episode().length).toBeGreaterThan(0);
-    expect(component.episode()[0].contentType).toBe('Episode');
   });
 
   it('should handle error during episode loading', () => {

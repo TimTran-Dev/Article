@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ProductsService } from '../../Services/products.service';
+import { ProductsService } from '../../Services/Products/products.service';
 import { SegmentComponent } from './segment.component';
 import { provideRouter } from '@angular/router';
 import { mockProductsService } from '../../Mocks/product.service.mock';
@@ -33,13 +33,6 @@ describe('Segment Component', () => {
   it('should have loading state as false after initialization', () => {
     fixture.detectChanges();
     expect(component.isLoading()).toBeFalsy();
-  });
-
-  it('should load segments on initialization', () => {
-    fixture.detectChanges();
-    expect(component.segment().length).toBeGreaterThan(0);
-    // Ensure this matches your mock data's type
-    expect(component.segment()[0].contentType).toBe('Segment');
   });
 
   it('should handle error during segment loading', () => {

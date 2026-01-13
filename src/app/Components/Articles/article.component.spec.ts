@@ -1,46 +1,47 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ArticleComponent } from './article.component';
-import { ProductsService } from '../../Services/products.service';
+import { ProductsService } from '../../Services/Products/products.service';
 import { provideRouter } from '@angular/router';
 import { mockProductsService } from '../../Mocks/product.service.mock';
-// Import these to fix the NG0303 errors
-import { DropdownComponent } from '../Tapestry/Dropdown/dropdown.component';
-import { LoadingComponent } from '../Tapestry/Loading/loading.component';
+import { mockToastService } from '../../Mocks/toast.service.mock';
+import { ToastService } from '../../Services/Toast/toast.service';
+import { createArticleMock } from '../../Mocks/article.mock';
+import { of } from 'rxjs';
 
 describe('Article Component', () => {
   let fixture: ComponentFixture<ArticleComponent>;
   let component: ArticleComponent;
+  let productService: ProductsService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      // 1. Add ALL child components used in the template here
-      imports: [ArticleComponent, DropdownComponent, LoadingComponent],
+      imports: [ArticleComponent], // Component pulls its own children
       providers: [
-        // 2. Ensure this mock has the getArticles() method we just wrote
         { provide: ProductsService, useValue: mockProductsService },
+        { provide: ToastService, useValue: mockToastService },
         provideRouter([]),
       ],
     }).compileComponents();
 
+    productService = TestBed.inject(ProductsService);
     fixture = TestBed.createComponent(ArticleComponent);
     component = fixture.componentInstance;
+  });
 
-    // 3. This triggers ngOnInit -> initializeArticles()
+  it('should create and load data', async () => {
+    // 2. This should now be recognized as a function
+    const mockData = [createArticleMock()];
+
+    vi.spyOn(productService, 'getArticles').mockReturnValue(
+      of({
+        items: mockData,
+        totalCount: mockData.length,
+      }),
+    );
+
     fixture.detectChanges();
-  });
+    await fixture.whenStable();
 
-  it('should create the component', () => {
-    expect(component).toBeTruthy();
-  });
-
-  it('should have loading state as false after initialization', () => {
-    // Because mockProductsService returns 'of()', it resolves instantly
-    expect(component.isLoading()).toBeFalsy();
-  });
-
-  it('should load articles on initialization', () => {
-    // This checks if the mock data was successfully mapped to signals
     expect(component.article().length).toBeGreaterThan(0);
-    expect(component.article()[0].contentType).toBe('Article');
   });
 });

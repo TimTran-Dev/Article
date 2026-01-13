@@ -1,28 +1,155 @@
 @if (isLoading()) {
-  <p>Loading...</p>
-}
-@if (!isLoading()) {
-  <div>
-    <nav>
-      <a routerLink="/">Home</a> |
-      <a routerLink="/articles">Articles</a>
-    </nav>
-    <h1>Featured Products</h1>
-    @for (product of featuredProducts(); track product.id) {
-      <ul></ul>
-      <h2>{{ product.contentType }}</h2>
-      @if (product.contentType === 'Article' && product.content && 'author' in product.content) {
-        <ul>
-          <li>
-            {{ product.description }}
-          </li>
-          <li>
-            {{ product.content.author }}
-          </li>
-        </ul>
-      }
-    }
-  </div>
+  <tap-loading loadingText="Loading homepage..."></tap-loading>
+} @else {
+  <div class="min-h-screen bg-gray-50">
+    <nav class="bg-white shadow-sm border-b border-gray-200">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+          <div class="flex items-center space-x-8">
+            <a routerLink="/" class="text-2xl font-bold text-gray-900"> NewsApp </a>
+            <div class="hidden md:flex space-x-6">
+              <a
+                routerLink="/"
+                routerLinkActive="text-blue-600 border-b-2 border-blue-600"
+                [routerLinkActiveOptions]="{ exact: true }"
+                class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors"
+              >
+                Home
+              </a>
+              <a
+                routerLink="/articles"
+                routerLinkActive="text-blue-600 border-b-2 border-blue-600"
+                class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors"
+              >
+                Articles
+              </a>
+              <a
+                routerLink="/segments"
+                routerLinkActive="text-blue-600 border-b-2 border-blue-600"
+                class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors"
+              >
+                Segments
+              </a>
+              <a
+                routerLink="/episodes"
+                routerLinkActive="text-blue-600 border-b-2 border-blue-600"
+                class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors"
+              >
+                Episodes
+              </a>
+            </div>
+          </div>
 
-  <router-outlet></router-outlet>
+          <div class="flex items-center space-x-4">
+            <button class="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
+              Search
+            </button>
+            <button
+              class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              New Article
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="mb-8">
+        <h1 class="text-4xl font-bold text-gray-900 mb-2">Featured Content</h1>
+        <p class="text-gray-600 text-lg">Discover the latest articles, segments, and episodes</p>
+      </div>
+
+      <div
+        class="flex items-center justify-between mb-6 p-4 bg-white rounded-lg shadow-sm border border-gray-200"
+      >
+        <div class="flex items-center space-x-4">
+          <span class="text-sm font-medium text-gray-700">Filter by:</span>
+          @for (filter of ['All Types', 'Articles', 'Segments', 'Episodes']; track filter) {
+            <button
+              class="px-3 py-1 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
+            >
+              {{ filter }}
+            </button>
+          }
+        </div>
+        <span class="text-sm text-gray-500">{{ featuredProducts().length }} items</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        @for (product of featuredProducts(); track product.id) {
+          <article
+            class="flex flex-col h-full bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow"
+          >
+            <div class="p-4 pb-3 flex-grow">
+              <div class="flex items-center justify-between mb-3">
+                <span
+                  class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium"
+                  [class]="
+                    product.contentType === 'Article'
+                      ? 'bg-blue-100 text-blue-800'
+                      : product.contentType === 'Segment'
+                        ? 'bg-purple-100 text-purple-800'
+                        : 'bg-green-100 text-green-800'
+                  "
+                >
+                  {{ product.contentType }}
+                </span>
+                <span
+                  class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-gray-50 text-gray-700 border border-gray-200"
+                >
+                  {{ product.contentStatus }}
+                </span>
+              </div>
+
+              @if (product.contentType === 'Article') {
+                <h3 class="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
+                  {{ product.title }}
+                </h3>
+                <p class="text-gray-600 text-sm mb-4 line-clamp-3">
+                  {{ product.description }}
+                </p>
+                <div class="flex items-center space-x-2 pt-3 border-t border-gray-100">
+                  <div
+                    class="flex items-center justify-center w-8 h-8 rounded-full bg-linear-to-br from-blue-500 to-blue-600 text-white text-sm font-medium"
+                  >
+                    {{ (product.author.charAt(0) || 'A').toUpperCase() }}
+                  </div>
+                  <p class="text-sm font-medium text-gray-900">{{ product.author }}</p>
+                </div>
+              }
+
+              @if (product.contentType === 'Segment' || product.contentType === 'Episode') {
+                <div
+                  class="py-8 text-center bg-gray-50 rounded-lg border border-dashed border-gray-300"
+                >
+                  <p class="text-sm font-medium text-gray-500 italic">
+                    {{ product.contentType }} details coming soon
+                  </p>
+                </div>
+              }
+            </div>
+
+            <div class="px-4 py-3 bg-gray-50 border-t border-gray-100 mt-auto">
+              <div class="flex items-center justify-end">
+                <a
+                  class="px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors"
+                  [href]="product.url"
+                  target="_blank"
+                >
+                  View Full Content →
+                </a>
+              </div>
+            </div>
+          </article>
+        } @empty {
+          <div class="col-span-full text-center py-12">
+            <h3 class="text-lg font-medium text-gray-900 mb-2">No content available</h3>
+            <p class="text-gray-500 mb-6">Create your first article to get started.</p>
+          </div>
+        }
+      </div>
+    </main>
+    <router-outlet></router-outlet>
+  </div>
 }

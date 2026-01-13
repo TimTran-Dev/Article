@@ -1,21 +1,28 @@
 import { defineConfig } from 'vitest/config';
+import angular from '@analogjs/vite-plugin-angular';
 
 export default defineConfig({
+  plugins: [angular()],
   test: {
     globals: true,
     environment: 'jsdom',
     setupFiles: ['src/test-setup.ts'],
-    include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+    include: ['src/**/*.{test,spec}.ts'],
     exclude: ['node_modules', 'dist', 'coverage', '**/mocks/**', '**/*.mock.ts'],
-    // Configure reporters
+    isolate: true,
+    /**
+     * Vitest 4 Concurrency Control
+     * fileParallelism: false forces tests to run one-by-one.
+     * maxWorkers: 1 ensures only a single worker process is created in CI.
+     */
+    fileParallelism: !process.env.CI,
+    maxWorkers: process.env.CI ? 1 : undefined,
+
     reporters: ['default'],
-    // Enable code coverage with the --coverage flag
     coverage: {
       enabled: true,
-      reporter: ['html', 'lcov', 'text'],
       provider: 'v8',
+      reporter: ['text', 'lcov', 'html'],
     },
-    // Use the Vitest UI for interactive testing (requires @vitest/ui package)
-    ui: false,
   },
 });
