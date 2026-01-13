@@ -1,9 +1,11 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
-import { Content, Article } from '../Models/content.interface';
-import { ContentStatus } from '../Models/common.enum';
-import { environment } from '../../environments/environment';
+import { Content, Article } from '../../Models/content.interface';
+import { ContentStatus } from '../../Models/common.enum';
+import { environment } from '../../../environments/environment';
+import { NewsArticleUpdateDto } from '../../Models/NewsArticleUpdate.interface';
+import { NewsArticleCreateDto } from '../../Models/NewsArticleCreate.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -34,6 +36,7 @@ export class ProductsService {
           description: apiItem.description || 'No description provided.',
           contentStatus: ContentStatus.Published,
           url: apiItem.url,
+          isDeleted: apiItem.isDeleted,
           content: {
             id: apiItem.id,
             title: apiItem.title,
@@ -51,6 +54,20 @@ export class ProductsService {
     );
   }
 
+  public deleteArticle(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/news/delete/${id}`);
+  }
+
+  public updateArticle(id: number, articleDto: NewsArticleUpdateDto): Observable<void> {
+    const url = `${this.baseUrl}/news/update?id=${id}`;
+
+    return this.http.patch<void>(url, articleDto);
+  }
+
+  public createArticle(articleDto: NewsArticleCreateDto): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}/news/create`, articleDto);
+  }
+
   // Keep your existing getFeaturedProducts if needed for the Home page
   public getFeaturedProducts(): Observable<Content[]> {
     return this.http
@@ -64,6 +81,7 @@ export class ProductsService {
       contentType: 'Article',
       description: apiItem.description || '',
       url: apiItem.url,
+      isDeleted: apiItem.isDeleted,
       contentStatus: ContentStatus.Published,
       content: {
         id: apiItem.id,

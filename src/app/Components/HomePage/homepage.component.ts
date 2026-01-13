@@ -1,6 +1,6 @@
 import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { Content } from '../../Models/content.interface';
-import { ProductsService } from '../../Services/products.service';
+import { ProductsService } from '../../Services/Products/products.service';
 import { RouterModule } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { LoadingComponent } from '../Tapestry/Loading/loading.component';

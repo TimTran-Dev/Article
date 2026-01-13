@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ProductsService } from '../../Services/products.service';
+import { ProductsService } from '../../Services/Products/products.service';
 import { SegmentComponent } from './segment.component';
 import { provideRouter } from '@angular/router';
 import { mockProductsService } from '../../Mocks/product.service.mock';

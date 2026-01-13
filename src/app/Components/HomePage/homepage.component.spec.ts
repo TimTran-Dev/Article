@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HomePageComponent } from './homepage.component';
-import { ProductsService } from '../../Services/products.service';
+import { ProductsService } from '../../Services/Products/products.service';
 import { mockContent } from '../../Mocks/content.mock';
 import { of, throwError } from 'rxjs';
 import { vi } from 'vitest';

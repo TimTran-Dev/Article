@@ -6,6 +6,7 @@ export const mockContent: Content[] = [
     id: 1,
     contentType: 'Article',
     description: 'Test Article',
+    isDeleted: false,
     content: {
       id: 1,
       title: 'Test Article',

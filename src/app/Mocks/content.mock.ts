@@ -7,6 +7,7 @@ export const mockDraftContent: Content = {
   contentType: 'Article',
   ownerId: 0,
   url: 'test-url',
+  isDeleted: false,
   content: {
     id: 1,
     ownerId: 0,
@@ -28,6 +29,7 @@ export const mockProducts: Content[] = [
     contentType: 'Article',
     ownerId: 0,
     url: 'test-url',
+    isDeleted: false,
     content: {
       id: 1,
       ownerId: 0,
@@ -50,6 +52,7 @@ export const mockContent: Content[] = [
     contentType: 'Article',
     description: 'Test Article',
     url: 'test-url',
+    isDeleted: false,
     content: {
       id: 1,
       ownerId: 1,
@@ -65,6 +68,7 @@ export const mockContent: Content[] = [
     contentType: 'Segment',
     description: 'Test Segment',
     url: 'test-url',
+    isDeleted: false,
     content: {
       id: 2,
       ownerId: 2,
@@ -79,6 +83,7 @@ export const mockContent: Content[] = [
     contentType: 'Episode',
     description: 'Test Episode',
     url: 'test-url',
+    isDeleted: false,
     content: {
       id: 3,
       ownerId: 3,

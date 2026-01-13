@@ -1,11 +1,16 @@
 import { Component, inject, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
 import { Content } from '../../Models/content.interface';
 import { debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
-import { ProductsService } from '../../Services/products.service';
+import { ProductsService } from '../../Services/Products/products.service';
 import { RouterModule } from '@angular/router';
 import { DropdownComponent } from '../Tapestry/Dropdown/dropdown.component';
 import { ContentStatus } from '../../Models/common.enum';
 import { LoadingComponent } from '../Tapestry/Loading/loading.component';
+import { ButtonComponent } from '../Tapestry/Button/button.component';
+import { ToastService } from '../../Services/Toast/toast.service';
+import { ModalComponent } from '../Tapestry/Modal/Confirm/modal.component';
+import { EditModalComponent } from '../Tapestry/Modal/Edit/edit.component';
+import { NewsArticleCreateDto } from '../../Models/NewsArticleCreate.interface';
 
 @Component({
   selector: 'app-article',
@@ -56,9 +61,18 @@ import { LoadingComponent } from '../Tapestry/Loading/loading.component';
               Search
             </button>
             <button
-              class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
+              (click)="openCreateModal()"
+              class="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all shadow-sm active:scale-95"
             >
-              New Article
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 4v16m8-8H4"
+                />
+              </svg>
+              <span class="font-semibold text-sm">New Article</span>
             </button>
           </div>
         </div>
@@ -226,10 +240,15 @@ import { LoadingComponent } from '../Tapestry/Loading/loading.component';
 
                       <div class="flex items-center space-x-3">
                         <button
+                          (click)="openEditModal(product)"
                           class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
                         >
                           Edit
                         </button>
+                        <tap-button
+                          buttonText="Delete"
+                          (click)="openDeleteModal(product.id)"
+                        ></tap-button>
                         <a
                           class="px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors"
                           [href]="product.url"
@@ -276,13 +295,34 @@ import { LoadingComponent } from '../Tapestry/Loading/loading.component';
           }
         </main>
 
+        @if (showModal()) {
+          <tap-modal (confirmed)="handleDelete()" (cancelled)="closeModal()"></tap-modal>
+        }
+
+        @if (showEditModal()) {
+          <tap-edit-modal
+            [editArticle]="selectedArticle()"
+            [isLoading]="isEditLoading()"
+            (confirm)="handleFormSubmit($event)"
+            (closeModal)="closeEditModal()"
+          >
+          </tap-edit-modal>
+        }
+
         <!-- Router Outlet for Child Routes -->
         <router-outlet></router-outlet>
       </div>
     }
   `,
   standalone: true,
-  imports: [RouterModule, DropdownComponent, LoadingComponent],
+  imports: [
+    RouterModule,
+    DropdownComponent,
+    LoadingComponent,
+    ModalComponent,
+    ButtonComponent,
+    EditModalComponent,
+  ],
 })
 export class ArticleComponent implements OnInit, OnDestroy {
   article = signal<(Content & { contentStatusSignal: WritableSignal<ContentStatus> })[]>([]);
@@ -294,9 +334,17 @@ export class ArticleComponent implements OnInit, OnDestroy {
   currentPage = signal(1);
   totalItems = signal(0);
 
+  showModal = signal(false);
+  articleToDeleteId = signal(0);
+
+  showEditModal = signal(false);
+  selectedArticle = signal<Content | null>(null);
+  isEditLoading = signal(false);
+
   contentStatus: ContentStatus[] = Object.values(ContentStatus);
 
   productService = inject(ProductsService);
+  toastService = inject(ToastService);
 
   private searchSubject = new Subject<string>();
   private destroy$ = new Subject<void>();
@@ -314,6 +362,151 @@ export class ArticleComponent implements OnInit, OnDestroy {
 
   onStatusChange(newStatus: string): void {
     console.log('Status changed:', newStatus);
+  }
+
+  openDeleteModal(id: number): void {
+    this.articleToDeleteId.set(id);
+    this.showModal.set(true);
+  }
+
+  handleUpdate(formData: any) {
+    const { id, ...dto } = formData;
+    this.isEditLoading.set(true);
+
+    this.productService.updateArticle(id, dto).subscribe({
+      next: () => {
+        // Update the signal locally so the UI refreshes instantly
+        this.article.update((currentArticles) =>
+          currentArticles.map((item) => {
+            if (item.id === id) {
+              // 1. Update the wrapper properties (Content interface)
+              const updatedWrapper = {
+                ...item,
+                description: dto.description,
+                url: dto.url,
+              };
+
+              // 2. Type Guard: Only update nested fields if it's an Article
+              if (updatedWrapper.content && 'author' in updatedWrapper.content) {
+                updatedWrapper.content = {
+                  ...updatedWrapper.content,
+                  title: dto.title,
+                  author: dto.author,
+                  imageUrl: dto.urlToImage,
+                  body: dto.content, // Mapping form 'content' to model 'body'
+                };
+              }
+              return updatedWrapper;
+            }
+            return item;
+          }),
+        );
+
+        this.toastService.show('Article updated successfully!', 'success');
+        this.closeEditModal();
+      },
+      error: (err) => {
+        this.isEditLoading.set(false);
+        this.toastService.show('Failed to save changes.', 'error');
+      },
+    });
+  }
+
+  handleDelete(): void {
+    const id = this.articleToDeleteId();
+
+    if (id > 0) {
+      this.productService.deleteArticle(id).subscribe({
+        next: () => {
+          this.article.update((currentArticles) => currentArticles.filter((a) => a.id != id));
+
+          this.totalItems.update((total) => total - 1);
+
+          this.closeModal();
+
+          this.toastService.show('Article successfully deleted!', 'success');
+        },
+        error: (err) => {
+          this.toastService.show('Failed to delete article. Please try again.', 'error');
+          this.closeModal();
+        },
+      });
+    }
+  }
+
+  // In ArticleComponent.ts
+
+  openCreateModal(): void {
+    this.selectedArticle.set(null); // Setting to null triggers "Create" mode in modal
+    this.showEditModal.set(true);
+    console.log('opened modal');
+  }
+
+  // article.component.ts
+
+  // 1. Logic to coordinate between Create and Update
+  handleFormSubmit(formData: any) {
+    if (this.selectedArticle()) {
+      // If we have a selected article, we are updating
+      this.handleUpdate(formData);
+    } else {
+      // If selectedArticle is null, we are creating
+      this.handleCreate(formData);
+    }
+  }
+
+  // 2. Logic to handle the POST request
+  handleCreate(formData: any) {
+    this.isEditLoading.set(true);
+
+    // Map form data to NewsArticleCreateDto
+    const createDto: NewsArticleCreateDto = {
+      title: formData.title,
+      url: formData.url,
+      author: formData.author,
+      description: formData.description,
+      urlToImage: formData.urlToImage,
+      content: formData.content,
+      sourceId: formData.sourceId || 'manual',
+      sourceName: formData.sourceName || 'User Contributed',
+    };
+
+    this.productService.createArticle(createDto).subscribe({
+      next: () => {
+        this.toastService.show('Article created successfully!', 'success');
+
+        // Refresh the list to show the new article (usually at the top)
+        this.currentPage.set(1);
+        this.initializeArticles();
+
+        this.closeEditModal();
+      },
+      error: (err) => {
+        this.isEditLoading.set(false);
+        // Handle the "Url already exists" error from your C# repository
+        const message =
+          err.status === 400
+            ? 'An article with this URL already exists.'
+            : 'Failed to create article.';
+        this.toastService.show(message, 'error');
+      },
+    });
+  }
+
+  openEditModal(product: any): void {
+    this.selectedArticle.set(product);
+    this.showEditModal.set(true);
+  }
+
+  closeEditModal(): void {
+    this.showEditModal.set(false);
+    this.selectedArticle.set(null);
+    this.isEditLoading.set(false);
+  }
+
+  closeModal(): void {
+    this.showModal.set(false);
+    this.articleToDeleteId.set(0);
   }
 
   public onPageSizeChange(newSize: string | number): void {

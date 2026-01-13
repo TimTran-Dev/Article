@@ -1,9 +1,9 @@
 import 'zone.js';
 import 'zone.js/testing';
-import { TestBed } from '@angular/core/testing';
+import { getTestBed } from '@angular/core/testing';
+
 import { BrowserTestingModule, platformBrowserTesting } from '@angular/platform-browser/testing';
 
-TestBed.initTestEnvironment(
-  BrowserTestingModule,
-  platformBrowserTesting(), // <-- required, cannot be undefined
-);
+getTestBed().initTestEnvironment(BrowserTestingModule, platformBrowserTesting(), {
+  teardown: { destroyAfterEach: true },
+});

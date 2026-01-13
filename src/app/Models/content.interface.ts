@@ -8,6 +8,7 @@ export interface Content {
   description: string;
   url?: string;
   contentStatus: ContentStatus;
+  isDeleted: boolean;
 }
 
 export interface Article {

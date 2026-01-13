@@ -4,7 +4,7 @@ import { DropdownComponent } from '../Tapestry/Dropdown/dropdown.component';
 import { LoadingComponent } from '../Tapestry/Loading/loading.component';
 import { ContentStatus } from '../../Models/common.enum';
 import { Content } from '../../Models/content.interface';
-import { ProductsService } from '../../Services/products.service';
+import { ProductsService } from '../../Services/Products/products.service';
 import { map, Subject, takeUntil } from 'rxjs';
 
 @Component({
