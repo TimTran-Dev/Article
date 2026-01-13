@@ -9,7 +9,7 @@ export default defineConfig({
     setupFiles: ['src/test-setup.ts'],
     include: ['src/**/*.{test,spec}.ts'],
     exclude: ['node_modules', 'dist', 'coverage', '**/mocks/**', '**/*.mock.ts'],
-
+    isolate: true,
     /**
      * Vitest 4 Concurrency Control
      * fileParallelism: false forces tests to run one-by-one.
