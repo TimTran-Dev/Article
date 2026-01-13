@@ -1,26 +1,230 @@
-@if (isLoading()) {
-  <p>Loading...</p>
-}
-@if (!isLoading()) {
-  <div>
-    <nav>
-      <a routerLink="/">Home</a> |
-      <a routerLink="/articles">Articles</a>
-    </nav>
-    <h1>Featured Products</h1>
-    @for (product of article(); track product.id) {
-      <tap-dropdown
-        [options]="contentStatus"
-        [selectedValue]="product.contentStatusSignal()"
-        (selectionChange)="product.contentStatusSignal.set($event)"
-      >
-      </tap-dropdown>
-      <div>
-        <h2>{{ product.content }}</h2>
-        <p>{{ product.description }}</p>
+<nav class="bg-white shadow-sm border-b border-gray-200">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+      <div class="flex items-center space-x-8">
+        <a routerLink="/" class="text-2xl font-bold text-gray-900"> NewsApp </a>
+        <div class="hidden md:flex space-x-6">
+          <a
+            routerLink="/"
+            routerLinkActive="text-blue-600 border-b-2 border-blue-600"
+            [routerLinkActiveOptions]="{ exact: true }"
+            class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors"
+          >
+            Home
+          </a>
+          <a
+            routerLink="/articles"
+            routerLinkActive="text-blue-600 border-b-2 border-blue-600"
+            class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors"
+          >
+            Articles
+          </a>
+          <a
+            routerLink="/segments"
+            routerLinkActive="text-blue-600 border-b-2 border-blue-600"
+            class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors"
+          >
+            Segments
+          </a>
+          <a
+            routerLink="/episodes"
+            routerLinkActive="text-blue-600 border-b-2 border-blue-600"
+            class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors"
+          >
+            Episodes
+          </a>
+        </div>
       </div>
-    }
-  </div>
 
-  <router-outlet></router-outlet>
+      <div class="flex items-center space-x-4">
+        <button class="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
+          Search
+        </button>
+        <button
+          (click)="openCreateModal()"
+          class="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all shadow-sm active:scale-95"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 4v16m8-8H4"
+            />
+          </svg>
+          <span class="font-semibold text-sm">New Article</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="bg-gray-50 py-6">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="mb-8">
+      <h1 class="text-4xl font-bold text-gray-900 mb-2">Articles</h1>
+      <p class="text-gray-600 text-lg">Manage and review your article content</p>
+    </div>
+
+    <div class="relative max-w-md mb-6">
+      <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+        <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+          />
+        </svg>
+      </div>
+      <input
+        type="text"
+        [value]="searchTerm()"
+        (input)="onSearch($event)"
+        placeholder="Search titles or descriptions..."
+        class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-all"
+      />
+    </div>
+
+    <div
+      class="flex items-center justify-between mt-8 p-4 bg-white rounded-lg shadow-sm border border-gray-200"
+    >
+      <div class="flex items-center space-x-4">
+        <span class="text-sm font-medium text-gray-700">Filter by status:</span>
+        @for (status of ['All', 'Draft', 'Review', 'Published']; track status) {
+          <button
+            class="px-3 py-1 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
+          >
+            {{ status }}
+          </button>
+        }
+      </div>
+
+      <div class="flex items-center space-x-6">
+        <div class="flex items-center space-x-3">
+          <span class="text-sm font-medium text-gray-700">Per page:</span>
+          <tap-dropdown
+            [options]="[5, 10, 25, 50]"
+            [selectedValue]="pageSize()"
+            (selectionChange)="onPageSizeChange($event)"
+          ></tap-dropdown>
+        </div>
+        <div class="text-right border-l pl-6 border-gray-200">
+          <span class="block text-sm font-bold text-gray-900">{{ totalItems() }} Articles</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+@if (isLoading()) {
+  <tap-loading loadingText="Loading articles..."></tap-loading>
+} @else {
+  <div class="min-h-screen bg-gray-50">
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="space-y-4">
+        @for (product of article(); track product.id) {
+          <article
+            class="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow overflow-hidden"
+          >
+            <div class="flex items-start justify-between p-6">
+              <div class="flex-1">
+                <div class="flex items-center space-x-3 mb-2">
+                  <span
+                    class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+                  >
+                    Article
+                  </span>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-900 mb-2">{{ product.title }}</h2>
+                <div class="flex items-center space-x-2 text-sm text-gray-600">
+                  <div
+                    class="flex items-center justify-center w-6 h-6 rounded-full bg-linear-to-br from-blue-500 to-blue-600 text-white text-xs font-medium"
+                  >
+                    {{ (product.author.charAt(0) || 'A').toUpperCase() }}
+                  </div>
+                  <span>{{ product.author }}</span>
+                </div>
+              </div>
+
+              <div class="ml-4">
+                <tap-dropdown
+                  [options]="contentStatus"
+                  [selectedValue]="product.contentStatusSignal()"
+                  (selectionChange)="product.contentStatusSignal.set($event)"
+                ></tap-dropdown>
+              </div>
+            </div>
+
+            @if (product.imageUrl) {
+              <img
+                [src]="product.imageUrl"
+                alt="Article thumbnail"
+                class="w-full h-auto block max-h-96 object-cover border-y border-gray-100"
+              />
+            }
+
+            <div class="p-6">
+              <p class="text-gray-700 mb-4 leading-relaxed line-clamp-4">
+                {{ product.body }}
+              </p>
+
+              <div class="flex items-center justify-between pt-4 border-t border-gray-200">
+                <div class="flex items-center space-x-4 text-sm text-gray-500">
+                  @if (product.sourceName) {
+                    <span>{{ product.sourceName }}</span>
+                  }
+                </div>
+
+                <div class="flex items-center space-x-3">
+                  <button
+                    (click)="openEditModal(product)"
+                    class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+                  >
+                    Edit
+                  </button>
+                  <tap-button
+                    buttonText="Delete"
+                    (click)="openDeleteModal(product.id)"
+                  ></tap-button>
+                  <a
+                    class="px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors"
+                    [href]="product.url"
+                    target="_blank"
+                  >
+                    View Full Article →
+                  </a>
+                </div>
+              </div>
+            </div>
+          </article>
+        } @empty {
+          <div class="text-center py-12 bg-white rounded-lg shadow-sm border border-gray-200">
+            <h3 class="text-lg font-medium text-gray-900 mb-2">No articles yet</h3>
+            <p class="text-gray-500 mb-6">Start by creating your first article.</p>
+            <button
+              (click)="openCreateModal()"
+              class="px-6 py-3 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              Create Article
+            </button>
+          </div>
+        }
+      </div>
+    </main>
+
+    @if (showModal()) {
+      <tap-modal (confirmed)="handleDelete()" (cancelled)="closeModal()"></tap-modal>
+    }
+    @if (showEditModal()) {
+      <tap-edit-modal
+        [editArticle]="selectedArticle()"
+        [isLoading]="isEditLoading()"
+        (confirm)="handleFormSubmit($event)"
+        (closeModal)="closeEditModal()"
+      ></tap-edit-modal>
+    }
+
+    <router-outlet></router-outlet>
+  </div>
 }

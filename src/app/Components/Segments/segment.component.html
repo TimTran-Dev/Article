@@ -1,0 +1,85 @@
+<div class="min-h-screen bg-gray-50 flex flex-col">
+  <nav class="bg-white shadow-sm border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <div class="flex items-center space-x-8">
+          <a routerLink="/" class="text-2xl font-bold text-gray-900"> NewsApp </a>
+          <div class="hidden md:flex space-x-6">
+            <a
+              routerLink="/"
+              routerLinkActive="text-blue-600 border-b-2 border-blue-600"
+              [routerLinkActiveOptions]="{ exact: true }"
+              class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors"
+            >
+              Home
+            </a>
+            <a
+              routerLink="/articles"
+              routerLinkActive="text-blue-600 border-b-2 border-blue-600"
+              class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors"
+            >
+              Articles
+            </a>
+            <a
+              routerLink="/segments"
+              routerLinkActive="text-blue-600 border-b-2 border-blue-600"
+              class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors"
+            >
+              Segments
+            </a>
+            <a
+              routerLink="/episodes"
+              routerLinkActive="text-blue-600 border-b-2 border-blue-600"
+              class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors"
+            >
+              Episodes
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="flex-1 flex items-center justify-center p-4">
+    <div class="text-center max-w-md">
+      <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-blue-50 mb-6">
+        <svg
+          class="w-10 h-10 text-blue-600"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+          ></path>
+        </svg>
+      </div>
+
+      <h1 class="text-4xl font-extrabold text-gray-900 mb-4 tracking-tight">Segments</h1>
+      <div
+        class="inline-block px-4 py-1.5 mb-6 text-sm font-semibold tracking-wide uppercase bg-blue-100 text-blue-700 rounded-full"
+      >
+        Coming Soon
+      </div>
+      <p class="text-lg text-gray-600 mb-8 leading-relaxed">
+        We're currently building the Segment management system. This feature will allow you to
+        organize and host multi-part content sequences.
+      </p>
+
+      <a
+        routerLink="/articles"
+        class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all"
+      >
+        Go to Articles
+      </a>
+    </div>
+  </main>
+
+  <footer class="py-6 text-center text-sm text-gray-400">
+    &copy; 2026 NewsApp Tapestry Framework
+  </footer>
+</div>

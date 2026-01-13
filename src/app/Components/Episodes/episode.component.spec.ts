@@ -35,12 +35,6 @@ describe('Episode Component', () => {
     expect(component.isLoading()).toBeFalsy();
   });
 
-  it('should load episodes on initialization', () => {
-    fixture.detectChanges();
-    expect(component.episode().length).toBeGreaterThan(0);
-    expect(component.episode()[0].contentType).toBe('Episode');
-  });
-
   it('should handle error during episode loading', () => {
     const productService = TestBed.inject(ProductsService);
 

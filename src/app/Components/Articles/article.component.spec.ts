@@ -5,10 +5,13 @@ import { provideRouter } from '@angular/router';
 import { mockProductsService } from '../../Mocks/product.service.mock';
 import { mockToastService } from '../../Mocks/toast.service.mock';
 import { ToastService } from '../../Services/Toast/toast.service';
+import { createArticleMock } from '../../Mocks/article.mock';
+import { of } from 'rxjs';
 
 describe('Article Component', () => {
   let fixture: ComponentFixture<ArticleComponent>;
   let component: ArticleComponent;
+  let productService: ProductsService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -20,15 +23,25 @@ describe('Article Component', () => {
       ],
     }).compileComponents();
 
+    productService = TestBed.inject(ProductsService);
     fixture = TestBed.createComponent(ArticleComponent);
     component = fixture.componentInstance;
   });
 
   it('should create and load data', async () => {
-    fixture.detectChanges(); // Start lifecycle
-    await fixture.whenStable(); // Wait for Signals and Async Observables
+    // 2. This should now be recognized as a function
+    const mockData = [createArticleMock()];
 
-    expect(component).toBeTruthy();
+    vi.spyOn(productService, 'getArticles').mockReturnValue(
+      of({
+        items: mockData,
+        totalCount: mockData.length,
+      }),
+    );
+
+    fixture.detectChanges();
+    await fixture.whenStable();
+
     expect(component.article().length).toBeGreaterThan(0);
   });
 });

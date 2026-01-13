@@ -1,97 +1,72 @@
-import { Content, Episode, Segment } from '../Models/content.interface';
 import { ContentStatus } from '../Models/common.enum';
-import { Article } from '../Models/content.interface';
+import { Article, ContentData } from '../Models/content.interface';
 
-export const mockDraftContent: Content = {
+// 1. Mock a single Article (Flattened)
+export const mockDraftArticle: Article = {
   id: 1,
+  ownerId: 101,
   contentType: 'Article',
-  ownerId: 0,
-  url: 'test-url',
-  isDeleted: false,
-  content: {
-    id: 1,
-    ownerId: 0,
-    title: 'Sample Title',
-    author: 'Sample Author',
-    body: 'Sample Body',
-    imageUrl: 'sample-url',
-    content: 'test-content',
-    sourceId: 'test-id',
-    sourceName: 'test-name',
-  },
-  description: 'Sample Description',
   contentStatus: ContentStatus.Draft,
+  isDeleted: false,
+  url: 'https://example.com/draft',
+  description: 'A sample draft article description',
+  // Flattened Article-specific fields
+  title: 'Sample Draft Title',
+  author: 'John Doe',
+  body: 'This is the main body content of the article.',
+  imageUrl: 'https://example.com/image.jpg',
+  content: 'Truncated preview content',
+  sourceId: 'manual',
+  sourceName: 'Local Editor',
 };
 
-export const mockProducts: Content[] = [
+// 2. Mock a list of Articles for the Table/Grid
+export const mockArticles: Article[] = [
   {
+    ...mockDraftArticle,
     id: 1,
-    contentType: 'Article',
-    ownerId: 0,
-    url: 'test-url',
-    isDeleted: false,
-    content: {
-      id: 1,
-      ownerId: 0,
-      title: 'Featured Article',
-      author: 'Featured Author',
-      body: 'Featured Body',
-      imageUrl: 'featured-url',
-      content: 'test-content',
-      sourceId: 'test-id',
-      sourceName: 'test-name',
-    },
-    description: 'Featured Article Description',
+    title: 'Featured Tech News',
     contentStatus: ContentStatus.Published,
+  },
+  {
+    ...mockDraftArticle,
+    id: 2,
+    title: 'Upcoming Science Breakthroughs',
+    contentStatus: ContentStatus.Review,
   },
 ];
 
-export const mockContent: Content[] = [
+// 3. Mock mixed content types (ContentData Union)
+export const mockMixedContent: ContentData[] = [
   {
     id: 1,
     contentType: 'Article',
-    description: 'Test Article',
-    url: 'test-url',
-    isDeleted: false,
-    content: {
-      id: 1,
-      ownerId: 1,
-      title: 'Test Article',
-      author: 'Test Author',
-      body: 'Test body',
-      imageUrl: 'test-image-url',
-    } as Article,
     contentStatus: ContentStatus.Published,
+    isDeleted: false,
+    description: 'Tech Trends 2026',
+    url: 'https://tech.com/trends',
+    title: 'Tech Trends 2026',
+    author: 'Jane Smith',
+    body: 'Future tech insights...',
+    imageUrl: 'https://tech.com/img.png',
+    content: 'Future tech...',
+    sourceId: 'news-api',
+    sourceName: 'Tech Daily',
   },
   {
     id: 2,
     contentType: 'Segment',
-    description: 'Test Segment',
-    url: 'test-url',
-    isDeleted: false,
-    content: {
-      id: 2,
-      ownerId: 2,
-      name: 'Test Name',
-      host: 'Test Host',
-      contents: [],
-    } as Segment,
     contentStatus: ContentStatus.Draft,
+    isDeleted: false,
+    description: 'Morning News Segment',
+    // Segment fields would go here if defined in your interface
   },
   {
     id: 3,
     contentType: 'Episode',
-    description: 'Test Episode',
-    url: 'test-url',
-    isDeleted: false,
-    content: {
-      id: 3,
-      ownerId: 3,
-      host: 'Test Host',
-      airDate: new Date(),
-      title: 'Test Title',
-      segments: [],
-    } as Episode,
     contentStatus: ContentStatus.Review,
+    isDeleted: false,
+    description: 'Podcast Episode 42',
+    // Episode fields would go here (e.g., host, airDate)
   },
 ];

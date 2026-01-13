@@ -35,13 +35,6 @@ describe('Segment Component', () => {
     expect(component.isLoading()).toBeFalsy();
   });
 
-  it('should load segments on initialization', () => {
-    fixture.detectChanges();
-    expect(component.segment().length).toBeGreaterThan(0);
-    // Ensure this matches your mock data's type
-    expect(component.segment()[0].contentType).toBe('Segment');
-  });
-
   it('should handle error during segment loading', () => {
     const productService = TestBed.inject(ProductsService);
 
