@@ -1,18 +1,20 @@
 import { signal } from '@angular/core';
-import { vi } from 'vitest';
 import { Toast, ToastType } from '../Models/toast.interface';
+import { vi } from 'vitest';
 
-export const mockToastService = {
-  // Use a signal to mirror the real service's state
-  currentToast: signal<Toast | null>(null),
+export const createToastServiceMock = () => {
+  const currentToast = signal<Toast | null>(null);
 
-  // Spyable methods using Vitest vi.fn()
-  show: vi.fn((message: string, type: ToastType = 'success', duration: number = 3000) => {
-    // Optional: Update the signal so the UI reflects the change in tests
-    mockToastService.currentToast.set({ message, type });
-  }),
+  return {
+    currentToast,
+    show: vi.fn((message: string, type: ToastType = 'success', _duration: number = 3000) => {
+      currentToast.set({ message, type });
+    }),
 
-  clear: vi.fn(() => {
-    mockToastService.currentToast.set(null);
-  }),
+    clear: vi.fn(() => {
+      currentToast.set(null);
+    }),
+  };
 };
+
+export const mockToastService = createToastServiceMock();
