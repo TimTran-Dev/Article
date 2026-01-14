@@ -1,14 +1,14 @@
 import { Routes } from '@angular/router';
 import { HomePageComponent } from './Components/HomePage/homepage.component';
-import { ArticleComponent } from './Components/Articles/article.component';
 import { SegmentComponent } from './Components/Segments/segment.component';
 import { EpisodeComponent } from './Components/Episodes/episode.component';
+import { NewsListComponent } from './Components/Articles/NewsList/news-list.component';
 
 export const routes: Routes = [
-  { path: 'home', component: HomePageComponent },
-  { path: 'articles', component: ArticleComponent },
+  { path: '', component: HomePageComponent },
+  { path: 'home', redirectTo: '' },
+  { path: 'articles', component: NewsListComponent },
   { path: 'segments', component: SegmentComponent },
   { path: 'episodes', component: EpisodeComponent },
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: '**', redirectTo: 'home' },
 ];

@@ -8,5 +8,5 @@ import { Component, input } from '@angular/core';
   imports: [CommonModule],
 })
 export class LoadingComponent {
-  loadingText = input<string>('');
+  loadingText = input<string>('Loading content...');
 }

@@ -1,3 +1,4 @@
+import { WritableSignal } from '@angular/core';
 import { ContentStatus } from './common.enum';
 
 // 1. Define the Type Alias first
@@ -33,4 +34,8 @@ export interface Segment extends BaseContent {
 
 export interface Episode extends BaseContent {
   contentType: 'Episode';
+}
+
+export interface ReactiveArticle extends Article {
+  contentStatusSignal: WritableSignal<ContentStatus>;
 }

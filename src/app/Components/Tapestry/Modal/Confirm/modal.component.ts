@@ -12,11 +12,11 @@ export class ModalComponent {
   @Output() confirmed = new EventEmitter<void>();
   @Output() cancelled = new EventEmitter<void>();
 
-  onConfirm() {
+  onConfirm(): void {
     this.confirmed.emit();
   }
 
-  onCancel() {
+  onCancel(): void {
     this.cancelled.emit();
   }
 }

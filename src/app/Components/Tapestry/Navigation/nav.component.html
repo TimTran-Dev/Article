@@ -1,0 +1,146 @@
+<nav class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+      <div class="flex items-center gap-8">
+        <a
+          routerLink="/"
+          (click)="closeMenu()"
+          class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent transition-transform active:scale-95"
+        >
+          NewsApp
+        </a>
+
+        <div class="hidden md:flex items-center space-x-1">
+          <a
+            routerLink="/"
+            routerLinkActive="bg-blue-50 text-blue-600 shadow-sm"
+            [routerLinkActiveOptions]="{ exact: true }"
+            class="px-4 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-50 hover:text-blue-500 transition-all duration-200 active:scale-95"
+          >
+            Home
+          </a>
+
+          <a
+            routerLink="/articles"
+            routerLinkActive="bg-blue-50 text-blue-600 shadow-sm"
+            class="px-4 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-50 hover:text-blue-500 transition-all duration-200 active:scale-95"
+          >
+            Articles
+          </a>
+
+          <a
+            routerLink="/segments"
+            routerLinkActive="bg-blue-50 text-blue-600 shadow-sm"
+            class="px-4 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-50 hover:text-blue-500 transition-all duration-200 active:scale-95"
+          >
+            Segments
+          </a>
+
+          <a
+            routerLink="/episodes"
+            routerLinkActive="bg-blue-50 text-blue-600 shadow-sm"
+            class="px-4 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-50 hover:text-blue-500 transition-all duration-200 active:scale-95"
+          >
+            Episodes
+          </a>
+        </div>
+      </div>
+
+      <div class="hidden md:flex items-center">
+        @if (shouldShowCreate()) {
+          <button
+            (click)="openCreateModal()"
+            class="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all shadow-md active:scale-95 hover:shadow-lg"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 4v16m8-8H4"
+              />
+            </svg>
+            <span class="font-semibold text-sm">New Article</span>
+          </button>
+        }
+      </div>
+
+      <div class="md:hidden flex items-center">
+        <button
+          (click)="toggleMenu()"
+          class="p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors focus:ring-2 focus:ring-blue-100"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            @if (!isMenuOpen()) {
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+            } @else {
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            }
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  @if (isMenuOpen()) {
+    <div class="md:hidden bg-white border-b border-gray-200 px-4 py-4 space-y-2 shadow-inner">
+      <a
+        routerLink="/home"
+        (click)="closeMenu()"
+        routerLinkActive="bg-blue-50 text-blue-600 border-l-4 border-blue-600"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="block px-4 py-3 rounded-r-xl text-base font-bold text-gray-700 transition-all"
+      >
+        Home
+      </a>
+
+      <a
+        routerLink="/articles"
+        (click)="closeMenu()"
+        routerLinkActive="bg-blue-50 text-blue-600 border-l-4 border-blue-600"
+        class="block px-4 py-3 rounded-r-xl text-base font-bold text-gray-700 transition-all"
+      >
+        Articles
+      </a>
+
+      <a
+        routerLink="/segments"
+        (click)="closeMenu()"
+        routerLinkActive="bg-blue-50 text-blue-600 border-l-4 border-blue-600"
+        class="block px-4 py-3 rounded-r-xl text-base font-bold text-gray-700 transition-all"
+      >
+        Segments
+      </a>
+
+      <a
+        routerLink="/episodes"
+        (click)="closeMenu()"
+        routerLinkActive="bg-blue-50 text-blue-600 border-l-4 border-blue-600"
+        class="block px-4 py-3 rounded-r-xl text-base font-bold text-gray-700 transition-all"
+      >
+        Episodes
+      </a>
+
+      @if (shouldShowCreate()) {
+        <div class="pt-4 border-t border-gray-100">
+          <button
+            (click)="openCreateModal()"
+            class="w-full flex justify-center items-center gap-2 px-4 py-4 bg-blue-600 text-white rounded-xl font-bold shadow-lg active:scale-[0.98] transition-transform"
+          >
+            New Article
+          </button>
+        </div>
+      }
+    </div>
+  }
+</nav>

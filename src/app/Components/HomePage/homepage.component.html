@@ -1,155 +1,143 @@
 @if (isLoading()) {
-  <tap-loading loadingText="Loading homepage..."></tap-loading>
+  <tap-loading loadingText="Building your newsroom..."></tap-loading>
 } @else {
-  <div class="min-h-screen bg-gray-50">
-    <nav class="bg-white shadow-sm border-b border-gray-200">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center h-16">
-          <div class="flex items-center space-x-8">
-            <a routerLink="/" class="text-2xl font-bold text-gray-900"> NewsApp </a>
-            <div class="hidden md:flex space-x-6">
-              <a
-                routerLink="/"
-                routerLinkActive="text-blue-600 border-b-2 border-blue-600"
-                [routerLinkActiveOptions]="{ exact: true }"
-                class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors"
-              >
-                Home
-              </a>
-              <a
-                routerLink="/articles"
-                routerLinkActive="text-blue-600 border-b-2 border-blue-600"
-                class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors"
-              >
-                Articles
-              </a>
-              <a
-                routerLink="/segments"
-                routerLinkActive="text-blue-600 border-b-2 border-blue-600"
-                class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors"
-              >
-                Segments
-              </a>
-              <a
-                routerLink="/episodes"
-                routerLinkActive="text-blue-600 border-b-2 border-blue-600"
-                class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors"
-              >
-                Episodes
-              </a>
-            </div>
-          </div>
-
-          <div class="flex items-center space-x-4">
-            <button class="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
-              Search
-            </button>
-            <button
-              class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              New Article
-            </button>
-          </div>
-        </div>
+  <div class="py-4">
+    <header class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div class="flex flex-col gap-2">
+        <span class="text-blue-600 font-black text-xs uppercase tracking-[0.3em]">Dashboard</span>
+        <h1 class="text-5xl font-black text-gray-900 tracking-tight">
+          Featured <span class="text-gray-400">Stories</span>
+        </h1>
+        <p class="text-gray-500 text-lg max-w-xl">
+          Browse through your latest publications and upcoming content integrations.
+        </p>
       </div>
-    </nav>
+    </header>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div class="mb-8">
-        <h1 class="text-4xl font-bold text-gray-900 mb-2">Featured Content</h1>
-        <p class="text-gray-600 text-lg">Discover the latest articles, segments, and episodes</p>
-      </div>
-
-      <div
-        class="flex items-center justify-between mb-6 p-4 bg-white rounded-lg shadow-sm border border-gray-200"
+    <main>
+      <section
+        class="relative group"
+        (mouseenter)="togglePause(true)"
+        (mouseleave)="togglePause(false)"
       >
-        <div class="flex items-center space-x-4">
-          <span class="text-sm font-medium text-gray-700">Filter by:</span>
-          @for (filter of ['All Types', 'Articles', 'Segments', 'Episodes']; track filter) {
-            <button
-              class="px-3 py-1 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
-            >
-              {{ filter }}
-            </button>
-          }
-        </div>
-        <span class="text-sm text-gray-500">{{ featuredProducts().length }} items</span>
-      </div>
+        <div
+          #scrollContainer
+          class="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide gap-6 px-4 sm:px-[calc((100vw-80rem)/2+2rem)] pb-8 pt-4"
+        >
+          @for (article of articles(); track article.id) {
+            <div class="snap-center shrink-0 w-[85vw] md:w-[600px] first:ml-0">
+              <div
+                class="h-full bg-white rounded-[2.5rem] p-10 border border-gray-100 transition-all duration-700 hover:bg-blue-600 hover:text-white group/card flex flex-col justify-between min-h-[480px] shadow-sm hover:shadow-2xl"
+              >
+                <div>
+                  <div class="flex justify-between items-start">
+                    <span
+                      class="px-4 py-1.5 rounded-full bg-gray-50 text-blue-600 text-[10px] font-black uppercase tracking-widest shadow-sm group-hover/card:bg-blue-500 group-hover/card:text-white transition-colors"
+                    >
+                      {{ article.contentType }}
+                    </span>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        @for (product of featuredProducts(); track product.id) {
-          <article
-            class="flex flex-col h-full bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow"
-          >
-            <div class="p-4 pb-3 flex-grow">
-              <div class="flex items-center justify-between mb-3">
-                <span
-                  class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium"
-                  [class]="
-                    product.contentType === 'Article'
-                      ? 'bg-blue-100 text-blue-800'
-                      : product.contentType === 'Segment'
-                        ? 'bg-purple-100 text-purple-800'
-                        : 'bg-green-100 text-green-800'
-                  "
-                >
-                  {{ product.contentType }}
-                </span>
-                <span
-                  class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-gray-50 text-gray-700 border border-gray-200"
-                >
-                  {{ product.contentStatus }}
-                </span>
-              </div>
-
-              @if (product.contentType === 'Article') {
-                <h3 class="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
-                  {{ product.title }}
-                </h3>
-                <p class="text-gray-600 text-sm mb-4 line-clamp-3">
-                  {{ product.description }}
-                </p>
-                <div class="flex items-center space-x-2 pt-3 border-t border-gray-100">
-                  <div
-                    class="flex items-center justify-center w-8 h-8 rounded-full bg-linear-to-br from-blue-500 to-blue-600 text-white text-sm font-medium"
-                  >
-                    {{ (product.author.charAt(0) || 'A').toUpperCase() }}
+                    <a
+                      [href]="article.url"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      (click)="$event.stopPropagation()"
+                      class="text-gray-400 group-hover/card:text-white transition-all duration-300 hover:scale-125 active:scale-95"
+                    >
+                      <svg
+                        class="w-6 h-6"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        stroke-width="2.5"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
+                        />
+                      </svg>
+                    </a>
                   </div>
-                  <p class="text-sm font-medium text-gray-900">{{ product.author }}</p>
-                </div>
-              }
 
-              @if (product.contentType === 'Segment' || product.contentType === 'Episode') {
-                <div
-                  class="py-8 text-center bg-gray-50 rounded-lg border border-dashed border-gray-300"
-                >
-                  <p class="text-sm font-medium text-gray-500 italic">
-                    {{ product.contentType }} details coming soon
+                  <h2
+                    class="text-3xl font-bold mt-8 mb-6 leading-tight group-hover/card:translate-x-2 transition-transform duration-500"
+                  >
+                    {{ article.title }}
+                  </h2>
+                  <p
+                    class="text-gray-500 text-lg line-clamp-4 group-hover/card:text-blue-50 transition-colors leading-relaxed"
+                  >
+                    {{ article.description }}
                   </p>
                 </div>
-              }
-            </div>
 
-            <div class="px-4 py-3 bg-gray-50 border-t border-gray-100 mt-auto">
-              <div class="flex items-center justify-end">
-                <a
-                  class="px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors"
-                  [href]="product.url"
-                  target="_blank"
+                <div
+                  class="flex items-center gap-4 pt-8 border-t border-gray-100 group-hover/card:border-white/20"
                 >
-                  View Full Content →
-                </a>
+                  <div
+                    class="w-12 h-12 rounded-2xl bg-gray-50 text-blue-600 flex items-center justify-center font-black shadow-sm group-hover/card:bg-blue-500 group-hover/card:text-white transition-colors"
+                  >
+                    {{ article.author.charAt(0) }}
+                  </div>
+                  <div>
+                    <p
+                      class="font-bold text-gray-900 group-hover/card:text-white transition-colors"
+                    >
+                      {{ article.author }}
+                    </p>
+                    <span
+                      class="text-xs font-medium text-gray-400 group-hover/card:text-blue-100 transition-colors"
+                    >
+                      Verified Contributor
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
-          </article>
-        } @empty {
-          <div class="col-span-full text-center py-12">
-            <h3 class="text-lg font-medium text-gray-900 mb-2">No content available</h3>
-            <p class="text-gray-500 mb-6">Create your first article to get started.</p>
+          }
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+          <div class="h-1.5 w-full bg-gray-200 rounded-full overflow-hidden">
+            <div
+              class="h-full bg-blue-600 transition-all ease-linear"
+              [style.width.%]="isPaused() ? 0 : 100"
+              [style.transition-duration]="isPaused() ? '200ms' : '5000ms'"
+            ></div>
           </div>
-        }
-      </div>
+        </div>
+
+        <div class="hidden md:flex justify-center gap-2 mt-4 text-gray-400">
+          <span class="text-[10px] font-black uppercase tracking-[0.2em]">
+            Auto-playing Newsroom
+          </span>
+        </div>
+      </section>
+
+      @if (comingSoon().length > 0) {
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+          <div class="flex items-center gap-4 mb-12">
+            <h2 class="text-2xl font-black text-gray-900">Pipeline</h2>
+            <div class="h-px flex-grow bg-gray-200"></div>
+          </div>
+
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+            @for (item of comingSoon(); track item.id) {
+              <div
+                class="group p-8 bg-white rounded-[2rem] border border-gray-100 transition-all text-center shadow-sm hover:shadow-xl hover:-translate-y-1"
+              >
+                <p
+                  class="font-black text-gray-400 uppercase text-[10px] tracking-widest mb-2 group-hover:text-blue-500 transition-colors"
+                >
+                  {{ item.contentType }}
+                </p>
+                <p class="font-bold text-gray-900 text-lg">Upcoming</p>
+              </div>
+            }
+          </div>
+        </section>
+      }
     </main>
-    <router-outlet></router-outlet>
   </div>
 }
