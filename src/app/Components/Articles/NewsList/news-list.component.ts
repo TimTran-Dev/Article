@@ -39,7 +39,7 @@ export class NewsListComponent implements OnInit, OnDestroy {
   navService = inject(NavigationService);
 
   isLoading = signal(false);
-  articles = signal<Article[]>([]);
+  articles = signal<ReactiveArticle[]>([]);
   searchTerm = signal('');
 
   selectedArticle = signal<Article | null>(null);
@@ -67,21 +67,6 @@ export class NewsListComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
-
-  // handleStatusChange(event: { id: number; status: ContentStatus }): void {
-  //   const { id, status } = event;
-
-  //   // We find the article in our signal and update it
-  //   this.productService.updateArticleStatus(id, status).subscribe({
-  //     next: () => {
-  //       this.articles.update((items) =>
-  //         items.map((a) => (a.id === id ? { ...a, contentStatus: status } : a)),
-  //       );
-  //       this.toastService.show('Status updated!', 'success');
-  //     },
-  //     error: () => this.toastService.show('Failed to update status', 'error'),
-  //   });
-  // }
 
   onSearch(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -126,7 +111,7 @@ export class NewsListComponent implements OnInit, OnDestroy {
       ...dto,
       url: dto.url ?? '', // Fallback to empty string if undefined
       // If your API expects 'urlToImage' instead of 'imageUrl', map it here:
-      urlToImage: dto.imageUrl,
+      urlToImage: dto.imageUrl ?? undefined,
     };
 
     this.productService.updateArticle(id, updateDto).subscribe({
@@ -194,7 +179,11 @@ export class NewsListComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res) => {
-          this.articles.update((curr) => [...curr, ...res.items]);
+          const newReactive = res.items.map((art) => ({
+            ...art,
+            contentStatusSignal: signal(art.contentStatus),
+          }));
+          this.articles.update((curr) => [...curr, ...newReactive]);
           this.currentPage.set(nextPage);
 
           if (res.items.length < this.pageSize()) {

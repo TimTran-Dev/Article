@@ -23,14 +23,6 @@
         <span class="font-medium">{{ article().author }}</span>
       </div>
     </div>
-
-    <div class="ml-4">
-      <tap-dropdown
-        [options]="contentStatus"
-        [selectedValue]="article().contentStatus"
-        (selectionChange)="statusChange.emit({ id: article().id, status: $event })"
-      ></tap-dropdown>
-    </div>
   </div>
 
   @if (article().imageUrl) {
