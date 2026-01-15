@@ -93,7 +93,7 @@ export class ProductsService {
       title: apiItem.title,
       author: apiItem.author || 'News Source',
       body: apiItem.description || '', // Mapping description to body as per your logic
-      imageUrl: apiItem.urlToImage || 'https://via.placeholder.com/150',
+      imageUrl: apiItem.urlToImage,
       content: apiItem.content || '',
 
       // Mapping from the nested source object in ArticleAPIResponse

@@ -22,7 +22,7 @@ export interface Article extends BaseContent {
   title: string;
   author: string;
   body: string;
-  imageUrl: string;
+  imageUrl: string | null;
   content: string;
   sourceId: string;
   sourceName: string;
