@@ -3,6 +3,7 @@ import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/ro
 import { NavigationService } from '../../../Services/NavigationService/navigation.service';
 import { filter, map } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { ThemeService } from '../../../Services/Theme/theme.service';
 
 @Component({
   selector: 'tap-nav',
@@ -13,6 +14,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 export class NavComponent {
   private navService = inject(NavigationService);
   private router = inject(Router);
+  themeService = inject(ThemeService);
 
   isMenuOpen = signal(false);
 

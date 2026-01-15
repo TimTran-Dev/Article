@@ -1,16 +1,18 @@
 <div
-  class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200"
+  class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 dark:bg-slate-950/70 backdrop-blur-sm animate-in fade-in duration-200"
 >
   <div
-    class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden transform transition-all animate-[slideIn_0.3s_ease-out]"
+    class="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl dark:shadow-blue-900/10 max-w-2xl w-full overflow-hidden border border-transparent dark:border-slate-800 transform transition-all animate-[slideIn_0.3s_ease-out]"
   >
-    <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
-      <h3 class="text-lg font-bold text-gray-900">
+    <div
+      class="px-6 py-4 border-b border-gray-100 dark:border-slate-800 flex justify-between items-center bg-gray-50/50 dark:bg-slate-800/30"
+    >
+      <h3 class="text-lg font-bold text-gray-900 dark:text-slate-100">
         {{ editArticle() ? 'Edit Article' : 'Create New Article' }}
       </h3>
       <button
         (click)="closeModal.emit()"
-        class="text-gray-400 hover:text-gray-600 transition-colors"
+        class="text-gray-400 hover:text-gray-600 dark:text-slate-500 dark:hover:text-slate-300 transition-colors"
       >
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
@@ -23,115 +25,105 @@
       </button>
     </div>
 
-    <form [formGroup]="editForm" (ngSubmit)="submitForm()" class="p-6 max-h-[80vh] overflow-y-auto">
+    <form
+      [formGroup]="editForm"
+      (ngSubmit)="submitForm()"
+      class="p-6 max-h-[80vh] overflow-y-auto custom-scrollbar"
+    >
       <div class="space-y-5">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Title</label>
+            <label class="block text-sm font-semibold text-gray-700 dark:text-slate-300 mb-1.5"
+              >Title</label
+            >
             <input
               formControlName="title"
               type="text"
               placeholder="Enter article title"
               [class.border-red-500]="getFieldError('title')"
-              class="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all"
+              class="w-full px-4 py-2.5 bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-slate-700 rounded-xl text-gray-900 dark:text-slate-100 focus:ring-4 focus:ring-blue-500/10 dark:focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-slate-500"
             />
             @if (getFieldError('title'); as errorMessage) {
-              <p class="text-xs text-red-500 mt-1 animate-in fade-in slide-in-from-top-1">
+              <p
+                class="text-xs text-red-500 dark:text-red-400 mt-1 animate-in fade-in slide-in-from-top-1"
+              >
                 {{ errorMessage }}
               </p>
             }
           </div>
           <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Author</label>
+            <label class="block text-sm font-semibold text-gray-700 dark:text-slate-300 mb-1.5"
+              >Author</label
+            >
             <input
               formControlName="author"
               type="text"
               placeholder="Name of the author"
-              class="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all"
+              class="w-full px-4 py-2.5 bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-slate-700 rounded-xl text-gray-900 dark:text-slate-100 focus:ring-4 focus:ring-blue-500/10 dark:focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-slate-500"
             />
           </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Article URL</label>
+            <label class="block text-sm font-semibold text-gray-700 dark:text-slate-300 mb-1.5"
+              >Article URL</label
+            >
             <input
               formControlName="url"
               type="text"
               placeholder="https://..."
               [class.border-red-500]="getFieldError('url')"
-              class="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all"
+              class="w-full px-4 py-2.5 bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-slate-700 rounded-xl text-gray-900 dark:text-slate-100 focus:ring-4 focus:ring-blue-500/10 dark:focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
             />
-            @if (getFieldError('url'); as errorMessage) {
-              <p class="text-xs text-red-500 mt-1 animate-in fade-in slide-in-from-top-1">
-                {{ errorMessage }}
-              </p>
-            }
           </div>
           <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Image URL</label>
+            <label class="block text-sm font-semibold text-gray-700 dark:text-slate-300 mb-1.5"
+              >Image URL</label
+            >
             <input
               formControlName="urlToImage"
               type="text"
               placeholder="Link to thumbnail image"
-              class="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all"
+              class="w-full px-4 py-2.5 bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-slate-700 rounded-xl text-gray-900 dark:text-slate-100 focus:ring-4 focus:ring-blue-500/10 dark:focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
             />
           </div>
         </div>
 
-        @if (!editArticle()) {
-          <div
-            class="grid grid-cols-1 md:grid-cols-2 gap-4 animate-in slide-in-from-top-2 duration-300"
-          >
-            <div>
-              <label class="block text-sm font-semibold text-gray-700 mb-1.5">Source ID</label>
-              <input
-                formControlName="sourceId"
-                type="text"
-                placeholder="e.g. general-news"
-                class="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all"
-              />
-            </div>
-            <div>
-              <label class="block text-sm font-semibold text-gray-700 mb-1.5">Source Name</label>
-              <input
-                formControlName="sourceName"
-                type="text"
-                placeholder="e.g. My News App"
-                class="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all"
-              />
-            </div>
-          </div>
-        }
-
         <div>
-          <label class="block text-sm font-semibold text-gray-700 mb-1.5">Short Description</label>
+          <label class="block text-sm font-semibold text-gray-700 dark:text-slate-300 mb-1.5"
+            >Short Description</label
+          >
           <textarea
             formControlName="description"
             rows="2"
             placeholder="A brief summary for the list view..."
-            class="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all resize-none"
+            class="w-full px-4 py-2.5 bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-slate-700 rounded-xl text-gray-900 dark:text-slate-100 focus:ring-4 focus:ring-blue-500/10 dark:focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all resize-none"
           ></textarea>
         </div>
 
         <div>
-          <label class="block text-sm font-semibold text-gray-700 mb-1.5">Article Body</label>
+          <label class="block text-sm font-semibold text-gray-700 dark:text-slate-300 mb-1.5"
+            >Article Body</label
+          >
           <textarea
             formControlName="content"
             rows="6"
             placeholder="The full content of the article..."
-            class="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all resize-y"
+            class="w-full px-4 py-2.5 bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-slate-700 rounded-xl text-gray-900 dark:text-slate-100 focus:ring-4 focus:ring-blue-500/10 dark:focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all resize-y"
           ></textarea>
         </div>
       </div>
 
-      <div class="flex items-center justify-between mt-8 pt-6 border-t border-gray-100">
+      <div
+        class="flex items-center justify-between mt-8 pt-6 border-t border-gray-100 dark:border-slate-800"
+      >
         <div>
           @if (!editArticle()) {
             <button
               type="button"
               (click)="resetForm()"
-              class="text-sm font-medium text-gray-400 hover:text-red-500 transition-colors flex items-center px-2 py-1"
+              class="text-sm font-medium text-gray-400 hover:text-red-500 dark:text-slate-500 dark:hover:text-red-400 transition-colors flex items-center px-2 py-1"
             >
               <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -161,8 +153,7 @@
             variant="primary"
             type="submit"
             [disabled]="editForm.invalid || (editArticle() && editForm.pristine) || isLoading()"
-          >
-          </tap-button>
+          ></tap-button>
         </div>
       </div>
     </form>
