@@ -69,11 +69,19 @@ export class HomePageComponent implements OnInit, OnDestroy {
 
   private moveNext(): void {
     const container = this.scrollContainer.nativeElement;
-    const cardWidth = 600;
+
+    // 1. Grab the actual width of the first card found in the container
+    const firstCard = container.querySelector('.snap-center') as HTMLElement;
+
+    if (!firstCard) return;
+
+    // 2. Calculate the step based on the real rendered width + the CSS gap
+    const cardWidth = firstCard.offsetWidth;
     const gap = 24;
     const step = cardWidth + gap;
 
-    const isAtEnd = container.scrollLeft + container.clientWidth >= container.scrollWidth - 10;
+    // 3. Logic for looping back to start or moving forward
+    const isAtEnd = container.scrollLeft + container.clientWidth >= container.scrollWidth - 50;
 
     if (isAtEnd) {
       container.scrollTo({ left: 0, behavior: 'smooth' });

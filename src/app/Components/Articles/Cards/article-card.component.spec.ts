@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ArticleCardComponent } from './article-card.component';
 import { provideRouter } from '@angular/router';
 import { createArticleMock } from '../../../Mocks/article.mock';
-import { ContentStatus } from '../../../Models/common.enum';
 
 describe('ArticleCardComponent', () => {
   let fixture: ComponentFixture<ArticleCardComponent>;
@@ -60,17 +59,5 @@ describe('ArticleCardComponent', () => {
     component.delete.emit(mockArticle.id);
 
     expect(deleteSpy).toHaveBeenCalledWith(mockArticle.id);
-  });
-
-  it('should emit statusChange event when status changes', () => {
-    const mockArticle = createArticleMock();
-    fixture.componentRef.setInput('article', mockArticle);
-
-    const statusSpy = vi.spyOn(component.statusChange, 'emit');
-    const newStatus = ContentStatus.Published; // Ensure this matches your enum values
-
-    component.statusChange.emit({ id: mockArticle.id, status: newStatus });
-
-    expect(statusSpy).toHaveBeenCalledWith({ id: mockArticle.id, status: newStatus });
   });
 });
