@@ -1,14 +1,18 @@
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+<div
+  class="min-h-screen max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 transition-colors duration-300"
+>
   <header class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
     <div>
-      <h1 class="text-4xl font-black text-gray-900 tracking-tight">Articles</h1>
-      <p class="text-gray-500 text-lg mt-2">Manage and review your newsroom content.</p>
+      <h1 class="text-4xl font-black text-gray-900 dark:text-slate-100 tracking-tight">Articles</h1>
+      <p class="text-gray-500 dark:text-slate-400 text-lg mt-2">
+        Manage and review your newsroom content.
+      </p>
     </div>
 
     <div class="flex flex-col sm:flex-row items-center gap-4">
       <div class="relative w-full sm:w-80 group">
         <div
-          class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-blue-600 transition-colors"
+          class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-blue-600 dark:group-focus-within:text-blue-400 transition-colors"
         >
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
@@ -24,7 +28,7 @@
           [value]="searchTerm()"
           (input)="onSearch($event)"
           placeholder="Search articles..."
-          class="w-full pl-11 pr-4 py-2.5 bg-white border border-gray-200 rounded-2xl transition-all focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none shadow-sm"
+          class="w-full pl-11 pr-4 py-2.5 bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-2xl text-gray-900 dark:text-slate-100 placeholder-gray-400 dark:placeholder-slate-500 transition-all focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/30 focus:border-blue-500 focus:outline-none shadow-sm"
         />
       </div>
     </div>
@@ -46,15 +50,12 @@
         />
       } @empty {
         <div
-          class="col-span-full flex flex-col items-center justify-center py-24 bg-white rounded-[2.5rem] border-2 border-dashed border-gray-200"
+          class="col-span-full flex flex-col items-center justify-center py-24 bg-white dark:bg-slate-900 rounded-[2.5rem] border-2 border-dashed border-gray-200 dark:border-slate-800"
         >
-          <div class="w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center mb-4">
-            <svg
-              class="w-8 h-8 text-gray-300"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
+          <div
+            class="w-16 h-16 bg-gray-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center mb-4 text-gray-300 dark:text-slate-600"
+          >
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -63,8 +64,8 @@
               />
             </svg>
           </div>
-          <p class="text-gray-900 font-bold text-xl">No articles found</p>
-          <p class="text-gray-500 mt-1">Try adjusting your search terms.</p>
+          <p class="text-gray-900 dark:text-slate-100 font-bold text-xl">No articles found</p>
+          <p class="text-gray-500 dark:text-slate-500 mt-1">Try adjusting your search terms.</p>
         </div>
       }
     </div>
@@ -74,7 +75,7 @@
         <button
           (click)="loadMore()"
           [disabled]="isLoadingMore()"
-          class="group px-10 py-4 bg-white border border-gray-200 text-gray-900 font-bold rounded-2xl hover:bg-gray-900 hover:text-white hover:border-gray-900 transition-all active:scale-95 disabled:opacity-50 flex items-center gap-3 shadow-sm hover:shadow-xl"
+          class="group px-10 py-4 bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 text-gray-900 dark:text-slate-100 font-bold rounded-2xl hover:bg-gray-900 dark:hover:bg-slate-100 hover:text-white dark:hover:text-slate-900 hover:border-gray-900 dark:hover:border-slate-100 transition-all active:scale-95 disabled:opacity-50 flex items-center gap-3 shadow-sm hover:shadow-xl dark:shadow-blue-900/10"
         >
           @if (isLoadingMore()) {
             <svg class="animate-spin h-5 w-5 text-blue-600" viewBox="0 0 24 24">

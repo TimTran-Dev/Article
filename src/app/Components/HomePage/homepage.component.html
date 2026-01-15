@@ -1,14 +1,17 @@
 @if (isLoading()) {
   <tap-loading loadingText="Building your newsroom..."></tap-loading>
 } @else {
-  <div class="py-4">
+  <div class="py-4 min-h-screen dark:bg-slate-950 transition-colors duration-500">
     <header class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <div class="flex flex-col gap-2">
-        <span class="text-blue-600 font-black text-xs uppercase tracking-[0.3em]">Dashboard</span>
-        <h1 class="text-5xl font-black text-gray-900 tracking-tight">
-          Featured <span class="text-gray-400">Stories</span>
+        <span class="text-blue-600 dark:text-blue-400 font-black text-xs uppercase tracking-[0.3em]"
+          >Dashboard</span
+        >
+
+        <h1 class="text-5xl font-black text-gray-900 dark:text-slate-100 tracking-tight">
+          Featured <span class="text-gray-400 dark:text-slate-600">Stories</span>
         </h1>
-        <p class="text-gray-500 text-lg max-w-xl">
+        <p class="text-gray-500 dark:text-slate-400 text-lg max-w-xl">
           Browse through your latest publications and upcoming content integrations.
         </p>
       </div>
@@ -27,12 +30,12 @@
           @for (article of articles(); track article.id) {
             <div class="snap-center shrink-0 w-[85vw] md:w-[600px] first:ml-0 scroll-ml-6">
               <div
-                class="h-full bg-white rounded-[2.5rem] p-10 border border-gray-100 transition-all duration-700 hover:bg-blue-600 hover:text-white group/card flex flex-col justify-between min-h-[480px] shadow-sm hover:shadow-2xl"
+                class="h-full bg-white dark:bg-slate-900 rounded-[2.5rem] p-10 border border-gray-100 dark:border-slate-800 transition-all duration-700 hover:bg-blue-600 dark:hover:bg-blue-600 hover:text-white group/card flex flex-col justify-between min-h-[480px] shadow-sm hover:shadow-2xl dark:hover:shadow-blue-900/40"
               >
                 <div>
                   <div class="flex justify-between items-start">
                     <span
-                      class="px-4 py-1.5 rounded-full bg-gray-50 text-blue-600 text-[10px] font-black uppercase tracking-widest shadow-sm group-hover/card:bg-blue-500 group-hover/card:text-white transition-colors"
+                      class="px-4 py-1.5 rounded-full bg-gray-50 dark:bg-slate-800 text-blue-600 dark:text-blue-400 text-[10px] font-black uppercase tracking-widest shadow-sm group-hover/card:bg-blue-500 group-hover/card:text-white transition-colors"
                     >
                       {{ article.contentType }}
                     </span>
@@ -42,7 +45,7 @@
                       target="_blank"
                       rel="noopener noreferrer"
                       (click)="$event.stopPropagation()"
-                      class="text-gray-400 group-hover/card:text-white transition-all duration-300 hover:scale-125 active:scale-95"
+                      class="text-gray-400 dark:text-slate-600 group-hover/card:text-white transition-all duration-300 hover:scale-125 active:scale-95"
                     >
                       <svg
                         class="w-6 h-6"
@@ -61,33 +64,33 @@
                   </div>
 
                   <h2
-                    class="text-3xl font-bold mt-8 mb-6 leading-tight group-hover/card:translate-x-2 transition-transform duration-500"
+                    class="text-3xl font-bold mt-8 mb-6 leading-tight dark:text-slate-100 group-hover/card:translate-x-2 transition-transform duration-500"
                   >
                     {{ article.title }}
                   </h2>
                   <p
-                    class="text-gray-500 text-lg line-clamp-4 group-hover/card:text-blue-50 transition-colors leading-relaxed"
+                    class="text-gray-500 dark:text-slate-400 text-lg line-clamp-4 group-hover/card:text-blue-50 transition-colors leading-relaxed"
                   >
                     {{ article.description }}
                   </p>
                 </div>
 
                 <div
-                  class="flex items-center gap-4 pt-8 border-t border-gray-100 group-hover/card:border-white/20"
+                  class="flex items-center gap-4 pt-8 border-t border-gray-100 dark:border-slate-800/50 group-hover/card:border-white/20"
                 >
                   <div
-                    class="w-12 h-12 rounded-2xl bg-gray-50 text-blue-600 flex items-center justify-center font-black shadow-sm group-hover/card:bg-blue-500 group-hover/card:text-white transition-colors"
+                    class="w-12 h-12 rounded-2xl bg-gray-50 dark:bg-slate-800 text-blue-600 dark:text-blue-400 flex items-center justify-center font-black shadow-sm group-hover/card:bg-blue-500 group-hover/card:text-white transition-colors"
                   >
                     {{ article.author.charAt(0) }}
                   </div>
                   <div>
                     <p
-                      class="font-bold text-gray-900 group-hover/card:text-white transition-colors"
+                      class="font-bold text-gray-900 dark:text-slate-100 group-hover/card:text-white transition-colors"
                     >
                       {{ article.author }}
                     </p>
                     <span
-                      class="text-xs font-medium text-gray-400 group-hover/card:text-blue-100 transition-colors"
+                      class="text-xs font-medium text-gray-400 dark:text-slate-500 group-hover/card:text-blue-100 transition-colors"
                     >
                       Verified Contributor
                     </span>
@@ -99,16 +102,16 @@
         </div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
-          <div class="h-1.5 w-full bg-gray-200 rounded-full overflow-hidden">
+          <div class="h-1.5 w-full bg-gray-200 dark:bg-slate-800 rounded-full overflow-hidden">
             <div
-              class="h-full bg-blue-600 transition-all ease-linear"
+              class="h-full bg-blue-600 dark:bg-blue-500 transition-all ease-linear"
               [style.width.%]="isPaused() ? 0 : 100"
               [style.transition-duration]="isPaused() ? '200ms' : '5000ms'"
             ></div>
           </div>
         </div>
 
-        <div class="hidden md:flex justify-center gap-2 mt-4 text-gray-400">
+        <div class="hidden md:flex justify-center gap-2 mt-4 text-gray-400 dark:text-slate-600">
           <span class="text-[10px] font-black uppercase tracking-[0.2em]">
             Auto-playing Newsroom
           </span>
@@ -118,21 +121,21 @@
       @if (comingSoon().length > 0) {
         <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
           <div class="flex items-center gap-4 mb-12">
-            <h2 class="text-2xl font-black text-gray-900">Pipeline</h2>
-            <div class="h-px flex-grow bg-gray-200"></div>
+            <h2 class="text-2xl font-black text-gray-900 dark:text-slate-100">Pipeline</h2>
+            <div class="h-px flex-grow bg-gray-200 dark:bg-slate-800"></div>
           </div>
 
           <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
             @for (item of comingSoon(); track item.id) {
               <div
-                class="group p-8 bg-white rounded-[2rem] border border-gray-100 transition-all text-center shadow-sm hover:shadow-xl hover:-translate-y-1"
+                class="group p-8 bg-white dark:bg-slate-900 rounded-[2rem] border border-gray-100 dark:border-slate-800 transition-all text-center shadow-sm hover:shadow-xl dark:hover:shadow-blue-900/10 hover:-translate-y-1"
               >
                 <p
-                  class="font-black text-gray-400 uppercase text-[10px] tracking-widest mb-2 group-hover:text-blue-500 transition-colors"
+                  class="font-black text-gray-400 dark:text-slate-600 uppercase text-[10px] tracking-widest mb-2 group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors"
                 >
                   {{ item.contentType }}
                 </p>
-                <p class="font-bold text-gray-900 text-lg">Upcoming</p>
+                <p class="font-bold text-gray-900 dark:text-slate-100 text-lg">Upcoming</p>
               </div>
             }
           </div>
