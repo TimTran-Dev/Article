@@ -45,6 +45,25 @@
           >
             Episodes
           </a>
+
+          @if (auth.user()) {
+            <div class="h-4 w-px bg-gray-200 dark:bg-slate-700 mx-2"></div>
+            <a
+              routerLink="/library"
+              routerLinkActive="bg-blue-50 text-blue-600 shadow-sm dark:bg-blue-900/30 dark:text-blue-400"
+              class="px-4 py-2 rounded-lg text-sm font-semibold text-gray-600 dark:text-slate-400 hover:bg-gray-50 dark:hover:bg-slate-800 hover:text-blue-500 dark:hover:text-blue-400 transition-all duration-200 active:scale-95 flex items-center gap-2"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
+                />
+              </svg>
+              My Library
+            </a>
+          }
         </div>
       </div>
 
@@ -73,6 +92,21 @@
             </svg>
           }
         </button>
+
+        <div
+          class="flex items-center gap-3 ml-2 border-l pl-4 border-gray-200 dark:border-slate-700"
+        >
+          @if (auth.user()) {
+            <div id="clerk-user-button"></div>
+          } @else {
+            <button
+              (click)="auth.signIn()"
+              class="px-4 py-2 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-xl transition-all"
+            >
+              Sign In
+            </button>
+          }
+        </div>
 
         @if (shouldShowCreate()) {
           <button
@@ -157,7 +191,6 @@
       >
         Home
       </a>
-
       <a
         routerLink="/articles"
         (click)="closeMenu()"
@@ -166,7 +199,6 @@
       >
         Articles
       </a>
-
       <a
         routerLink="/segments"
         (click)="closeMenu()"
@@ -175,7 +207,6 @@
       >
         Segments
       </a>
-
       <a
         routerLink="/episodes"
         (click)="closeMenu()"
@@ -185,10 +216,51 @@
         Episodes
       </a>
 
-      @if (shouldShowCreate()) {
-        <div class="pt-4 border-t border-gray-100 dark:border-slate-800">
+      @if (auth.user()) {
+        <a
+          routerLink="/library"
+          (click)="closeMenu()"
+          routerLinkActive="bg-blue-50 text-blue-600 border-l-4 border-blue-600 dark:bg-blue-900/30 dark:text-blue-400"
+          class="block px-4 py-3 rounded-r-xl text-base font-bold text-gray-700 dark:text-slate-300 transition-all"
+        >
+          <div class="flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
+              />
+            </svg>
+            My Library
+          </div>
+        </a>
+      }
+
+      <div class="pt-4 mt-2 border-t border-gray-100 dark:border-slate-800">
+        @if (auth.user()) {
+          <div
+            class="flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-slate-800/50 rounded-xl"
+          >
+            <span class="text-sm font-medium text-gray-600 dark:text-slate-400"
+              >Account Settings</span
+            >
+            <div id="clerk-user-button-mobile"></div>
+          </div>
+        } @else {
           <button
-            (click)="openCreateModal()"
+            (click)="auth.signIn(); closeMenu()"
+            class="w-full flex justify-center items-center px-4 py-3 text-blue-600 dark:text-blue-400 font-bold border-2 border-blue-600 dark:border-blue-400 rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all"
+          >
+            Sign In
+          </button>
+        }
+      </div>
+
+      @if (shouldShowCreate()) {
+        <div class="pt-2">
+          <button
+            (click)="openCreateModal(); closeMenu()"
             class="w-full flex justify-center items-center gap-2 px-4 py-4 bg-blue-600 text-white rounded-xl font-bold shadow-lg active:scale-[0.98] transition-transform"
           >
             New Article

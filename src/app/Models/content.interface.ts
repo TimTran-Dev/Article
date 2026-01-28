@@ -26,6 +26,7 @@ export interface Article extends BaseContent {
   content: string;
   sourceId: string;
   sourceName: string;
+  isBookmarked?: boolean;
 }
 
 export interface Segment extends BaseContent {

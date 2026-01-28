@@ -1,0 +1,37 @@
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <header class="mb-10">
+    <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">
+      My Saved Articles
+    </h1>
+    <p class="mt-2 text-lg text-gray-600 dark:text-slate-400">
+      Manage the stories you've saved for later.
+    </p>
+  </header>
+
+  @if (isLoading()) {
+    <div class="flex justify-center py-20">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+    </div>
+  } @else if (bookmarks().length > 0) {
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      @for (article of bookmarks(); track article.id) {
+        <app-article-card [article]="article" (bookmark)="handleRemoveBookmark($event)">
+        </app-article-card>
+      }
+    </div>
+  } @else {
+    <div
+      class="text-center py-20 bg-gray-50 dark:bg-slate-800/50 rounded-2xl border-2 border-dashed border-gray-200 dark:border-slate-700"
+    >
+      <i class="bi bi-bookmark-heart text-5xl text-gray-300 dark:text-slate-600"></i>
+      <h3 class="mt-4 text-xl font-medium text-gray-900 dark:text-white">No bookmarks yet</h3>
+      <p class="mt-2 text-gray-500 dark:text-slate-400">Articles you save will appear here.</p>
+      <a
+        routerLink="/articles"
+        class="mt-6 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700"
+      >
+        Browse News
+      </a>
+    </div>
+  }
+</div>

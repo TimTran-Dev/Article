@@ -92,12 +92,19 @@ export class HomePageComponent implements OnInit, OnDestroy {
 
   private initializeProducts(): void {
     this.isLoading.set(true);
-    this.productService.getFeaturedProducts().subscribe({
-      next: (products) => {
-        this.featuredProducts.set(products);
+
+    // Note: Ensure getFeaturedProducts() in your service is also updated
+    // to return the PaginatedArticleResponse or use getArticles() directly
+    this.productService.getArticles(1, 10).subscribe({
+      next: (response) => {
+        // response is { items: Article[], totalCount: number }
+        this.featuredProducts.set(response.items);
         this.isLoading.set(false);
       },
-      error: () => this.isLoading.set(false),
+      error: (err) => {
+        console.error('Error fetching featured products', err);
+        this.isLoading.set(false);
+      },
     });
   }
 }

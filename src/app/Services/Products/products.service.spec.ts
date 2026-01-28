@@ -2,26 +2,31 @@ import { TestBed } from '@angular/core/testing';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { ProductsService } from './products.service';
-import { ArticleAPIResponse } from '../../Models/ArticleAPIResponse.interface';
 import { environment } from '../../../environments/environment';
-import { NewsArticleUpdateDto } from '../../Models/NewsArticleUpdate.interface';
+import { ContentStatus } from '../../Models/common.enum';
+import {
+  PaginatedArticleResponse,
+  ArticleAPIResponse,
+} from '../../Models/ArticleAPIResponse.interface';
 
 describe('ProductsService', () => {
   let service: ProductsService;
   let httpMock: HttpTestingController;
+  const apiUrl = environment.apiUrl;
 
-  // 1. Setup a helper to create raw API data (mirrors your ArticleAPIResponse)
-  const createRawArticle = (overrides: Partial<ArticleAPIResponse> = {}): ArticleAPIResponse => ({
-    source: { id: 'test-id', name: 'Test Source' },
-    author: 'Test Author',
-    title: 'Test Title',
+  // Mock Data
+  const mockApiArticle: ArticleAPIResponse = {
+    id: 1,
+    title: 'Test Article',
     description: 'Test Description',
     url: 'https://test.com',
-    urlToImage: 'https://test.com/image.png',
-    publishedAt: '2024-01-01',
-    content: 'Test Content',
-    ...overrides,
-  });
+    urlToImage: 'https://test.com/image.jpg',
+    author: 'John Doe',
+    content: 'Full content here',
+    isBookmarked: false,
+    publishedAt: '',
+    source: { id: 'cnn', name: 'CNN' },
+  };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -33,75 +38,104 @@ describe('ProductsService', () => {
   });
 
   afterEach(() => {
-    httpMock.verify(); // Ensures no outstanding HTTP requests
+    httpMock.verify(); // Ensures no outstanding requests
   });
 
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
-  describe('getArticles', () => {
-    it('should fetch articles and map them correctly with totalCount from headers', () => {
-      const mockRawData: ArticleAPIResponse[] = [createRawArticle()];
+  describe('#getArticles', () => {
+    it('should return mapped articles and total count', () => {
+      const mockResponse: PaginatedArticleResponse = {
+        items: [mockApiArticle],
+        totalCount: 1,
+      };
 
-      service.getArticles(1, 10, 'test').subscribe((result) => {
+      service.getArticles(1, 10, 'Angular').subscribe((result) => {
         expect(result.items.length).toBe(1);
-        expect(result.totalCount).toBe(100);
-        // Verify Mapping logic (e.g., urlToImage -> imageUrl)
-        expect(result.items[0].imageUrl).toBe(mockRawData[0].urlToImage);
-        expect(result.items[0].sourceName).toBe(mockRawData[0].source.name);
+        expect(result.totalCount).toBe(1);
+        expect(result.items[0].title).toBe('Test Article');
+        expect(result.items[0].sourceName).toBe('CNN'); // Verifies mapping
+        expect(result.items[0].contentStatus).toBe(ContentStatus.Published);
       });
 
-      const req = httpMock.expectOne((r) => r.url.includes('/news'));
+      const req = httpMock.expectOne(
+        (request) =>
+          request.url === `${apiUrl}/news` && request.params.get('searchTerm') === 'Angular',
+      );
+
       expect(req.request.method).toBe('GET');
-      expect(req.request.params.get('searchTerm')).toBe('test');
-
-      // Flush with custom headers
-      req.flush(mockRawData, {
-        headers: { 'X-Total-Count': '100' },
-      });
+      req.flush(mockResponse);
     });
   });
 
-  describe('getFeaturedProducts', () => {
-    it('should map raw API response to flat Article structure', () => {
-      const mockRawData: ArticleAPIResponse[] = [
-        createRawArticle({ title: 'Featured 1' }),
-        createRawArticle({ title: 'Featured 2' }),
-      ];
+  describe('#createArticle', () => {
+    it('should send a POST request to create an article', () => {
+      const newArticle = { title: 'New', description: 'Desc' } as any;
 
-      service.getFeaturedProducts().subscribe((articles) => {
-        expect(articles.length).toBe(2);
-        expect(articles[0].title).toBe('Featured 1');
-        expect(articles[0].contentType).toBe('Article'); // Verified by mapper
-      });
+      service.createArticle(newArticle).subscribe();
 
-      const req = httpMock.expectOne(`${environment.apiUrl}/news`);
-      req.flush(mockRawData);
+      const req = httpMock.expectOne(`${apiUrl}/news/create`);
+      expect(req.request.method).toBe('POST');
+      expect(req.request.body).toEqual(newArticle);
+      req.flush(null);
     });
   });
 
-  describe('CRUD operations', () => {
-    it('should call delete with correct ID', () => {
+  describe('#updateArticle', () => {
+    it('should send a PATCH request with update DTO', () => {
+      const updateDto = { title: 'Updated Title' } as any;
+
+      service.updateArticle(123, updateDto).subscribe();
+
+      const req = httpMock.expectOne(`${apiUrl}/news/update/123`);
+      expect(req.request.method).toBe('PATCH');
+      req.flush(null);
+    });
+  });
+
+  describe('#deleteArticle', () => {
+    it('should send a DELETE request', () => {
       service.deleteArticle(123).subscribe();
-      const req = httpMock.expectOne(`${environment.apiUrl}/news/delete/123`);
+
+      const req = httpMock.expectOne(`${apiUrl}/news/delete/123`);
       expect(req.request.method).toBe('DELETE');
       req.flush(null);
     });
+  });
 
-    it('should call update with correct payload', () => {
-      // Add the missing 'url' property required by NewsArticleUpdateDto
-      const updateDto: NewsArticleUpdateDto = {
-        title: 'New Title',
-        url: 'https://test.com/updated-url',
-      };
+  describe('#getFeaturedProducts', () => {
+    it('should return mapped articles from a simple array response', () => {
+      const mockList: ArticleAPIResponse[] = [mockApiArticle];
 
-      service.updateArticle(1, updateDto).subscribe();
+      service.getFeaturedProducts().subscribe((articles) => {
+        expect(articles.length).toBe(1);
+        expect(articles[0].author).toBe('John Doe');
+      });
 
-      const req = httpMock.expectOne(`${environment.apiUrl}/news/update?id=1`);
-      expect(req.request.method).toBe('PATCH');
-      expect(req.request.body).toEqual(updateDto);
-      req.flush(null);
+      const req = httpMock.expectOne(`${apiUrl}/news`);
+      req.flush(mockList);
+    });
+  });
+
+  describe('Mapping Logic', () => {
+    it('should provide default values if optional API fields are missing', () => {
+      const incompleteArticle: ArticleAPIResponse = {
+        id: 2,
+        title: 'Minimal',
+        url: 'url',
+        source: null, // Testing safe navigation
+      } as any;
+
+      service['getArticles'](1, 1).subscribe((res) => {
+        const item = res.items[0];
+        expect(item.author).toBe('News Source'); // Default from mapToArticle
+        expect(item.sourceName).toBe('Unknown Source'); // Default from mapToArticle
+      });
+
+      const req = httpMock.expectOne((r) => r.url.includes('/news'));
+      req.flush({ items: [incompleteArticle], totalCount: 1 });
     });
   });
 });

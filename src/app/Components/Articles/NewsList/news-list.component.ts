@@ -10,6 +10,7 @@ import { NewsArticleCreateDto } from '../../../Models/NewsArticleCreate.interfac
 import { ModalComponent } from '../../Tapestry/Modal/Confirm/modal.component';
 import { EditModalComponent } from '../../Tapestry/Modal/Edit/edit.component';
 import { NavigationService } from '../../../Services/NavigationService/navigation.service';
+import { BookmarkService } from '../../../Services/Bookmark/bookmark.service';
 
 @Component({
   selector: 'app-news-list',
@@ -37,6 +38,7 @@ export class NewsListComponent implements OnInit, OnDestroy {
   productService = inject(ProductsService);
   toastService = inject(ToastService);
   navService = inject(NavigationService);
+  bookmarkService = inject(BookmarkService);
 
   isLoading = signal(false);
   articles = signal<ReactiveArticle[]>([]);
@@ -71,6 +73,31 @@ export class NewsListComponent implements OnInit, OnDestroy {
   onSearch(event: Event): void {
     const input = event.target as HTMLInputElement;
     this.searchSubject.next(input.value);
+  }
+
+  handleBookmarkToggle(articleId: number): void {
+    // Find the current state to provide a better rollback if it fails
+    const article = this.articles().find((a) => a.id === articleId);
+    if (!article) return;
+
+    // Optional: Add a small delay or loading state if desired
+    this.bookmarkService.toggleBookmark(articleId).subscribe({
+      next: (response) => {
+        // 3. Update the signal state
+        this.articles.update((items) =>
+          items.map((item) =>
+            item.id === articleId ? { ...item, isBookmarked: response.bookmarked } : item,
+          ),
+        );
+
+        // 4. Show a quick toast
+        const message = response.bookmarked ? 'Saved to Library' : 'Removed from Library';
+        this.toastService.show(message, 'success');
+      },
+      error: () => {
+        this.toastService.show('Failed to update bookmark.', 'error');
+      },
+    });
   }
 
   handleCreate(dto: NewsArticleCreateDto): void {
