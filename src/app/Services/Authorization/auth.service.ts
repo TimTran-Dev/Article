@@ -1,19 +1,26 @@
 import { Injectable, signal } from '@angular/core';
-import { Clerk } from '@clerk/clerk-js';
-import { UserResource } from '@clerk/types';
+// Import 'Clerk' as the instance type and 'UserResource' for the signal
+import type { Clerk, UserResource } from '@clerk/types';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private clerk = new Clerk(environment.clearkKey);
+  // Use the 'Clerk' interface from @clerk/types
+  private clerk: Clerk | null = null;
 
   user = signal<UserResource | null>(null);
   loaded = signal<boolean>(false);
 
   async init(): Promise<void> {
-    await this.clerk.load();
+    // 1. Dynamically import the library
+    const module = await import('@clerk/clerk-js');
+
+    if (!this.clerk) {
+      this.clerk = new module.Clerk(environment.clearkKey) as Clerk;
+    }
+    await (this.clerk as Clerk & { load: () => Promise<void> }).load();
 
     this.user.set(this.clerk.user ?? null);
     this.loaded.set(true);
@@ -23,16 +30,16 @@ export class AuthService {
     });
   }
 
-  public getClerkInstance(): Clerk {
+  public getClerkInstance(): Clerk | null {
     return this.clerk;
   }
 
   signIn(): void {
-    this.clerk.openSignIn();
+    this.clerk?.openSignIn();
   }
 
   async getToken(): Promise<string | null> {
-    if (!this.clerk.session) {
+    if (!this.clerk?.session) {
       return null;
     }
     return await this.clerk.session.getToken();

@@ -1,16 +1,37 @@
 import { Routes } from '@angular/router';
 import { HomePageComponent } from './Components/HomePage/homepage.component';
-import { SegmentComponent } from './Components/Segments/segment.component';
-import { EpisodeComponent } from './Components/Episodes/episode.component';
-import { NewsListComponent } from './Components/Articles/NewsList/news-list.component';
-import { LibraryComponent } from './Components/MyLibrary/library.component';
 
 export const routes: Routes = [
-  { path: '', component: HomePageComponent },
-  { path: 'home', redirectTo: '' },
-  { path: 'articles', component: NewsListComponent },
-  { path: 'segments', component: SegmentComponent },
-  { path: 'episodes', component: EpisodeComponent },
-  { path: 'library', component: LibraryComponent },
-  { path: '**', redirectTo: 'home' },
+  {
+    path: '',
+    component: HomePageComponent,
+  },
+  {
+    path: 'home',
+    redirectTo: '',
+  },
+  {
+    path: 'articles',
+    loadComponent: () =>
+      import('./Components/Articles/NewsList/news-list.component').then((m) => m.NewsListComponent),
+  },
+  {
+    path: 'segments',
+    loadComponent: () =>
+      import('./Components/Segments/segment.component').then((m) => m.SegmentComponent),
+  },
+  {
+    path: 'episodes',
+    loadComponent: () =>
+      import('./Components/Episodes/episode.component').then((m) => m.EpisodeComponent),
+  },
+  {
+    path: 'library',
+    loadComponent: () =>
+      import('./Components/MyLibrary/library.component').then((m) => m.LibraryComponent),
+  },
+  {
+    path: '**',
+    redirectTo: 'home',
+  },
 ];
