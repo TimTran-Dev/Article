@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://my-news-backend-ategd4fkehazh8d4.centralus-01.azurewebsites.net/api',
+  apiUrl: 'https://newsappapi-a8vf.onrender.com/api',
   clearkKey: 'pk_test_Ym9zcy1jaG93LTI0LmNsZXJrLmFjY291bnRzLmRldiQ',
 };
