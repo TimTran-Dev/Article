@@ -1,0 +1,23 @@
+<button
+  (click)="onToggle($event)"
+  class="group relative flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300 active:scale-90 shadow-sm overflow-hidden bg-gray-100 dark:bg-slate-800"
+  [title]="article().isBookmarked ? 'Remove Bookmark' : 'Save Article'"
+>
+  <div
+    class="absolute inset-0 transition-opacity duration-300"
+    [class.bg-red-500/10]="article().isBookmarked"
+    [class.opacity-100]="article().isBookmarked"
+    [class.opacity-0]="!article().isBookmarked"
+  ></div>
+
+  <i
+    class="bi relative z-10 text-xl leading-none transition-all duration-300"
+    [class.bi-heart-fill]="article().isBookmarked"
+    [class.text-red-500]="article().isBookmarked"
+    [class.animate-heart-pop]="article().isBookmarked"
+    [class.bi-heart]="!article().isBookmarked"
+    [class.text-slate-500]="!article().isBookmarked"
+    [class.dark:text-slate-400]="!article().isBookmarked"
+    [class.group-hover:text-red-400]="!article().isBookmarked"
+  ></i>
+</button>

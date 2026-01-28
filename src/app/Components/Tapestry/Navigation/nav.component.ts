@@ -1,9 +1,10 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { NavigationService } from '../../../Services/NavigationService/navigation.service';
 import { filter, map } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ThemeService } from '../../../Services/Theme/theme.service';
+import { AuthService } from '../../../Services/Authorization/auth.service';
 
 @Component({
   selector: 'tap-nav',
@@ -15,8 +16,19 @@ export class NavComponent {
   private navService = inject(NavigationService);
   private router = inject(Router);
   themeService = inject(ThemeService);
+  auth = inject(AuthService);
 
   isMenuOpen = signal(false);
+
+  constructor() {
+    effect(() => {
+      const user = this.auth.user();
+      const menuOpen = this.isMenuOpen();
+      if (user) {
+        setTimeout(() => this.mountUserButton(), 0);
+      }
+    });
+  }
 
   toggleMenu(): void {
     this.isMenuOpen.update((v) => !v);
@@ -29,6 +41,30 @@ export class NavComponent {
   openCreateModal(): void {
     this.navService.openModal();
     this.isMenuOpen.set(false);
+  }
+
+  async checkToken(): Promise<void> {
+    const token = await this.auth.getToken();
+    console.log('Current JWT:', token);
+  }
+
+  private mountUserButton(): void {
+    const clerk = this.auth.getClerkInstance();
+    const appearance = {
+      variables: { colorPrimary: '#2563eb' },
+    };
+
+    // 1. Mount Desktop Version
+    const desktopEl = document.getElementById('clerk-user-button');
+    if (desktopEl) {
+      clerk?.mountUserButton(desktopEl as HTMLDivElement, { appearance });
+    }
+
+    // 2. Mount Mobile Version (if menu is open)
+    const mobileEl = document.getElementById('clerk-user-button-mobile');
+    if (mobileEl) {
+      clerk?.mountUserButton(mobileEl as HTMLDivElement, { appearance });
+    }
   }
 
   private currentUrl = toSignal(

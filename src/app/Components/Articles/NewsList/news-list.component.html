@@ -47,6 +47,7 @@
           [article]="item"
           (edit)="openEditModal($event)"
           (delete)="openDeleteModal($event)"
+          (bookmark)="handleBookmarkToggle($event)"
         />
       } @empty {
         <div

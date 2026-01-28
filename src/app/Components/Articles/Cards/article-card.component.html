@@ -1,6 +1,13 @@
 <article
-  class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-gray-200 dark:border-slate-800 hover:shadow-xl dark:hover:shadow-blue-900/20 transition-all overflow-hidden h-full flex flex-col duration-300 ease-out hover:-translate-y-1 hover:border-blue-200 dark:hover:border-blue-500"
+  class="relative group/card bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-gray-200 dark:border-slate-800 hover:shadow-xl dark:hover:shadow-blue-900/20 transition-all overflow-hidden h-full flex flex-col duration-300 ease-out hover:-translate-y-1 hover:border-blue-200 dark:hover:border-blue-500"
 >
+  @if (authService.user()) {
+    <div class="absolute top-3 right-3 z-10">
+      <app-bookmark-button [article]="article()" (toggled)="bookmark.emit($event)">
+      </app-bookmark-button>
+    </div>
+  }
+
   <div class="flex items-start justify-between p-6">
     <div class="flex-1">
       <div class="flex items-center space-x-3 mb-3">
@@ -10,7 +17,7 @@
           Article
         </span>
       </div>
-      <h2 class="text-xl font-bold text-gray-900 dark:text-slate-100 leading-tight mb-3">
+      <h2 class="text-xl font-bold text-gray-900 dark:text-slate-100 leading-tight mb-3 pr-10">
         {{ article().title }}
       </h2>
 
