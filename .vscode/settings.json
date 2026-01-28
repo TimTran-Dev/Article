@@ -1,13 +1,17 @@
 {
   "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": {
-    "source.fixAll": "always",
-    "source.fixAll.eslint": "always"
+    // REMOVE "source.fixAll": "always" - it's too aggressive
+    "source.fixAll.eslint": "explicit"
   },
   "eslint.validate": ["typescript", "html"],
-  "eslint.run": "onSave",
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  // Change this to "onType" so you see errors immediately
+  // without waiting for a save to trigger a "fix war"
+  "eslint.run": "onType",
   "files.eol": "\n",
   "files.insertFinalNewline": true,
-  "files.trimFinalNewlines": true
+  "files.trimFinalNewlines": true,
+  // Ensure the editor doesn't try to "help" and mess up Prettier
+  "editor.formatOnType": false
 }

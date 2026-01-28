@@ -1,109 +1,118 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { LibraryComponent } from './library.component';
 import { BookmarkService } from '../../Services/Bookmark/bookmark.service';
+import { AuthService } from '../../Services/Authorization/auth.service';
 import { of, throwError } from 'rxjs';
 import { Article } from '../../Models/content.interface';
 import { ContentStatus } from '../../Models/common.enum';
 import { provideRouter } from '@angular/router';
-import { vi } from 'vitest';
+import { vi, describe, it, expect, beforeEach, Mock } from 'vitest';
+
+// 1. Define a strict mock interface for the BookmarkService
+interface MockBookmarkService {
+  getUsersBookmarks: Mock;
+  toggleBookmark: Mock;
+}
 
 describe('LibraryComponent', () => {
   let component: LibraryComponent;
   let fixture: ComponentFixture<LibraryComponent>;
-  let bookmarkService: BookmarkService;
+  let bookmarkService: MockBookmarkService;
 
   const mockArticles: Article[] = [
     {
       id: 1,
       title: 'Saved Article 1',
+      author: 'John Doe', // Added this
+      body: 'Sample body text...', // Added this
       contentType: 'Article',
       contentStatus: ContentStatus.Published,
-      isBookmarked: false, // Service might return false, but component should map to true
+      isBookmarked: false,
     } as Article,
     {
       id: 2,
       title: 'Saved Article 2',
+      author: 'Jane Doe', // Added this
+      body: 'Sample body text...', // Added this
       contentType: 'Article',
       contentStatus: ContentStatus.Published,
     } as Article,
   ];
 
   beforeEach(async () => {
-    // Mocking the BookmarkService
-    const bookmarkServiceMock = {
+    // 2. Create the Mock Objects
+    const bookmarkServiceMock: MockBookmarkService = {
       getUsersBookmarks: vi.fn(),
       toggleBookmark: vi.fn(),
     };
 
+    // This mock prevents the real AuthService and Clerk SDK from loading
+    const authServiceMock = {
+      init: vi.fn().mockResolvedValue(undefined),
+      getToken: vi.fn().mockResolvedValue('mock-token'),
+      user: vi.fn().mockReturnValue(null),
+    };
+
     await TestBed.configureTestingModule({
       imports: [LibraryComponent],
-      providers: [{ provide: BookmarkService, useValue: bookmarkServiceMock }, provideRouter([])],
+      providers: [
+        { provide: BookmarkService, useValue: bookmarkServiceMock },
+        { provide: AuthService, useValue: authServiceMock }, // Crucial fix
+        provideRouter([]),
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(LibraryComponent);
     component = fixture.componentInstance;
-    bookmarkService = TestBed.inject(BookmarkService);
+
+    // 3. Inject and cast to our Mock interface for type-safe spies
+    bookmarkService = TestBed.inject(BookmarkService) as unknown as MockBookmarkService;
   });
 
   it('should load bookmarks on init and map isBookmarked to true', () => {
-    // Arrange
-    vi.spyOn(bookmarkService, 'getUsersBookmarks').mockReturnValue(of(mockArticles));
+    bookmarkService.getUsersBookmarks.mockReturnValue(of(mockArticles));
 
-    // Act
     fixture.detectChanges(); // triggers ngOnInit
 
-    // Assert
     expect(component.isLoading()).toBe(false);
     expect(component.bookmarks().length).toBe(2);
-    // Verify the mapping logic works
+    // Logic check: component should map isBookmarked to true
     expect(component.bookmarks()[0].isBookmarked).toBe(true);
   });
 
   it('should handle error during initial load', () => {
-    // Arrange
-    vi.spyOn(bookmarkService, 'getUsersBookmarks').mockReturnValue(
-      throwError(() => new Error('API Error')),
-    );
+    bookmarkService.getUsersBookmarks.mockReturnValue(throwError(() => new Error('API Error')));
 
-    // Act
     fixture.detectChanges();
 
-    // Assert
     expect(component.isLoading()).toBe(false);
     expect(component.bookmarks()).toEqual([]);
   });
 
   describe('handleRemoveBookmark (Optimistic UI)', () => {
     beforeEach(() => {
-      // Set initial state
-      vi.spyOn(bookmarkService, 'getUsersBookmarks').mockReturnValue(of(mockArticles));
+      bookmarkService.getUsersBookmarks.mockReturnValue(of(mockArticles));
       fixture.detectChanges();
     });
 
     it('should remove article from list immediately (optimistic update)', () => {
-      // Arrange: Return the expected object shape instead of void 0
-      vi.spyOn(bookmarkService, 'toggleBookmark').mockReturnValue(of({ bookmarked: false }));
+      bookmarkService.toggleBookmark.mockReturnValue(of({ bookmarked: false }));
 
-      // Act
       component.handleRemoveBookmark(1);
 
-      // Assert
       expect(component.bookmarks().length).toBe(1);
       expect(bookmarkService.toggleBookmark).toHaveBeenCalledWith(1);
     });
 
     it('should rollback the list if the delete API call fails', () => {
-      // Arrange
       const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-      vi.spyOn(bookmarkService, 'toggleBookmark').mockReturnValue(
-        throwError(() => new Error('Server Fail')),
-      );
 
-      // Act
+      bookmarkService.toggleBookmark.mockReturnValue(throwError(() => new Error('Server Fail')));
+
       component.handleRemoveBookmark(1);
 
-      // Assert
-      expect(component.bookmarks().length).toBe(2); // Rolled back to original count
+      // Verify rollback
+      expect(component.bookmarks().length).toBe(2);
       expect(component.bookmarks().find((a) => a.id === 1)).toBeTruthy();
       expect(consoleSpy).toHaveBeenCalled();
 
