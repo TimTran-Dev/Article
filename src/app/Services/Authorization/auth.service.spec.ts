@@ -72,12 +72,14 @@ describe('AuthService', () => {
   let service: AuthService;
   let clerk: MockClerkInstance;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     TestBed.configureTestingModule({
       providers: [AuthService],
     });
 
     service = TestBed.inject(AuthService);
+
+    await service.init();
 
     // Retrieve the instance that was returned by the mock constructor
     clerk = service.getClerkInstance() as unknown as MockClerkInstance;
