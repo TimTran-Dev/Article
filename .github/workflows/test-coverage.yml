@@ -1,0 +1,32 @@
+name: Test & Coverage
+
+on:
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  test-coverage:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Run Vitest + coverage
+        run: pnpm run coverage
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/

@@ -1,0 +1,49 @@
+@import 'tailwindcss';
+
+/* 1. MANUALLY DEFINE THE DARK VARIANT (Crucial for v4) */
+/* This tells Tailwind: If the 'dark' class is on <html>, apply dark: styles */
+@variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* Define your custom colors using v4 CSS variables */
+  --color-dark-bg: #0f172a;
+  --color-dark-card: #1e293b;
+  --color-dark-border: #334155;
+}
+
+/* 2. GLOBAL STYLES & TRANSITIONS */
+@layer base {
+  html {
+    /* Ensure the scrollbar area is consistent */
+    color-scheme: light;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  body {
+    /* Light mode defaults */
+    @apply bg-gray-50 text-gray-900 transition-colors duration-300;
+  }
+
+  /* 3. APPLY THE DARK THEME */
+  .dark body {
+    @apply bg-slate-950 text-slate-100;
+  }
+}
+
+/* 4. CUSTOM SCROLLBARS FOR DARK MODE */
+.dark ::-webkit-scrollbar {
+  width: 10px;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: var(--color-dark-bg);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: var(--color-dark-border);
+  border-radius: 5px;
+  border: 2px solid var(--color-dark-bg);
+}
