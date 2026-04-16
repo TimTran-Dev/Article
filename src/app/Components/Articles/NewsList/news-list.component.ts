@@ -235,8 +235,7 @@ export class NewsListComponent implements OnInit, OnDestroy {
   }
 
   private mapFormToArticle(formData: Record<string, unknown>, existing: Article): Article {
-    const getString = (key: string, fallback: string = ''): string =>
-      String(formData[key] ?? fallback);
+    const getString = (key: string, fallback = ''): string => String(formData[key] ?? fallback);
 
     return {
       ...existing,

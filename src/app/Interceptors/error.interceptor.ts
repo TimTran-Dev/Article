@@ -8,12 +8,12 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
-      let errorMessage = 'An unknown error occurred.';
+      let errorMessage: string;
 
       if (error.error instanceof ErrorEvent) {
         errorMessage = `Network Error: ${error.error.message}`;
       } else {
-        errorMessage = error.error?.message || `Error ${error.status}: ${error.statusText}`;
+        errorMessage = error.error?.message || error.statusText || 'An unknown error occurred.';
       }
 
       toastService.show(errorMessage, 'error');

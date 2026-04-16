@@ -21,7 +21,7 @@ export class ProductsService {
   public getArticles(
     page: number,
     pageSize: number,
-    searchTerm: string = '',
+    searchTerm = '',
   ): Observable<{ items: Article[]; totalCount: number }> {
     const params = {
       page: page.toString(),

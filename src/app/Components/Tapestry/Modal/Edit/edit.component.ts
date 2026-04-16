@@ -17,7 +17,7 @@ interface ArticleFormValue {
 }
 
 @Component({
-  selector: 'tap-edit-modal',
+  selector: 'app-edit-modal',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, ButtonComponent],
   templateUrl: 'edit.component.html',

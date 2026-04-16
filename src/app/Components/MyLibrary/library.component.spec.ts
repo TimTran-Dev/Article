@@ -100,7 +100,9 @@ describe('LibraryComponent', () => {
     });
 
     it('should rollback the list if the delete API call fails', () => {
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {
+        /* empty */
+      });
 
       bookmarkService.toggleBookmark.mockReturnValue(throwError(() => new Error('Server Fail')));
 

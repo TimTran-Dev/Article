@@ -119,19 +119,19 @@
 </div>
 
 @if (showModal()) {
-  <tap-modal (confirmed)="handleDelete()" (cancelled)="closeModal()"></tap-modal>
+  <app-modal (confirmed)="handleDelete()" (cancelled)="closeModal()"></app-modal>
 }
 @if (showEditModal()) {
-  <tap-edit-modal
+  <app-edit-modal
     [editArticle]="selectedArticle()"
     [isLoading]="isEditLoading()"
     (confirm)="handleFormSubmit($event)"
     (closeModal)="closeEditModal()"
-  ></tap-edit-modal>
+  ></app-edit-modal>
 }
 @if (navService.showCreateModal()) {
-  <tap-edit-modal
+  <app-edit-modal
     (confirm)="handleFormSubmit($event)"
     (closeModal)="navService.closeModal()"
-  ></tap-edit-modal>
+  ></app-edit-modal>
 }

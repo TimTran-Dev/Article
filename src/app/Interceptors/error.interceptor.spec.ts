@@ -46,12 +46,9 @@ describe('errorInterceptor', () => {
 
     const req = httpMock.expectOne('/test');
 
-    req.flush('Error body', { status: 500, statusText });
+    req.flush({ message: 'Internal Server Error' }, { status: 500, statusText });
 
-    expect(mockToastService.show).toHaveBeenCalledWith(
-      expect.stringContaining('Error 500: Internal Server Error'),
-      'error',
-    );
+    expect(mockToastService.show).toHaveBeenCalledWith('Internal Server Error', 'error');
   });
 
   it('should handle client-side ErrorEvents (Network Error)', () => {

@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, input } from '@angular/core';
 
 @Component({
-  selector: 'tap-loading',
+  selector: 'app-loading',
   templateUrl: 'loading.component.html',
   standalone: true,
   imports: [CommonModule],

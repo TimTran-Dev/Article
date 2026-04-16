@@ -3,7 +3,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { ButtonComponent } from '../../Button/button.component';
 
 @Component({
-  selector: 'tap-modal',
+  selector: 'app-modal',
   templateUrl: 'modal.component.html',
   imports: [CommonModule, ButtonComponent],
   standalone: true,

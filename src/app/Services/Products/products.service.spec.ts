@@ -8,6 +8,8 @@ import {
   PaginatedArticleResponse,
   ArticleAPIResponse,
 } from '../../Models/ArticleAPIResponse.interface';
+import { NewsArticleCreateDto } from '../../Models/NewsArticleCreate.interface';
+import { NewsArticleUpdateDto } from '../../Models/NewsArticleUpdate.interface';
 
 describe('ProductsService', () => {
   let service: ProductsService;
@@ -71,7 +73,7 @@ describe('ProductsService', () => {
 
   describe('#createArticle', () => {
     it('should send a POST request to create an article', () => {
-      const newArticle = { title: 'New', description: 'Desc' } as any;
+      const newArticle = { title: 'New', description: 'Desc' } as NewsArticleCreateDto;
 
       service.createArticle(newArticle).subscribe();
 
@@ -84,7 +86,7 @@ describe('ProductsService', () => {
 
   describe('#updateArticle', () => {
     it('should send a PATCH request with update DTO', () => {
-      const updateDto = { title: 'Updated Title' } as any;
+      const updateDto = { title: 'Updated Title' } as NewsArticleUpdateDto;
 
       service.updateArticle(123, updateDto).subscribe();
 
@@ -125,7 +127,7 @@ describe('ProductsService', () => {
         title: 'Minimal',
         url: 'url',
         source: null, // Testing safe navigation
-      } as any;
+      } as unknown as ArticleAPIResponse;
 
       service['getArticles'](1, 1).subscribe((res) => {
         const item = res.items[0];

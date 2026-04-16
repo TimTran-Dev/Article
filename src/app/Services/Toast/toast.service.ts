@@ -5,7 +5,7 @@ import { Toast, ToastType } from '../../Models/toast.interface';
 export class ToastService {
   currentToast = signal<Toast | null>(null);
 
-  show(message: string, type: ToastType = 'success', duration: number = 3000): void {
+  show(message: string, type: ToastType = 'success', duration = 3000): void {
     this.currentToast.set({ message, type });
 
     setTimeout(() => {

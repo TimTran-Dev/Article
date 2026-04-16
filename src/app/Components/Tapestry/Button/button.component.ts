@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, input } from '@angular/core';
 
 @Component({
-  selector: 'tap-button',
+  selector: 'app-button',
   templateUrl: 'button.component.html',
   imports: [CommonModule],
   standalone: true,

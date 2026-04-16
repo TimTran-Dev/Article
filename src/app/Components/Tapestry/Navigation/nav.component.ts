@@ -7,7 +7,7 @@ import { ThemeService } from '../../../Services/Theme/theme.service';
 import { AuthService } from '../../../Services/Authorization/auth.service';
 
 @Component({
-  selector: 'tap-nav',
+  selector: 'app-nav',
   templateUrl: './nav.component.html',
   standalone: true,
   imports: [RouterLink, RouterLinkActive],
@@ -23,7 +23,6 @@ export class NavComponent {
   constructor() {
     effect(() => {
       const user = this.auth.user();
-      const menuOpen = this.isMenuOpen();
       if (user) {
         setTimeout(() => this.mountUserButton(), 0);
       }

@@ -69,7 +69,9 @@ describe('AuthService', () => {
 
   describe('#init', () => {
     it('should update user signal when addListener triggers', async () => {
-      let listenerCallback: (state: { user: UserResource | null }) => void = () => {};
+      let listenerCallback: (state: { user: UserResource | null }) => void = () => {
+        /* empty */
+      };
 
       clerk.addListener.mockImplementation((cb) => {
         listenerCallback = cb;

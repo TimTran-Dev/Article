@@ -1,9 +1,9 @@
-import { CommonModule } from '@angular/common';
 import { Component, inject, signal, effect, OnDestroy } from '@angular/core';
 import { ToastService } from '../../../Services/Toast/toast.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'tap-toast',
+  selector: 'app-toast',
   standalone: true,
   imports: [CommonModule],
   templateUrl: 'toast.component.html',
@@ -18,7 +18,7 @@ export class ToastComponent implements OnDestroy {
 
   progressBarDuration = 2500;
 
-  private exitTimeout: any;
+  private exitTimeout: number | null = null;
 
   constructor() {
     effect(() => {

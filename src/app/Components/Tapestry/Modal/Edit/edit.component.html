@@ -34,15 +34,16 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label class="block text-sm font-semibold text-gray-700 dark:text-slate-300 mb-1.5"
-              >Title</label
-            >
-            <input
-              formControlName="title"
-              type="text"
-              placeholder="Enter article title"
-              [class.border-red-500]="getFieldError('title')"
-              class="w-full px-4 py-2.5 bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-slate-700 rounded-xl text-gray-900 dark:text-slate-100 focus:ring-4 focus:ring-blue-500/10 dark:focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-slate-500"
-            />
+              >Title
+              <input
+                formControlName="title"
+                type="text"
+                placeholder="Enter article title"
+                [class.border-red-500]="getFieldError('title')"
+                class="w-full px-4 py-2.5 bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-slate-700 rounded-xl text-gray-900 dark:text-slate-100 focus:ring-4 focus:ring-blue-500/10 dark:focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-slate-500"
+              />
+            </label>
+
             @if (getFieldError('title'); as errorMessage) {
               <p
                 class="text-xs text-red-500 dark:text-red-400 mt-1 animate-in fade-in slide-in-from-top-1"
@@ -53,65 +54,65 @@
           </div>
           <div>
             <label class="block text-sm font-semibold text-gray-700 dark:text-slate-300 mb-1.5"
-              >Author</label
-            >
-            <input
-              formControlName="author"
-              type="text"
-              placeholder="Name of the author"
-              class="w-full px-4 py-2.5 bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-slate-700 rounded-xl text-gray-900 dark:text-slate-100 focus:ring-4 focus:ring-blue-500/10 dark:focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-slate-500"
-            />
+              >Author
+              <input
+                formControlName="author"
+                type="text"
+                placeholder="Name of the author"
+                class="w-full px-4 py-2.5 bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-slate-700 rounded-xl text-gray-900 dark:text-slate-100 focus:ring-4 focus:ring-blue-500/10 dark:focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-slate-500"
+              />
+            </label>
           </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label class="block text-sm font-semibold text-gray-700 dark:text-slate-300 mb-1.5"
-              >Article URL</label
-            >
-            <input
-              formControlName="url"
-              type="text"
-              placeholder="https://..."
-              [class.border-red-500]="getFieldError('url')"
-              class="w-full px-4 py-2.5 bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-slate-700 rounded-xl text-gray-900 dark:text-slate-100 focus:ring-4 focus:ring-blue-500/10 dark:focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
-            />
+              >Article URL
+              <input
+                formControlName="url"
+                type="text"
+                placeholder="https://..."
+                [class.border-red-500]="getFieldError('url')"
+                class="w-full px-4 py-2.5 bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-slate-700 rounded-xl text-gray-900 dark:text-slate-100 focus:ring-4 focus:ring-blue-500/10 dark:focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
+              />
+            </label>
           </div>
           <div>
             <label class="block text-sm font-semibold text-gray-700 dark:text-slate-300 mb-1.5"
-              >Image URL</label
-            >
-            <input
-              formControlName="urlToImage"
-              type="text"
-              placeholder="Link to thumbnail image"
-              class="w-full px-4 py-2.5 bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-slate-700 rounded-xl text-gray-900 dark:text-slate-100 focus:ring-4 focus:ring-blue-500/10 dark:focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
-            />
+              >Image URL
+              <input
+                formControlName="urlToImage"
+                type="text"
+                placeholder="Link to thumbnail image"
+                class="w-full px-4 py-2.5 bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-slate-700 rounded-xl text-gray-900 dark:text-slate-100 focus:ring-4 focus:ring-blue-500/10 dark:focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
+              />
+            </label>
           </div>
         </div>
 
         <div>
           <label class="block text-sm font-semibold text-gray-700 dark:text-slate-300 mb-1.5"
-            >Short Description</label
-          >
-          <textarea
-            formControlName="description"
-            rows="2"
-            placeholder="A brief summary for the list view..."
-            class="w-full px-4 py-2.5 bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-slate-700 rounded-xl text-gray-900 dark:text-slate-100 focus:ring-4 focus:ring-blue-500/10 dark:focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all resize-none"
-          ></textarea>
+            >Short Description
+            <textarea
+              formControlName="description"
+              rows="2"
+              placeholder="A brief summary for the list view..."
+              class="w-full px-4 py-2.5 bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-slate-700 rounded-xl text-gray-900 dark:text-slate-100 focus:ring-4 focus:ring-blue-500/10 dark:focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all resize-none"
+            ></textarea>
+          </label>
         </div>
 
         <div>
           <label class="block text-sm font-semibold text-gray-700 dark:text-slate-300 mb-1.5"
-            >Article Body</label
-          >
-          <textarea
-            formControlName="content"
-            rows="6"
-            placeholder="The full content of the article..."
-            class="w-full px-4 py-2.5 bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-slate-700 rounded-xl text-gray-900 dark:text-slate-100 focus:ring-4 focus:ring-blue-500/10 dark:focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all resize-y"
-          ></textarea>
+            >Article Body
+            <textarea
+              formControlName="content"
+              rows="6"
+              placeholder="The full content of the article..."
+              class="w-full px-4 py-2.5 bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-slate-700 rounded-xl text-gray-900 dark:text-slate-100 focus:ring-4 focus:ring-blue-500/10 dark:focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all resize-y"
+            ></textarea>
+          </label>
         </div>
       </div>
 
@@ -139,21 +140,21 @@
         </div>
 
         <div class="flex items-center space-x-3">
-          <tap-button
+          <app-button
             buttonText="Cancel"
             variant="secondary"
             type="button"
             (click)="closeModal.emit()"
-          ></tap-button>
+          ></app-button>
 
-          <tap-button
+          <app-button
             [buttonText]="
               isLoading() ? 'Processing...' : editArticle() ? 'Save Changes' : 'Create Article'
             "
             variant="primary"
             type="submit"
             [disabled]="editForm.invalid || (editArticle() && editForm.pristine) || isLoading()"
-          ></tap-button>
+          ></app-button>
         </div>
       </div>
     </form>

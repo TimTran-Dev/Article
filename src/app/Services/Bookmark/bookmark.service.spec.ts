@@ -65,7 +65,7 @@ describe('BookmarkService', () => {
         title: 'Minimal',
         url: 'url',
         source: null, // Testing safe navigation for source
-      } as any;
+      } as unknown as ArticleAPIResponse;
 
       service.getUsersBookmarks().subscribe((articles) => {
         expect(articles[0].author).toBe('Anonymous');

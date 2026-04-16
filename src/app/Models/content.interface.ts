@@ -1,4 +1,4 @@
-import { WritableSignal } from '@angular/core';
+import type { WritableSignal } from '@angular/core';
 import { ContentStatus } from './common.enum';
 
 export type ContentType = 'Article' | 'Segment' | 'Episode';
