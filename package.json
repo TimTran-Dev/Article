@@ -119,6 +119,7 @@
     "@angular/cli": "^21.0.4",
     "@angular/compiler-cli": "^21.0.4",
     "@clerk/types": "^4.101.10",
+    "@oxc-project/runtime": "^0.126.0",
     "@types/node": "^25.0.3",
     "@typescript-eslint/eslint-plugin": "^8.52.0",
     "@typescript-eslint/parser": "^8.52.0",
