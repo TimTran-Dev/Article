@@ -18,13 +18,10 @@ export class ProductsService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = environment.apiUrl;
 
-  /**
-   * Fetches paginated articles. Returns a flattened Article structure.
-   */
   public getArticles(
     page: number,
     pageSize: number,
-    searchTerm: string = '',
+    searchTerm = '',
   ): Observable<{ items: Article[]; totalCount: number }> {
     const params = {
       page: page.toString(),
@@ -32,8 +29,6 @@ export class ProductsService {
       searchTerm,
     };
 
-    // 1. Type the HTTP call as ArticleAPIResponse[]
-    // 2. 'observe: response' means we get the full HttpResponse object
     return this.http
       .get<PaginatedArticleResponse>(`${this.baseUrl}/news`, {
         params,
@@ -42,12 +37,8 @@ export class ProductsService {
       .pipe(
         map((response) => {
           const body = response.body;
-          // 3. Extract headers safely
           const totalCount = body?.totalCount ?? 0;
-
-          // 4. response.body is now correctly typed as ArticleAPIResponse[] | null
           const apiItems = body?.items ?? [];
-
           const items: Article[] = apiItems.map((apiItem) => this.mapToArticle(apiItem));
 
           return { items, totalCount };
@@ -78,30 +69,21 @@ export class ProductsService {
       );
   }
 
-  /**
-   * Helper to map API response to the flat Article interface.
-   * Uses ArticleAPIResponse to ensure type safety during transformation.
-   */
   private mapToArticle(apiItem: ArticleAPIResponse): Article {
     return {
-      // BaseContent properties
-      id: apiItem.id, // Set default or use a specific field if the API provides a numeric ID
+      id: apiItem.id,
       ownerId: 0,
       contentType: 'Article',
       description: apiItem.description || 'No description provided.',
       url: apiItem.url,
       contentStatus: ContentStatus.Published,
       isDeleted: false,
-
-      // Article specific properties
       title: apiItem.title,
       author: apiItem.author || 'News Source',
-      body: apiItem.description || '', // Mapping description to body as per your logic
+      body: apiItem.description || '',
       imageUrl: apiItem.urlToImage,
       content: apiItem.content || '',
       isBookmarked: apiItem.isBookmarked ?? false,
-
-      // Mapping from the nested source object in ArticleAPIResponse
       sourceId: apiItem.source?.id || '',
       sourceName: apiItem.source?.name || 'Unknown Source',
     };

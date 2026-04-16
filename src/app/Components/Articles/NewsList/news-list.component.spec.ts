@@ -7,7 +7,6 @@ import { of } from 'rxjs';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
 
-// Import your dedicated mock files
 import { createArticleMock } from '../../../Mocks/article.mock';
 import { createToastServiceMock } from '../../../Mocks/toast.service.mock';
 import { createProductsServiceMock } from '../../../Mocks/product.service.mock';
@@ -17,7 +16,6 @@ describe('NewsListComponent', () => {
   let component: NewsListComponent;
   let fixture: ComponentFixture<NewsListComponent>;
 
-  // Use the return types of your factory functions for strict typing
   let mockProductService: ReturnType<typeof createProductsServiceMock>;
   let mockToastService: ReturnType<typeof createToastServiceMock>;
   let mockNavService: ReturnType<typeof createNavigationServiceMock>;
@@ -28,12 +26,10 @@ describe('NewsListComponent', () => {
   };
 
   beforeEach(async () => {
-    // Initialize fresh mocks for every test
     mockProductService = createProductsServiceMock();
     mockToastService = createToastServiceMock();
     mockNavService = createNavigationServiceMock();
 
-    // Setup the default successful response for initialization
     mockProductService.getArticles.mockReturnValue(of(mockArticleResponse));
 
     await TestBed.configureTestingModule({
@@ -51,7 +47,7 @@ describe('NewsListComponent', () => {
   });
 
   it('should create and initialize articles on init', () => {
-    fixture.detectChanges(); // triggers ngOnInit
+    fixture.detectChanges();
 
     expect(component.isLoading()).toBe(false);
     expect(component.articles().length).toBe(1);
@@ -60,28 +56,22 @@ describe('NewsListComponent', () => {
 
   describe('Search Logic', () => {
     it('should update search term and reload articles after debounce', async () => {
-      // 1. Setup Vitest Fake Timers
       vi.useFakeTimers();
-      fixture.detectChanges(); // ngOnInit
+      fixture.detectChanges();
 
       const newSearchTerm = 'Angular Testing';
 
-      // 2. Trigger Search
-      component.onSearch({ target: { value: newSearchTerm } } as any);
+      component.onSearch({ target: { value: newSearchTerm } } as unknown as Event);
 
-      // 3. Verify debounce is active (term not updated yet)
       expect(component.searchTerm()).toBe('');
 
-      // 4. Advance time by 400ms
       vi.advanceTimersByTime(400);
 
-      // 5. Important: flush microtasks so the RxJS debounce emits
       await Promise.resolve();
 
       expect(component.searchTerm()).toBe(newSearchTerm);
       expect(component.currentPage()).toBe(1);
 
-      // Total calls: 1 (init) + 1 (search) = 2
       expect(mockProductService.getArticles).toHaveBeenCalledTimes(2);
 
       vi.useRealTimers();
@@ -102,7 +92,6 @@ describe('NewsListComponent', () => {
       const article = component.articles()[0];
       component.articleToDeleteId.set(article.id);
 
-      // Ensure the delete call returns success
       mockProductService.deleteArticle.mockReturnValue(of(undefined));
 
       component.handleDelete();

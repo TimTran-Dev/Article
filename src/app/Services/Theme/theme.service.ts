@@ -5,7 +5,6 @@ import { isPlatformBrowser } from '@angular/common';
 export class ThemeService {
   private platformId = inject(PLATFORM_ID);
 
-  // 1. Determine initial state safely
   private getInitialTheme(): boolean {
     if (isPlatformBrowser(this.platformId)) {
       const stored = localStorage.getItem('theme');
@@ -18,7 +17,6 @@ export class ThemeService {
   isDarkMode = signal<boolean>(this.getInitialTheme());
 
   constructor() {
-    // 2. The Effect: This watches the signal and updates the DOM
     effect(() => {
       const dark = this.isDarkMode();
       if (isPlatformBrowser(this.platformId)) {
@@ -32,7 +30,7 @@ export class ThemeService {
   }
 
   private applyTheme(isDark: boolean): void {
-    const root = document.documentElement; // This is the <html> tag
+    const root = document.documentElement;
     if (isDark) {
       root.classList.add('dark');
       localStorage.setItem('theme', 'dark');

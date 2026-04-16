@@ -1,9 +1,9 @@
-import { CommonModule } from '@angular/common';
 import { Component, inject, signal, effect, OnDestroy } from '@angular/core';
 import { ToastService } from '../../../Services/Toast/toast.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'tap-toast',
+  selector: 'app-toast',
   standalone: true,
   imports: [CommonModule],
   templateUrl: 'toast.component.html',
@@ -14,30 +14,26 @@ export class ToastComponent implements OnDestroy {
   isVisible = signal(false);
   progressWidth = signal(100);
 
-  // Total time the toast exists in the DOM
   totalDuration = 3000;
-  // Bar finishes slightly before the slide-out starts
+
   progressBarDuration = 2500;
 
-  private exitTimeout: any;
+  private exitTimeout: number | null = null;
 
   constructor() {
     effect(() => {
       const toast = this.toastService.currentToast();
 
       if (toast) {
-        // Reset state
         this.progressWidth.set(100);
         this.isVisible.set(false);
 
-        // 1. Entrance
         setTimeout(() => {
           this.isVisible.set(true);
-          // 2. Start Progress (finishes at 2500ms)
+
           this.progressWidth.set(0);
         }, 50);
 
-        // 3. Start sliding out exactly when the bar hits 0%
         this.exitTimeout = setTimeout(() => {
           this.isVisible.set(false);
         }, this.progressBarDuration);

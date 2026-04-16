@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-// Import 'Clerk' as the instance type and 'UserResource' for the signal
+
 import type { Clerk, UserResource } from '@clerk/types';
 import { environment } from '../../../environments/environment';
 
@@ -7,14 +7,12 @@ import { environment } from '../../../environments/environment';
   providedIn: 'root',
 })
 export class AuthService {
-  // Use the 'Clerk' interface from @clerk/types
   private clerk: Clerk | null = null;
 
   user = signal<UserResource | null>(null);
   loaded = signal<boolean>(false);
 
   async init(): Promise<void> {
-    // 1. Dynamically import the library
     const module = await import('@clerk/clerk-js');
 
     if (!this.clerk) {

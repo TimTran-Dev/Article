@@ -2,13 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, input, Output, signal } from '@angular/core';
 
 @Component({
-  selector: 'tap-dropdown',
+  selector: 'app-dropdown',
   templateUrl: 'dropdown.component.html',
   imports: [CommonModule],
   standalone: true,
 })
 export class DropdownComponent<T extends string | number = string> {
-  // dropdown content
   readonly options = input<T[]>([]);
   selectedValue = input<T | null>(null);
 

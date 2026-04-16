@@ -7,7 +7,7 @@ import { ThemeService } from '../../../Services/Theme/theme.service';
 import { AuthService } from '../../../Services/Authorization/auth.service';
 
 @Component({
-  selector: 'tap-nav',
+  selector: 'app-nav',
   templateUrl: './nav.component.html',
   standalone: true,
   imports: [RouterLink, RouterLinkActive],
@@ -23,7 +23,6 @@ export class NavComponent {
   constructor() {
     effect(() => {
       const user = this.auth.user();
-      const menuOpen = this.isMenuOpen();
       if (user) {
         setTimeout(() => this.mountUserButton(), 0);
       }
@@ -54,13 +53,11 @@ export class NavComponent {
       variables: { colorPrimary: '#2563eb' },
     };
 
-    // 1. Mount Desktop Version
     const desktopEl = document.getElementById('clerk-user-button');
     if (desktopEl) {
       clerk?.mountUserButton(desktopEl as HTMLDivElement, { appearance });
     }
 
-    // 2. Mount Mobile Version (if menu is open)
     const mobileEl = document.getElementById('clerk-user-button-mobile');
     if (mobileEl) {
       clerk?.mountUserButton(mobileEl as HTMLDivElement, { appearance });

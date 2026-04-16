@@ -20,7 +20,7 @@ describe('ButtonComponent', () => {
 
   it('should apply secondary classes by default', () => {
     const btn = getButton();
-    // Verify specific classes from the secondary map
+
     expect(btn.classList.contains('bg-gray-100')).toBe(true);
     expect(btn.classList.contains('text-gray-700')).toBe(true);
   });
@@ -32,7 +32,7 @@ describe('ButtonComponent', () => {
     const btn = getButton();
     expect(btn.classList.contains('bg-blue-600')).toBe(true);
     expect(btn.classList.contains('text-white')).toBe(true);
-    // Ensure old classes are removed
+
     expect(btn.classList.contains('bg-gray-100')).toBe(false);
   });
 

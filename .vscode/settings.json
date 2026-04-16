@@ -9,6 +9,12 @@
   // Change this to "onType" so you see errors immediately
   // without waiting for a save to trigger a "fix war"
   "eslint.run": "onType",
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
   "files.eol": "\n",
   "files.insertFinalNewline": true,
   "files.trimFinalNewlines": true,

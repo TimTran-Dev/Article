@@ -14,7 +14,6 @@ describe('NavComponent', () => {
   let mockNavService: ReturnType<typeof createNavigationServiceMock>;
   let mockThemeService: ThemeServiceMock;
 
-  // Subject to control router events for toSignal/computed logic
   const routerEventsSubject = new Subject<Event>();
 
   beforeEach(async () => {
@@ -32,14 +31,12 @@ describe('NavComponent', () => {
 
     const router = TestBed.inject(Router);
 
-    // Mock router properties to trigger the toSignal logic
     Object.defineProperty(router, 'events', { value: routerEventsSubject.asObservable() });
     Object.defineProperty(router, 'url', { value: '/', writable: true });
 
     fixture = TestBed.createComponent(NavComponent);
     component = fixture.componentInstance;
 
-    // Trigger initial detection to initialize toSignal(..., { initialValue: router.url })
     fixture.detectChanges();
   });
 
@@ -49,32 +46,26 @@ describe('NavComponent', () => {
 
   describe('Theme Logic', () => {
     it('should call toggleTheme on service when toggleMenu is called', () => {
-      // Act
       component.themeService.toggleTheme();
 
-      // Assert
       expect(mockThemeService.toggleTheme).toHaveBeenCalled();
-      // Since our mock actually updates its signal:
+
       expect(mockThemeService.isDarkMode()).toBe(true);
     });
 
     it('should show correct theme icon based on isDarkMode signal', async () => {
-      // Force dark mode in the mock signal
       mockThemeService.isDarkMode.set(true);
       fixture.detectChanges();
 
       const darkIcon = fixture.nativeElement.querySelector('svg');
       expect(darkIcon).toBeTruthy();
-      // You could further verify specific SVG paths if needed
     });
   });
 
   describe('Menu Visibility (URL Driven)', () => {
     it('should update shouldShowCreate based on URL events', () => {
-      // 1. Initial state (starts at root '/')
       expect(component.shouldShowCreate()).toBe(false);
 
-      // 2. Simulate navigation to articles
       const event = new NavigationEnd(1, '/articles', '/articles');
       routerEventsSubject.next(event);
       fixture.detectChanges();
@@ -83,12 +74,10 @@ describe('NavComponent', () => {
     });
 
     it('should hide create button when navigating away from articles', () => {
-      // Start in articles
       routerEventsSubject.next(new NavigationEnd(1, '/articles', '/articles'));
       fixture.detectChanges();
       expect(component.shouldShowCreate()).toBe(true);
 
-      // Move to episodes
       routerEventsSubject.next(new NavigationEnd(2, '/episodes', '/episodes'));
       fixture.detectChanges();
 

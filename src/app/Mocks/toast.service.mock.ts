@@ -7,7 +7,7 @@ export const createToastServiceMock = () => {
 
   return {
     currentToast,
-    show: vi.fn((message: string, type: ToastType = 'success', _duration: number = 3000) => {
+    show: vi.fn((message: string, type: ToastType = 'success') => {
       currentToast.set({ message, type });
     }),
 

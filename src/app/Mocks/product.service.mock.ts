@@ -10,10 +10,6 @@ export interface PaginatedArticles {
   totalCount: number;
 }
 
-/**
- * Pass the function signature as the single generic argument to Mock.
- * Syntax: Mock<(params) => ReturnType>
- */
 export interface IProductsServiceMock {
   getFeaturedProducts: Mock<() => Observable<Article[]>>;
   getArticles: Mock<(page: number, size: number, term: string) => Observable<PaginatedArticles>>;
@@ -33,7 +29,7 @@ export const createProductsServiceMock = (): IProductsServiceMock => {
     createArticle: vi.fn().mockReturnValue(of(undefined)),
     updateArticle: vi.fn().mockReturnValue(of(undefined)),
     deleteArticle: vi.fn().mockReturnValue(of(undefined)),
-    // For functions with logic, use vi.fn((params) => ...)
+
     updateContentStatus: vi.fn((content: ContentData, status: ContentStatus) =>
       of({ ...content, contentStatus: status }),
     ),

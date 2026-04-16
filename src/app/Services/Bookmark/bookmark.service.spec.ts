@@ -47,7 +47,6 @@ describe('BookmarkService', () => {
         expect(articles.length).toBe(1);
         const article = articles[0];
 
-        // Verify Mapping Logic
         expect(article.id).toBe(99);
         expect(article.sourceName).toBe('TechCrunch');
         expect(article.contentType).toBe('Article');
@@ -66,7 +65,7 @@ describe('BookmarkService', () => {
         title: 'Minimal',
         url: 'url',
         source: null, // Testing safe navigation for source
-      } as any;
+      } as unknown as ArticleAPIResponse;
 
       service.getUsersBookmarks().subscribe((articles) => {
         expect(articles[0].author).toBe('Anonymous');

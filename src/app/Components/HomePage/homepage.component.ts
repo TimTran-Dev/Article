@@ -29,13 +29,10 @@ export class HomePageComponent implements OnInit, OnDestroy {
 
   isPaused = signal(false);
 
-  // 1. Separate articles for the "Main" view
-  // Using a type guard (isArticle) makes the 'title' property accessible
   articles = computed(() =>
     this.featuredProducts().filter((p): p is Article => p.contentType === 'Article'),
   );
 
-  // 2. Identify coming soon content
   comingSoon = computed(() => this.featuredProducts().filter((p) => p.contentType !== 'Article'));
 
   private readonly productService = inject(ProductsService);
@@ -70,17 +67,14 @@ export class HomePageComponent implements OnInit, OnDestroy {
   private moveNext(): void {
     const container = this.scrollContainer.nativeElement;
 
-    // 1. Grab the actual width of the first card found in the container
     const firstCard = container.querySelector('.snap-center') as HTMLElement;
 
     if (!firstCard) return;
 
-    // 2. Calculate the step based on the real rendered width + the CSS gap
     const cardWidth = firstCard.offsetWidth;
     const gap = 24;
     const step = cardWidth + gap;
 
-    // 3. Logic for looping back to start or moving forward
     const isAtEnd = container.scrollLeft + container.clientWidth >= container.scrollWidth - 50;
 
     if (isAtEnd) {
@@ -92,12 +86,8 @@ export class HomePageComponent implements OnInit, OnDestroy {
 
   private initializeProducts(): void {
     this.isLoading.set(true);
-
-    // Note: Ensure getFeaturedProducts() in your service is also updated
-    // to return the PaginatedArticleResponse or use getArticles() directly
     this.productService.getArticles(1, 10).subscribe({
       next: (response) => {
-        // response is { items: Article[], totalCount: number }
         this.featuredProducts.set(response.items);
         this.isLoading.set(false);
       },
