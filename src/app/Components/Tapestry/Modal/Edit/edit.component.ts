@@ -4,10 +4,6 @@ import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angu
 import { ButtonComponent } from '../../Button/button.component';
 import { Article } from '../../../../Models/content.interface';
 
-/**
- * Interface for the Form Value to ensure submitForm remains type-safe
- * without using 'any'.
- */
 interface ArticleFormValue {
   id: number | null;
   title: string | null;
@@ -29,17 +25,12 @@ interface ArticleFormValue {
 export class EditModalComponent {
   private fb = inject(FormBuilder);
 
-  // Input is now restricted to the flat Article type
   editArticle = input<Article | null>(null);
   isLoading = input<boolean>(false);
 
-  // Strictly typed EventEmitter
   @Output() confirm = new EventEmitter<ArticleFormValue>();
   @Output() closeModal = new EventEmitter<void>();
 
-  /**
-   * Typed form group using non-nullable defaults where appropriate.
-   */
   editForm = this.fb.group({
     id: new FormControl<number | null>(null),
     title: new FormControl<string>('', {
@@ -62,7 +53,6 @@ export class EditModalComponent {
     effect(() => {
       const article = this.editArticle();
       if (article) {
-        // Direct access: No casting, no union narrowing, no 'any'
         this.editForm.patchValue({
           id: article.id,
           title: article.title,
@@ -88,7 +78,6 @@ export class EditModalComponent {
 
   submitForm(): void {
     if (this.editForm.valid) {
-      // Cast only to our internal interface, ensuring no 'any' enters the stream
       const value = this.editForm.value as ArticleFormValue;
       this.confirm.emit(value);
     } else {

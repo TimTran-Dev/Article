@@ -8,7 +8,6 @@ import { Component, EventEmitter, input, Output, signal } from '@angular/core';
   standalone: true,
 })
 export class DropdownComponent<T extends string | number = string> {
-  // dropdown content
   readonly options = input<T[]>([]);
   selectedValue = input<T | null>(null);
 

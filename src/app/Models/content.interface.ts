@@ -1,16 +1,14 @@
 import { WritableSignal } from '@angular/core';
 import { ContentStatus } from './common.enum';
 
-// 1. Define the Type Alias first
 export type ContentType = 'Article' | 'Segment' | 'Episode';
 
-// 2. Define the Union for all possible data shapes
 export type ContentData = Article | Segment | Episode;
 
 export interface BaseContent {
   id: number;
   ownerId?: number;
-  contentType: ContentType; // Now this will be found
+  contentType: ContentType;
   description: string;
   url?: string;
   contentStatus: ContentStatus;
@@ -18,7 +16,7 @@ export interface BaseContent {
 }
 
 export interface Article extends BaseContent {
-  contentType: 'Article'; // More specific literal for narrowing
+  contentType: 'Article';
   title: string;
   author: string;
   body: string;

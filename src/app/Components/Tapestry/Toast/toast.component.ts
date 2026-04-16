@@ -14,9 +14,8 @@ export class ToastComponent implements OnDestroy {
   isVisible = signal(false);
   progressWidth = signal(100);
 
-  // Total time the toast exists in the DOM
   totalDuration = 3000;
-  // Bar finishes slightly before the slide-out starts
+
   progressBarDuration = 2500;
 
   private exitTimeout: any;
@@ -26,18 +25,15 @@ export class ToastComponent implements OnDestroy {
       const toast = this.toastService.currentToast();
 
       if (toast) {
-        // Reset state
         this.progressWidth.set(100);
         this.isVisible.set(false);
 
-        // 1. Entrance
         setTimeout(() => {
           this.isVisible.set(true);
-          // 2. Start Progress (finishes at 2500ms)
+
           this.progressWidth.set(0);
         }, 50);
 
-        // 3. Start sliding out exactly when the bar hits 0%
         this.exitTimeout = setTimeout(() => {
           this.isVisible.set(false);
         }, this.progressBarDuration);

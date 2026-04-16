@@ -8,7 +8,6 @@ import { ContentStatus } from '../../Models/common.enum';
 import { provideRouter } from '@angular/router';
 import { vi, describe, it, expect, beforeEach, Mock } from 'vitest';
 
-// 1. Define a strict mock interface for the BookmarkService
 interface MockBookmarkService {
   getUsersBookmarks: Mock;
   toggleBookmark: Mock;
@@ -23,8 +22,8 @@ describe('LibraryComponent', () => {
     {
       id: 1,
       title: 'Saved Article 1',
-      author: 'John Doe', // Added this
-      body: 'Sample body text...', // Added this
+      author: 'John Doe',
+      body: 'Sample body text...',
       contentType: 'Article',
       contentStatus: ContentStatus.Published,
       isBookmarked: false,
@@ -32,21 +31,19 @@ describe('LibraryComponent', () => {
     {
       id: 2,
       title: 'Saved Article 2',
-      author: 'Jane Doe', // Added this
-      body: 'Sample body text...', // Added this
+      author: 'Jane Doe',
+      body: 'Sample body text...',
       contentType: 'Article',
       contentStatus: ContentStatus.Published,
     } as Article,
   ];
 
   beforeEach(async () => {
-    // 2. Create the Mock Objects
     const bookmarkServiceMock: MockBookmarkService = {
       getUsersBookmarks: vi.fn(),
       toggleBookmark: vi.fn(),
     };
 
-    // This mock prevents the real AuthService and Clerk SDK from loading
     const authServiceMock = {
       init: vi.fn().mockResolvedValue(undefined),
       getToken: vi.fn().mockResolvedValue('mock-token'),
@@ -57,7 +54,7 @@ describe('LibraryComponent', () => {
       imports: [LibraryComponent],
       providers: [
         { provide: BookmarkService, useValue: bookmarkServiceMock },
-        { provide: AuthService, useValue: authServiceMock }, // Crucial fix
+        { provide: AuthService, useValue: authServiceMock },
         provideRouter([]),
       ],
     }).compileComponents();
@@ -65,18 +62,16 @@ describe('LibraryComponent', () => {
     fixture = TestBed.createComponent(LibraryComponent);
     component = fixture.componentInstance;
 
-    // 3. Inject and cast to our Mock interface for type-safe spies
     bookmarkService = TestBed.inject(BookmarkService) as unknown as MockBookmarkService;
   });
 
   it('should load bookmarks on init and map isBookmarked to true', () => {
     bookmarkService.getUsersBookmarks.mockReturnValue(of(mockArticles));
 
-    fixture.detectChanges(); // triggers ngOnInit
+    fixture.detectChanges();
 
     expect(component.isLoading()).toBe(false);
     expect(component.bookmarks().length).toBe(2);
-    // Logic check: component should map isBookmarked to true
     expect(component.bookmarks()[0].isBookmarked).toBe(true);
   });
 
@@ -111,7 +106,6 @@ describe('LibraryComponent', () => {
 
       component.handleRemoveBookmark(1);
 
-      // Verify rollback
       expect(component.bookmarks().length).toBe(2);
       expect(component.bookmarks().find((a) => a.id === 1)).toBeTruthy();
       expect(consoleSpy).toHaveBeenCalled();

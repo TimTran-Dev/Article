@@ -76,21 +76,17 @@ export class NewsListComponent implements OnInit, OnDestroy {
   }
 
   handleBookmarkToggle(articleId: number): void {
-    // Find the current state to provide a better rollback if it fails
     const article = this.articles().find((a) => a.id === articleId);
     if (!article) return;
 
-    // Optional: Add a small delay or loading state if desired
     this.bookmarkService.toggleBookmark(articleId).subscribe({
       next: (response) => {
-        // 3. Update the signal state
         this.articles.update((items) =>
           items.map((item) =>
             item.id === articleId ? { ...item, isBookmarked: response.bookmarked } : item,
           ),
         );
 
-        // 4. Show a quick toast
         const message = response.bookmarked ? 'Saved to Library' : 'Removed from Library';
         this.toastService.show(message, 'success');
       },
@@ -133,11 +129,9 @@ export class NewsListComponent implements OnInit, OnDestroy {
     const id = dto.id;
     this.isEditLoading.set(true);
 
-    // Create a clean DTO that ensures 'url' is a string
     const updateDto = {
       ...dto,
-      url: dto.url ?? '', // Fallback to empty string if undefined
-      // If your API expects 'urlToImage' instead of 'imageUrl', map it here:
+      url: dto.url ?? '',
       urlToImage: dto.imageUrl ?? undefined,
     };
 
@@ -161,11 +155,9 @@ export class NewsListComponent implements OnInit, OnDestroy {
     const current = this.selectedArticle();
 
     if (current) {
-      // Update Mode
       const updatedArticle = this.mapFormToArticle(formData, current);
       this.handleUpdate(updatedArticle);
     } else {
-      // Create Mode
       const createDto = this.mapFormToDto(formData);
       this.handleCreate(createDto);
     }
@@ -230,7 +222,6 @@ export class NewsListComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (response) => {
-          // response.items is Article[]
           const reactiveArticles: ReactiveArticle[] = response.items.map((art) => ({
             ...art,
             contentStatusSignal: signal(art.contentStatus),
@@ -253,11 +244,11 @@ export class NewsListComponent implements OnInit, OnDestroy {
       url: getString('url'),
       title: getString('title'),
       author: getString('author'),
-      body: getString('content'), // Remap content -> body
-      imageUrl: getString('urlToImage'), // Remap urlToImage -> imageUrl
+      body: getString('content'),
+      imageUrl: getString('urlToImage'),
       sourceId: getString('sourceId', 'manual'),
       sourceName: getString('sourceName', 'User Contributed'),
-      content: getString('content'), // satisfy interface 'content' field
+      content: getString('content'),
     };
   }
 

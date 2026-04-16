@@ -13,7 +13,6 @@ describe('HomePage Component', () => {
   let component: HomePageComponent;
   let productService: ProductsService;
 
-  // Reusable Mock Response
   const mockPaginatedResponse = {
     items: [
       {
@@ -63,13 +62,9 @@ describe('HomePage Component', () => {
   });
 
   it('should load featured products using paginated service', () => {
-    // Arrange: Setup spy for the correct method
     const spy = vi.spyOn(productService, 'getArticles').mockReturnValue(of(mockPaginatedResponse));
-
-    // Act
     fixture.detectChanges();
 
-    // Assert
     expect(spy).toHaveBeenCalledWith(1, 10);
     expect(component.featuredProducts()).toEqual(mockPaginatedResponse.items);
     expect(component.isLoading()).toBe(false);

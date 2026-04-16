@@ -5,7 +5,6 @@ import { provideRouter } from '@angular/router';
 import { mockProductsService } from '../../Mocks/product.service.mock';
 import { throwError } from 'rxjs';
 import { vi } from 'vitest';
-// Missing Imports
 import { DropdownComponent } from '../Tapestry/Dropdown/dropdown.component';
 import { LoadingComponent } from '../Tapestry/Loading/loading.component';
 
@@ -15,14 +14,12 @@ describe('Episode Component', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      // 1. Add child components to fix NG0303 errors
       imports: [EpisodeComponent, DropdownComponent, LoadingComponent],
       providers: [{ provide: ProductsService, useValue: mockProductsService }, provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(EpisodeComponent);
     component = fixture.componentInstance;
-    // We remove the detectChanges here to control when ngOnInit runs in specific tests
   });
 
   it('should create the component', () => {
@@ -38,7 +35,6 @@ describe('Episode Component', () => {
   it('should handle error during episode loading', () => {
     const productService = TestBed.inject(ProductsService);
 
-    // 2. Ensure you are spying on getArticles (the method calling the API)
     vi.spyOn(productService, 'getArticles').mockReturnValue(
       throwError(() => new Error('Service error')),
     );

@@ -14,7 +14,6 @@ describe('ProductsService', () => {
   let httpMock: HttpTestingController;
   const apiUrl = environment.apiUrl;
 
-  // Mock Data
   const mockApiArticle: ArticleAPIResponse = {
     id: 1,
     title: 'Test Article',
@@ -38,7 +37,7 @@ describe('ProductsService', () => {
   });
 
   afterEach(() => {
-    httpMock.verify(); // Ensures no outstanding requests
+    httpMock.verify();
   });
 
   it('should be created', () => {
@@ -56,7 +55,7 @@ describe('ProductsService', () => {
         expect(result.items.length).toBe(1);
         expect(result.totalCount).toBe(1);
         expect(result.items[0].title).toBe('Test Article');
-        expect(result.items[0].sourceName).toBe('CNN'); // Verifies mapping
+        expect(result.items[0].sourceName).toBe('CNN');
         expect(result.items[0].contentStatus).toBe(ContentStatus.Published);
       });
 

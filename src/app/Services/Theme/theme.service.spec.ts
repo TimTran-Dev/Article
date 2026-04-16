@@ -6,7 +6,6 @@ import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 describe('ThemeService', () => {
   let service: ThemeService;
 
-  // Helper to simulate system theme preference
   const setSystemTheme = (isDark: boolean) => {
     Object.defineProperty(window, 'matchMedia', {
       writable: true,
@@ -23,12 +22,11 @@ describe('ThemeService', () => {
   beforeEach(() => {
     localStorage.clear();
     vi.clearAllMocks();
-    // Default system preference to light for consistent tests
+
     setSystemTheme(false);
   });
 
   afterEach(() => {
-    // Cleanup DOM changes made during tests
     document.documentElement.classList.remove('dark');
   });
 
@@ -42,7 +40,7 @@ describe('ThemeService', () => {
     });
 
     it('should initialize with system preference when localStorage is empty', () => {
-      setSystemTheme(true); // System preference set to dark
+      setSystemTheme(true);
 
       service = TestBed.inject(ThemeService);
 
@@ -57,7 +55,6 @@ describe('ThemeService', () => {
 
       service.toggleTheme();
 
-      // CRITICAL: Force the Signal effect() to run
       TestBed.flushEffects();
 
       expect(service.isDarkMode()).toBe(true);
@@ -92,9 +89,9 @@ describe('ThemeService', () => {
       service.toggleTheme();
       TestBed.flushEffects();
 
-      expect(service.isDarkMode()).toBe(true); // Signal updates
-      expect(rootSpy).not.toHaveBeenCalled(); // DOM does not update
-      expect(storageSpy).not.toHaveBeenCalled(); // Storage does not update
+      expect(service.isDarkMode()).toBe(true);
+      expect(rootSpy).not.toHaveBeenCalled();
+      expect(storageSpy).not.toHaveBeenCalled();
     });
   });
 });

@@ -47,7 +47,6 @@ describe('BookmarkService', () => {
         expect(articles.length).toBe(1);
         const article = articles[0];
 
-        // Verify Mapping Logic
         expect(article.id).toBe(99);
         expect(article.sourceName).toBe('TechCrunch');
         expect(article.contentType).toBe('Article');

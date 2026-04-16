@@ -1,5 +1,3 @@
-#!/usr/bin/env ts-node
-
 import fs from 'fs';
 import path from 'path';
 import { execSync } from 'child_process';
@@ -14,15 +12,12 @@ if (!bump || !['major', 'minor', 'patch'].includes(bump)) {
   process.exit(1);
 }
 
-// Paths
 const versionPath = path.resolve(process.cwd(), 'version.json');
 const packagePath = path.resolve(process.cwd(), 'package.json');
 
-// Read current version from version.json
 const versionData = JSON.parse(fs.readFileSync(versionPath, 'utf-8'));
 const [major, minor, patch] = versionData.version.split('.').map(Number);
 
-// Compute new version
 let newVersion: string;
 switch (bump) {
   case 'major':
@@ -36,20 +31,15 @@ switch (bump) {
     break;
 }
 
-console.log(`Bumping version: ${versionData.version} → ${newVersion}`);
-
-// Update version.json
 versionData.version = newVersion;
 fs.writeFileSync(versionPath, JSON.stringify(versionData, null, 2) + '\n');
 
-// Update package.json
 const packageData = JSON.parse(fs.readFileSync(packagePath, 'utf-8'));
 packageData.version = newVersion;
 fs.writeFileSync(packagePath, JSON.stringify(packageData, null, 2) + '\n');
 
 console.log('Updated version.json and package.json');
 
-// Create Git commit and tag
 try {
   execSync('git add version.json package.json', { stdio: 'inherit' });
   execSync(`git commit -m "chore: bump version to ${newVersion}"`, { stdio: 'inherit' });

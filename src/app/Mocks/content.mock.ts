@@ -1,7 +1,6 @@
 import { ContentStatus } from '../Models/common.enum';
 import { Article, ContentData } from '../Models/content.interface';
 
-// 1. Mock a single Article (Flattened)
 export const mockDraftArticle: Article = {
   id: 1,
   ownerId: 101,
@@ -10,7 +9,7 @@ export const mockDraftArticle: Article = {
   isDeleted: false,
   url: 'https://example.com/draft',
   description: 'A sample draft article description',
-  // Flattened Article-specific fields
+
   title: 'Sample Draft Title',
   author: 'John Doe',
   body: 'This is the main body content of the article.',
@@ -20,7 +19,6 @@ export const mockDraftArticle: Article = {
   sourceName: 'Local Editor',
 };
 
-// 2. Mock a list of Articles for the Table/Grid
 export const mockArticles: Article[] = [
   {
     ...mockDraftArticle,
@@ -36,7 +34,6 @@ export const mockArticles: Article[] = [
   },
 ];
 
-// 3. Mock mixed content types (ContentData Union)
 export const mockMixedContent: ContentData[] = [
   {
     id: 1,
@@ -59,7 +56,6 @@ export const mockMixedContent: ContentData[] = [
     contentStatus: ContentStatus.Draft,
     isDeleted: false,
     description: 'Morning News Segment',
-    // Segment fields would go here if defined in your interface
   },
   {
     id: 3,
@@ -67,6 +63,5 @@ export const mockMixedContent: ContentData[] = [
     contentStatus: ContentStatus.Review,
     isDeleted: false,
     description: 'Podcast Episode 42',
-    // Episode fields would go here (e.g., host, airDate)
   },
 ];

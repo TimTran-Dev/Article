@@ -1,14 +1,10 @@
 import { Component, inject, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ContentStatus } from '../../Models/common.enum';
-import { Episode, ContentData } from '../../Models/content.interface'; // Updated Imports
+import { Episode, ContentData } from '../../Models/content.interface';
 import { ProductsService } from '../../Services/Products/products.service';
 import { map, Subject, takeUntil } from 'rxjs';
 
-/**
- * Interface to wrap our Episode with a reactive status signal.
- * Strictly typed to avoid the old nested 'content' property.
- */
 interface ReactiveEpisode extends Episode {
   contentStatusSignal: WritableSignal<ContentStatus>;
 }
@@ -20,7 +16,6 @@ interface ReactiveEpisode extends Episode {
   imports: [RouterModule],
 })
 export class EpisodeComponent implements OnInit, OnDestroy {
-  // strictly typed signal using our flat inheritance model
   episode = signal<ReactiveEpisode[]>([]);
   isLoading = signal(false);
   contentStatus: ContentStatus[] = Object.values(ContentStatus);
@@ -33,7 +28,6 @@ export class EpisodeComponent implements OnInit, OnDestroy {
   }
 
   onStatusChange(newStatus: string): void {
-    // Validating against enum for strictness
     const isValid = Object.values(ContentStatus).includes(newStatus as ContentStatus);
     if (isValid) {
       console.log('Status changed to:', newStatus);
@@ -44,10 +38,9 @@ export class EpisodeComponent implements OnInit, OnDestroy {
     this.isLoading.set(true);
 
     this.productService
-      .getFeaturedProducts() // Returns Observable<ContentData[]>
+      .getFeaturedProducts()
       .pipe(
         takeUntil(this.destroy$),
-        // Type Predicate: Correctly narrows ContentData union to Episode
         map((items: ContentData[]) =>
           items.filter((item): item is Episode => item.contentType === 'Episode'),
         ),

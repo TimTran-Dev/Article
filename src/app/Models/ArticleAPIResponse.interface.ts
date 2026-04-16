@@ -1,10 +1,8 @@
-// The new "Wrapper" that matches your Controller's return (items, totalCount)
 export interface PaginatedArticleResponse {
   items: ArticleAPIResponse[];
   totalCount: number;
 }
 
-// Your existing item model (keep this as is)
 export interface ArticleAPIResponse {
   source: {
     id: string | null;

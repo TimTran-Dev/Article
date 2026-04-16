@@ -54,13 +54,11 @@ export class NavComponent {
       variables: { colorPrimary: '#2563eb' },
     };
 
-    // 1. Mount Desktop Version
     const desktopEl = document.getElementById('clerk-user-button');
     if (desktopEl) {
       clerk?.mountUserButton(desktopEl as HTMLDivElement, { appearance });
     }
 
-    // 2. Mount Mobile Version (if menu is open)
     const mobileEl = document.getElementById('clerk-user-button-mobile');
     if (mobileEl) {
       clerk?.mountUserButton(mobileEl as HTMLDivElement, { appearance });

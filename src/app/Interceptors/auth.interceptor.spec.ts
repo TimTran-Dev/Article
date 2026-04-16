@@ -20,7 +20,6 @@ describe('authInterceptor', () => {
         {
           provide: AuthService,
           useValue: {
-            // Initialize as a mock function
             getToken: vi.fn(),
           },
         },
@@ -31,7 +30,6 @@ describe('authInterceptor', () => {
     httpClient = TestBed.inject(HttpClient);
     authService = TestBed.inject(AuthService);
 
-    // Create a typed spy to avoid 'any'
     getTokenSpy = vi.spyOn(authService, 'getToken') as MockInstance<() => Promise<string | null>>;
   });
 
@@ -43,11 +41,9 @@ describe('authInterceptor', () => {
     const mockToken = 'mock-clerk-token-123';
     getTokenSpy.mockResolvedValue(mockToken);
 
-    // Using firstValueFrom handles the async nature of the interceptor pipeline
     const request$ = httpClient.get('/api/test');
     const pendingRequest = firstValueFrom(request$);
 
-    // Give the microtask queue a chance to process the getToken promise
     await vi.waitFor(() => {
       const req = httpMock.expectOne('/api/test');
       expect(req.request.headers.get('Authorization')).toBe(`Bearer ${mockToken}`);
@@ -62,7 +58,6 @@ describe('authInterceptor', () => {
 
     httpClient.get('/api/test').subscribe();
 
-    // vi.waitFor is great for interceptors that wrap requests in promises/observables
     await vi.waitFor(() => {
       const req = httpMock.expectOne('/api/test');
       expect(req.request.headers.has('Authorization')).toBe(false);
@@ -79,12 +74,10 @@ describe('authInterceptor', () => {
       error: (err: Error) => (caughtError = err),
     });
 
-    // Wait for the rejection to propagate
     await vi.waitFor(() => {
       expect(caughtError?.message).toBe(errorMsg);
     });
 
-    // Verify no request was actually sent
     httpMock.expectNone('/api/test');
   });
 });

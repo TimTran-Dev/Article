@@ -5,7 +5,7 @@ import { provideRouter } from '@angular/router';
 import { mockProductsService } from '../../Mocks/product.service.mock';
 import { throwError } from 'rxjs';
 import { vi } from 'vitest';
-// Import child components
+
 import { DropdownComponent } from '../Tapestry/Dropdown/dropdown.component';
 import { LoadingComponent } from '../Tapestry/Loading/loading.component';
 
@@ -15,14 +15,12 @@ describe('Segment Component', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      // 1. Add child components to imports
       imports: [SegmentComponent, DropdownComponent, LoadingComponent],
       providers: [{ provide: ProductsService, useValue: mockProductsService }, provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SegmentComponent);
     component = fixture.componentInstance;
-    // fixture.detectChanges(); // Triggers ngOnInit
   });
 
   it('should create the component', () => {
@@ -38,9 +36,6 @@ describe('Segment Component', () => {
   it('should handle error during segment loading', () => {
     const productService = TestBed.inject(ProductsService);
 
-    // 2. IMPORTANT: Spy on the actual method the component calls.
-    // In your Article component it was 'getArticles'.
-    // Check if SegmentComponent calls 'getArticles' or 'getFeaturedProducts'.
     vi.spyOn(productService, 'getArticles').mockReturnValue(
       throwError(() => new Error('Service error')),
     );

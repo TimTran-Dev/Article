@@ -46,7 +46,6 @@ describe('errorInterceptor', () => {
 
     const req = httpMock.expectOne('/test');
 
-    // Simulate a 500 error
     req.flush('Error body', { status: 500, statusText });
 
     expect(mockToastService.show).toHaveBeenCalledWith(
@@ -64,7 +63,6 @@ describe('errorInterceptor', () => {
 
     const req = httpMock.expectOne('/test');
 
-    // Simulate a client-side network error
     const mockError = new ErrorEvent('Network error', {
       message: 'No internet connection',
     });
@@ -84,7 +82,6 @@ describe('errorInterceptor', () => {
 
     const req = httpMock.expectOne('/test');
 
-    // Simulate error where the API returns a specific message field
     req.flush({ message: 'User already exists' }, { status: 400, statusText: 'Bad Request' });
 
     expect(mockToastService.show).toHaveBeenCalledWith('User already exists', 'error');
