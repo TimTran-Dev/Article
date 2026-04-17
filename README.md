@@ -25,6 +25,7 @@ pnpm build             # Production build
 ```
 
 **Code quality checks:**
+
 ```bash
 pnpm lint && pnpm format:check && pnpm test -- --run
 ```
@@ -34,6 +35,7 @@ pnpm lint && pnpm format:check && pnpm test -- --run
 **Branch names:** `feature/X`, `hotfix/X`
 
 **Pull Request Process:**
+
 1. Fork and create branch from `main`
 2. Make changes with tests
 3. Run: `pnpm lint && pnpm format:check && pnpm test -- --run && pnpm build`
@@ -57,6 +59,7 @@ Version: [version.json](version.json)
 Run tests with: `pnpm test -- --run` or `pnpm test` (watch mode)
 
 **Best Practices:**
+
 1. Use mocks from `src/app/Mocks/` for services
 2. Test components and services independently
 3. Use Arrange-Act-Assert structure
