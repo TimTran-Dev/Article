@@ -1,82 +1,64 @@
 # Front-End App
 
-An Angular 21 front-end application using **pnpm**, **Vitest**, **ESLint**, **Prettier**, and **Husky**. This project enforces consistent code style, automated testing, code coverage, and version control.
+Angular 21 news and content management platform with article discovery, bookmarking, episode streaming, and user authentication.
 
 [![Build and Test](https://github.com/TimTran-Dev/Article/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/TimTran-Dev/Article/actions/workflows/ci.yml)
 ![Coverage](https://img.shields.io/badge/coverage-85%25-brightgreen)
 
----
+## What It Does
 
-## Table of Contents:
+📰 Article discovery, search & filtering • ❤️ Bookmarking & library • 🔐 Clerk authentication • 📺 Episodes & segments • 🎨 Theme management • ♿ Accessible
 
-- [Project Setup](#project-setup)
-- [Available Scripts](#available-scripts)
-- [Branching & PR Guidelines](#branching--pr-guidelines)
-- [Versioning](#versioning)
-- [Code Quality](#code-quality)
-- [Testing](#testing)
-- [Security](#security)
-- [Contributing](#contributing)
+## Tech Stack
 
----
+Angular 21 • TypeScript 5.9 (strict) • Vite • Vitest (85% coverage) • Tailwind CSS • Clerk • ESLint + Prettier
 
-## Project Setup:
+## Build & Development
 
-Clone the repository and install dependencies:
+**Requirements:** Node.js 20+ & pnpm 10+
 
 ```bash
-git clone <repo-url>
-cd front-end-app
-pnpm install
+pnpm install           # Install dependencies
+pnpm start             # Dev server (http://localhost:4200)
+pnpm test -- --run     # Run tests
+pnpm build             # Production build
 ```
 
----
-
-## Start development server:
-
+**Code quality checks:**
 ```bash
-pnpm start
+pnpm lint && pnpm format:check && pnpm test -- --run
 ```
 
-## Build the application:
+## Contributing
 
-```bash
-pnpm build
-```
+**Branch names:** `feature/X`, `hotfix/X`
 
-## Watch for development changes:
+**Pull Request Process:**
+1. Fork and create branch from `main`
+2. Make changes with tests
+3. Run: `pnpm lint && pnpm format:check && pnpm test -- --run && pnpm build`
+4. Bump version: `pnpm increment-version {patch|minor|major}`
+5. Open PR (1 approval required)
 
-```bash
-pnpm watch
-```
+## License
+
+MIT - see [LICENSE](LICENSE)
 
 ---
 
-## Branching & Pull Request Guidelines
+Version: [version.json](version.json)
 
-To maintain a consistent workflow and ensure proper versioning, please follow these branching and PR rules:
+## Testing
 
-### Branch Naming
+- **Framework:** Vitest 4.0 with jsdom
+- **Coverage:** 85% minimum required
+- **Mocks:** Factory functions in `src/app/Mocks/`
 
-- **Feature branches**:
+Run tests with: `pnpm test -- --run` or `pnpm test` (watch mode)
 
-Example: `feature/user-auth`
-
-- **Hotfix branches**:
-
-Example: `hotfix/login-bug`
-
-- **Protected branches**:
-- `main`
-- `feature/*`
-- `hotfix/*`
-
-### Pull Request Requirements
-
-1. PRs **must be created from a feature or hotfix branch**.
-2. Each PR **must include a version bump** in `version.json` (or `package.json` if applicable).  
-   Use the script:
-
-```bash
-pnpm increment-version {major|minor|patch}
-```
+**Best Practices:**
+1. Use mocks from `src/app/Mocks/` for services
+2. Test components and services independently
+3. Use Arrange-Act-Assert structure
+4. Write descriptive test names
+5. Proper TestBed setup and cleanup
