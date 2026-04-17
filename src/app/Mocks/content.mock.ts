@@ -15,7 +15,6 @@ export const mockDraftArticle: Article = {
   body: 'This is the main body content of the article.',
   imageUrl: 'https://example.com/image.jpg',
   content: 'Truncated preview content',
-  sourceId: 'manual',
   sourceName: 'Local Editor',
 };
 
@@ -47,7 +46,6 @@ export const mockMixedContent: ContentData[] = [
     body: 'Future tech insights...',
     imageUrl: 'https://tech.com/img.png',
     content: 'Future tech...',
-    sourceId: 'news-api',
     sourceName: 'Tech Daily',
   },
   {

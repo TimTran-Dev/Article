@@ -11,6 +11,7 @@ import { createArticleMock } from '../../../Mocks/article.mock';
 import { createToastServiceMock } from '../../../Mocks/toast.service.mock';
 import { createProductsServiceMock } from '../../../Mocks/product.service.mock';
 import { createNavigationServiceMock } from '../../../Mocks/nav.service.mock';
+import { createIntersectionObserverMock } from '../../../Mocks/intersectionObserver.mock';
 
 describe('NewsListComponent', () => {
   let component: NewsListComponent;
@@ -26,6 +27,8 @@ describe('NewsListComponent', () => {
   };
 
   beforeEach(async () => {
+    global.IntersectionObserver = createIntersectionObserverMock();
+
     mockProductService = createProductsServiceMock();
     mockToastService = createToastServiceMock();
     mockNavService = createNavigationServiceMock();
@@ -46,8 +49,9 @@ describe('NewsListComponent', () => {
     component = fixture.componentInstance;
   });
 
-  it('should create and initialize articles on init', () => {
+  it('should create and initialize articles on init', async () => {
     fixture.detectChanges();
+    await fixture.whenStable();
 
     expect(component.isLoading()).toBe(false);
     expect(component.articles().length).toBe(1);

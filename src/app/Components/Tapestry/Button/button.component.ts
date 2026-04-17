@@ -11,6 +11,7 @@ export class ButtonComponent {
   buttonText = input.required<string>();
   disabled = input<boolean>(false);
   variant = input<'primary' | 'secondary' | 'danger'>('secondary');
+  type = input<'button' | 'submit' | 'reset'>('button');
 
   protected buttonClasses = computed(() => {
     const baseClasses =

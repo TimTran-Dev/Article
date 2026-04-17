@@ -21,7 +21,7 @@ describe('BookmarkService', () => {
     content: 'Full Content',
     isBookmarked: true,
     publishedAt: '',
-    source: { id: 'tech-crunch', name: 'TechCrunch' },
+    sourceName: 'TechCrunch',
   };
 
   beforeEach(() => {
