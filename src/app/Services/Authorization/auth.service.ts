@@ -16,7 +16,7 @@ export class AuthService {
     const module = await import('@clerk/clerk-js');
 
     if (!this.clerk) {
-      this.clerk = new module.Clerk(environment.clearkKey) as Clerk;
+      this.clerk = new module.Clerk(environment.clerkKey) as Clerk;
     }
     await (this.clerk as Clerk & { load: () => Promise<void> }).load();
 
