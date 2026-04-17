@@ -26,7 +26,7 @@ describe('ProductsService', () => {
     content: 'Full content here',
     isBookmarked: false,
     publishedAt: '',
-    source: { id: 'cnn', name: 'CNN' },
+    sourceName: 'CNN',
   };
 
   beforeEach(() => {

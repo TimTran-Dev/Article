@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal, OnDestroy } from '@angular/core';
+import { Component, inject, OnInit, signal, OnDestroy, viewChild, ElementRef } from '@angular/core';
 import { trigger, transition, style, animate, query, stagger } from '@angular/animations';
 import { ArticleCardComponent } from '../Cards/article-card.component';
 import { ArticleSkeletonComponent } from '../Skeleton/article-skeleton.component';
@@ -60,14 +60,19 @@ export class NewsListComponent implements OnInit, OnDestroy {
 
   destroy$ = new Subject<void>();
 
+  sentinelElement = viewChild('sentinel', { read: ElementRef });
+  private intersectionObserver: IntersectionObserver | null = null;
+
   ngOnInit(): void {
     this.initializeArticles();
     this.setupSearchSubscription();
+    this.setupInfiniteScroll();
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+    this.intersectionObserver?.disconnect();
   }
 
   onSearch(event: Event): void {
@@ -119,7 +124,7 @@ export class NewsListComponent implements OnInit, OnDestroy {
     this.productService.deleteArticle(id).subscribe({
       next: () => {
         this.articles.update((items) => items.filter((a) => a.id !== id));
-        this.closeModal();
+        this.closeDeleteModal();
         this.toastService.show('Article removed', 'success');
       },
     });
@@ -178,7 +183,7 @@ export class NewsListComponent implements OnInit, OnDestroy {
     this.showModal.set(true);
   }
 
-  closeModal(): void {
+  closeDeleteModal(): void {
     this.showModal.set(false);
     this.articleToDeleteId.set(0);
   }
@@ -205,9 +210,9 @@ export class NewsListComponent implements OnInit, OnDestroy {
           this.articles.update((curr) => [...curr, ...newReactive]);
           this.currentPage.set(nextPage);
 
-          if (res.items.length < this.pageSize()) {
-            this.hasMore.set(false);
-          }
+          const totalLoaded = nextPage * this.pageSize();
+          this.hasMore.set(totalLoaded < res.totalCount);
+
           this.isLoadingMore.set(false);
         },
         error: () => this.isLoadingMore.set(false),
@@ -245,7 +250,6 @@ export class NewsListComponent implements OnInit, OnDestroy {
       author: getString('author'),
       body: getString('content'),
       imageUrl: getString('urlToImage'),
-      sourceId: getString('sourceId', 'manual'),
       sourceName: getString('sourceName', 'User Contributed'),
       content: getString('content'),
     };
@@ -272,5 +276,25 @@ export class NewsListComponent implements OnInit, OnDestroy {
         this.currentPage.set(1);
         this.initializeArticles();
       });
+  }
+
+  private setupInfiniteScroll(): void {
+    setTimeout(() => {
+      const sentinel = this.sentinelElement()?.nativeElement;
+      if (!sentinel) return;
+
+      this.intersectionObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting && this.hasMore() && !this.isLoadingMore()) {
+              this.loadMore();
+            }
+          });
+        },
+        { rootMargin: '100px' },
+      );
+
+      this.intersectionObserver.observe(sentinel);
+    });
   }
 }

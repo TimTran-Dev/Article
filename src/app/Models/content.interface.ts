@@ -22,7 +22,6 @@ export interface Article extends BaseContent {
   body: string;
   imageUrl: string | null;
   content: string;
-  sourceId: string;
   sourceName: string;
   isBookmarked?: boolean;
 }

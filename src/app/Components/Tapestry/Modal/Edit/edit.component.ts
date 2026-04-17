@@ -61,7 +61,6 @@ export class EditModalComponent {
           url: article.url || '',
           urlToImage: article.imageUrl || '',
           content: article.content || article.body || '',
-          sourceId: article.sourceId || '',
           sourceName: article.sourceName || '',
         });
       } else {

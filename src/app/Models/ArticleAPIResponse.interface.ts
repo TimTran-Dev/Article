@@ -4,10 +4,6 @@ export interface PaginatedArticleResponse {
 }
 
 export interface ArticleAPIResponse {
-  source: {
-    id: string | null;
-    name: string;
-  };
   id: number;
   author: string | null;
   title: string;
@@ -17,4 +13,5 @@ export interface ArticleAPIResponse {
   publishedAt: string;
   content: string | null;
   isBookmarked: boolean;
+  sourceName: string | null;
 }

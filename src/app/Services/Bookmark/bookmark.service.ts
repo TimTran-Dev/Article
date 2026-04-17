@@ -39,8 +39,7 @@ export class BookmarkService {
       body: item.description || '',
       content: item.content || '',
       imageUrl: item.urlToImage,
-      sourceId: item.source && item.source.id ? item.source.id : '',
-      sourceName: item.source && item.source.name ? item.source.name : 'Unknown Source',
+      sourceName: item.sourceName ?? 'Unknown Source',
       isBookmarked: item.isBookmarked,
     };
   }

@@ -84,8 +84,7 @@ export class ProductsService {
       imageUrl: apiItem.urlToImage,
       content: apiItem.content || '',
       isBookmarked: apiItem.isBookmarked ?? false,
-      sourceId: apiItem.source?.id || '',
-      sourceName: apiItem.source?.name || 'Unknown Source',
+      sourceName: apiItem.sourceName || 'Unknown Source',
     };
   }
 }

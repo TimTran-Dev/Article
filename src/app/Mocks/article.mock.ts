@@ -14,7 +14,6 @@ export const createArticleMock = (overrides: Partial<Article> = {}): Article => 
   imageUrl: 'https://test.com/image.png',
   url: 'https://test.com/article',
   content: 'Test Content',
-  sourceId: 'manual',
   sourceName: 'User Contributed',
   ...overrides,
 });
