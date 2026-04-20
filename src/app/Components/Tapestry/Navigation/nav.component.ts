@@ -74,6 +74,7 @@ export class NavComponent {
 
   shouldShowCreate = computed(() => {
     const url = this.currentUrl();
-    return url.startsWith('/articles');
+    const isLoggedIn = !!this.auth.user();
+    return isLoggedIn && url === '/my-articles';
   });
 }

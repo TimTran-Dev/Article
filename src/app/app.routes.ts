@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { HomePageComponent } from './Components/HomePage/homepage.component';
+import { authGuard } from './Guards/auth.guard';
 
 export const routes: Routes = [
   {
@@ -16,6 +17,14 @@ export const routes: Routes = [
       import('./Components/Articles/NewsList/news-list.component').then((m) => m.NewsListComponent),
   },
   {
+    path: 'my-articles',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./Components/MyArticles/my-articles/my-articles.component').then(
+        (m) => m.MyArticlesComponent,
+      ),
+  },
+  {
     path: 'segments',
     loadComponent: () =>
       import('./Components/Segments/segment.component').then((m) => m.SegmentComponent),
@@ -27,6 +36,7 @@ export const routes: Routes = [
   },
   {
     path: 'library',
+    canActivate: [authGuard],
     loadComponent: () =>
       import('./Components/MyLibrary/library.component').then((m) => m.LibraryComponent),
   },

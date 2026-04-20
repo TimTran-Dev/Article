@@ -2,13 +2,10 @@ import { Component, inject, OnInit, signal, OnDestroy, viewChild, ElementRef } f
 import { trigger, transition, style, animate, query, stagger } from '@angular/animations';
 import { ArticleCardComponent } from '../Cards/article-card.component';
 import { ArticleSkeletonComponent } from '../Skeleton/article-skeleton.component';
-import { Article, ReactiveArticle } from '../../../Models/content.interface';
+import { ReactiveArticle } from '../../../Models/content.interface';
 import { debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
 import { ProductsService } from '../../../Services/Products/products.service';
 import { ToastService } from '../../../Services/Toast/toast.service';
-import { NewsArticleCreateDto } from '../../../Models/NewsArticleCreate.interface';
-import { ModalComponent } from '../../Tapestry/Modal/Confirm/modal.component';
-import { EditModalComponent } from '../../Tapestry/Modal/Edit/edit.component';
 import { NavigationService } from '../../../Services/NavigationService/navigation.service';
 import { BookmarkService } from '../../../Services/Bookmark/bookmark.service';
 
@@ -32,7 +29,7 @@ import { BookmarkService } from '../../../Services/Bookmark/bookmark.service';
       ]),
     ]),
   ],
-  imports: [ArticleCardComponent, ArticleSkeletonComponent, ModalComponent, EditModalComponent],
+  imports: [ArticleCardComponent, ArticleSkeletonComponent],
 })
 export class NewsListComponent implements OnInit, OnDestroy {
   productService = inject(ProductsService);
@@ -43,12 +40,6 @@ export class NewsListComponent implements OnInit, OnDestroy {
   isLoading = signal(false);
   articles = signal<ReactiveArticle[]>([]);
   searchTerm = signal('');
-
-  selectedArticle = signal<Article | null>(null);
-  showEditModal = signal(false);
-  articleToDeleteId = signal(0);
-  showModal = signal(false);
-  isEditLoading = signal(false);
 
   currentPage = signal(1);
   pageSize = signal(10);
@@ -101,99 +92,6 @@ export class NewsListComponent implements OnInit, OnDestroy {
     });
   }
 
-  handleCreate(dto: NewsArticleCreateDto): void {
-    this.isEditLoading.set(true);
-
-    this.productService.createArticle(dto).subscribe({
-      next: () => {
-        this.toastService.show('Article created successfully!', 'success');
-        this.currentPage.set(1);
-        this.initializeArticles();
-        this.closeEditModal();
-      },
-      error: (err) => {
-        this.isEditLoading.set(false);
-        const message = err.status === 400 ? 'URL already exists.' : 'Creation failed.';
-        this.toastService.show(message, 'error');
-      },
-    });
-  }
-
-  handleDelete(): void {
-    const id = this.articleToDeleteId();
-    this.productService.deleteArticle(id).subscribe({
-      next: () => {
-        this.articles.update((items) => items.filter((a) => a.id !== id));
-        this.closeDeleteModal();
-        this.toastService.show('Article removed', 'success');
-      },
-    });
-  }
-
-  handleUpdate(dto: Article): void {
-    const id = dto.id;
-    this.isEditLoading.set(true);
-
-    const updateDto = {
-      ...dto,
-      url: dto.url ?? '',
-      urlToImage: dto.imageUrl ?? undefined,
-    };
-
-    this.productService.updateArticle(id, updateDto).subscribe({
-      next: () => {
-        this.articles.update((current) =>
-          current.map((item) => (item.id === id ? { ...item, ...dto } : item)),
-        );
-        this.toastService.show('Article updated successfully!', 'success');
-        this.closeEditModal();
-      },
-      error: () => {
-        this.isEditLoading.set(false);
-        this.toastService.show('Failed to save changes.', 'error');
-      },
-    });
-  }
-
-  handleFormSubmit(eventData: object): void {
-    const formData = eventData as Record<string, unknown>;
-    const current = this.selectedArticle();
-
-    if (current) {
-      const updatedArticle = this.mapFormToArticle(formData, current);
-      this.handleUpdate(updatedArticle);
-    } else {
-      const createDto = this.mapFormToDto(formData);
-      this.handleCreate(createDto);
-    }
-  }
-
-  openEditModal(article: Article): void {
-    this.selectedArticle.set(article);
-    this.showEditModal.set(true);
-  }
-
-  openCreateModal(): void {
-    this.selectedArticle.set(null);
-    this.showEditModal.set(true);
-  }
-
-  openDeleteModal(id: number): void {
-    this.articleToDeleteId.set(id);
-    this.showModal.set(true);
-  }
-
-  closeDeleteModal(): void {
-    this.showModal.set(false);
-    this.articleToDeleteId.set(0);
-  }
-
-  closeEditModal(): void {
-    this.showEditModal.set(false);
-    this.selectedArticle.set(null);
-    this.isEditLoading.set(false);
-  }
-
   loadMore(): void {
     const nextPage = this.currentPage() + 1;
     this.isLoadingMore.set(true);
@@ -237,35 +135,6 @@ export class NewsListComponent implements OnInit, OnDestroy {
           this.isLoading.set(false);
         },
       });
-  }
-
-  private mapFormToArticle(formData: Record<string, unknown>, existing: Article): Article {
-    const getString = (key: string, fallback = ''): string => String(formData[key] ?? fallback);
-
-    return {
-      ...existing,
-      description: getString('description'),
-      url: getString('url'),
-      title: getString('title'),
-      author: getString('author'),
-      body: getString('content'),
-      imageUrl: getString('urlToImage'),
-      sourceName: getString('sourceName', 'User Contributed'),
-      content: getString('content'),
-    };
-  }
-
-  private mapFormToDto(formData: Record<string, unknown>): NewsArticleCreateDto {
-    return {
-      title: String(formData['title'] ?? ''),
-      author: String(formData['author'] ?? ''),
-      description: String(formData['description'] ?? ''),
-      url: String(formData['url'] ?? ''),
-      urlToImage: String(formData['urlToImage'] ?? ''),
-      content: String(formData['content'] ?? ''),
-      sourceId: String(formData['sourceId'] ?? 'manual'),
-      sourceName: String(formData['sourceName'] ?? 'User Contributed'),
-    };
   }
 
   private setupSearchSubscription(): void {

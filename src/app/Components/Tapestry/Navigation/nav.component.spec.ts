@@ -2,29 +2,40 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NavComponent } from './nav.component';
 import { NavigationService } from '../../../Services/NavigationService/navigation.service';
 import { ThemeService } from '../../../Services/Theme/theme.service';
+import { AuthService } from '../../../Services/Authorization/auth.service';
 import { NavigationEnd, Router, Event, provideRouter } from '@angular/router';
 import { Subject } from 'rxjs';
+import { signal, Signal } from '@angular/core';
 import { createNavigationServiceMock } from '../../../Mocks/nav.service.mock';
 import { createThemeServiceMock, ThemeServiceMock } from '../../../Mocks/theme.service.mock';
 import { describe, it, expect, beforeEach } from 'vitest';
+import type { UserResource } from '@clerk/types';
 
 describe('NavComponent', () => {
   let component: NavComponent;
   let fixture: ComponentFixture<NavComponent>;
   let mockNavService: ReturnType<typeof createNavigationServiceMock>;
   let mockThemeService: ThemeServiceMock;
+  let mockAuthService: Partial<AuthService>;
+  let userSignal: Signal<UserResource | null>;
 
   const routerEventsSubject = new Subject<Event>();
 
   beforeEach(async () => {
     mockNavService = createNavigationServiceMock();
     mockThemeService = createThemeServiceMock();
+    userSignal = signal<UserResource | null>(null);
+    mockAuthService = {
+      user: userSignal,
+      getClerkInstance: () => null,
+    };
 
     await TestBed.configureTestingModule({
       imports: [NavComponent],
       providers: [
         { provide: NavigationService, useValue: mockNavService },
         { provide: ThemeService, useValue: mockThemeService },
+        { provide: AuthService, useValue: mockAuthService },
         provideRouter([]),
       ],
     }).compileComponents();
@@ -63,24 +74,43 @@ describe('NavComponent', () => {
   });
 
   describe('Menu Visibility (URL Driven)', () => {
-    it('should update shouldShowCreate based on URL events', () => {
+    it('should show create button only when logged in and on /my-articles', () => {
       expect(component.shouldShowCreate()).toBe(false);
 
-      const event = new NavigationEnd(1, '/articles', '/articles');
+      // Navigate to /my-articles but not logged in
+      const event = new NavigationEnd(1, '/my-articles', '/my-articles');
       routerEventsSubject.next(event);
       fixture.detectChanges();
+      expect(component.shouldShowCreate()).toBe(false);
 
+      // Now log in
+      userSignal.set({ id: '1' } as UserResource);
+      fixture.detectChanges();
       expect(component.shouldShowCreate()).toBe(true);
     });
 
-    it('should hide create button when navigating away from articles', () => {
+    it('should hide create button when on /articles even if logged in', () => {
+      // Log in first
+      userSignal.set({ id: '1' } as UserResource);
+      fixture.detectChanges();
+      expect(component.shouldShowCreate()).toBe(false);
+
+      // Navigate to /articles
       routerEventsSubject.next(new NavigationEnd(1, '/articles', '/articles'));
+      fixture.detectChanges();
+      expect(component.shouldShowCreate()).toBe(false);
+    });
+
+    it('should hide create button when navigating away from /my-articles', () => {
+      // Log in and navigate to /my-articles
+      userSignal.set({ id: '1' } as UserResource);
+      routerEventsSubject.next(new NavigationEnd(1, '/my-articles', '/my-articles'));
       fixture.detectChanges();
       expect(component.shouldShowCreate()).toBe(true);
 
+      // Navigate to /episodes
       routerEventsSubject.next(new NavigationEnd(2, '/episodes', '/episodes'));
       fixture.detectChanges();
-
       expect(component.shouldShowCreate()).toBe(false);
     });
   });

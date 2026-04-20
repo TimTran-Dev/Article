@@ -3,9 +3,11 @@
 >
   <header class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
     <div>
-      <h1 class="text-4xl font-black text-gray-900 dark:text-slate-100 tracking-tight">Articles</h1>
+      <h1 class="text-4xl font-black text-gray-900 dark:text-slate-100 tracking-tight">
+        My Articles
+      </h1>
       <p class="text-gray-500 dark:text-slate-400 text-lg mt-2">
-        Manage and review your newsroom content.
+        Manage and edit your created articles.
       </p>
     </div>
 
@@ -27,7 +29,7 @@
           type="text"
           [value]="searchTerm()"
           (input)="onSearch($event)"
-          placeholder="Search articles..."
+          placeholder="Search your articles..."
           class="w-full pl-11 pr-4 py-2.5 bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-2xl text-gray-900 dark:text-slate-100 placeholder-gray-400 dark:placeholder-slate-500 transition-all focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/30 focus:border-blue-500 focus:outline-none shadow-sm"
         />
       </div>
@@ -45,7 +47,9 @@
       @for (item of articles(); track item.id) {
         <app-article-card
           [article]="item"
-          [allowEditDelete]="false"
+          [allowEditDelete]="true"
+          (edit)="openEditModal($event)"
+          (delete)="openDeleteModal($event)"
           (bookmark)="handleBookmarkToggle($event)"
         />
       } @empty {
@@ -64,8 +68,16 @@
               />
             </svg>
           </div>
-          <p class="text-gray-900 dark:text-slate-100 font-bold text-xl">No articles found</p>
-          <p class="text-gray-500 dark:text-slate-500 mt-1">Try adjusting your search terms.</p>
+          <p class="text-gray-900 dark:text-slate-100 font-bold text-xl">No articles yet</p>
+          <p class="text-gray-500 dark:text-slate-500 mt-1">
+            Create your first article to get started.
+          </p>
+          <button
+            (click)="openCreateModal()"
+            class="mt-6 px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-2xl transition-colors"
+          >
+            Create Your First Article
+          </button>
         </div>
       }
     </div>
@@ -93,3 +105,15 @@
   }
   <div #sentinel class="h-4"></div>
 </div>
+
+@if (showModal()) {
+  <app-modal (confirmed)="handleDelete()" (cancelled)="closeDeleteModal()"></app-modal>
+}
+@if (showEditModal()) {
+  <app-edit-modal
+    [editArticle]="selectedArticle()"
+    [isLoading]="isEditLoading()"
+    (confirm)="handleFormSubmit($event)"
+    (closeModal)="closeEditModal()"
+  ></app-edit-modal>
+}
