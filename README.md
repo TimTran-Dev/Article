@@ -1,13 +1,13 @@
 # Front-End App
 
-Angular 21 news and content management platform with article discovery, bookmarking, episode streaming, and user authentication.
+Angular 21 news and content management platform with article discovery, bookmarking, and user authentication.
 
 [![Build and Test](https://github.com/TimTran-Dev/Article/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/TimTran-Dev/Article/actions/workflows/ci.yml)
 ![Coverage](https://img.shields.io/badge/coverage-85%25-brightgreen)
 
 ## What It Does
 
-📰 Article discovery, search & filtering • ❤️ Bookmarking & library • 🔐 Clerk authentication • 📺 Episodes & segments • 🎨 Theme management • ♿ Accessible
+📰 Article discovery, search & filtering • ❤️ Bookmarking & library • 🔐 Clerk authentication • 📺 Episodes & segments (TODO) • 🎨 Theme management • ♿ Accessible
 
 ## Tech Stack
 
