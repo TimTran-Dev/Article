@@ -82,38 +82,6 @@ describe('NewsListComponent', () => {
     });
   });
 
-  describe('Modal Management', () => {
-    it('should open delete modal and set article ID', () => {
-      const idToDelete = 99;
-      component.openDeleteModal(idToDelete);
-
-      expect(component.showModal()).toBe(true);
-      expect(component.articleToDeleteId()).toBe(idToDelete);
-    });
-
-    it('should remove article from list upon successful deletion', () => {
-      fixture.detectChanges();
-      const article = component.articles()[0];
-      component.articleToDeleteId.set(article.id);
-
-      mockProductService.deleteArticle.mockReturnValue(of(undefined));
-
-      component.handleDelete();
-
-      expect(mockProductService.deleteArticle).toHaveBeenCalledWith(article.id);
-      expect(component.articles().length).toBe(0);
-      expect(mockToastService.show).toHaveBeenCalledWith('Article removed', 'success');
-    });
-
-    it('should open edit modal and set selected article', () => {
-      const article = createArticleMock();
-      component.openEditModal(article);
-
-      expect(component.selectedArticle()).toEqual(article);
-      expect(component.showEditModal()).toBe(true);
-    });
-  });
-
   describe('Pagination', () => {
     it('should load more articles and append to existing list', () => {
       fixture.detectChanges();

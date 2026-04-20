@@ -13,6 +13,7 @@ import { AuthService } from '../../../Services/Authorization/auth.service';
 export class ArticleCardComponent {
   authService = inject(AuthService);
   article = input.required<Article>();
+  allowEditDelete = input<boolean>(false);
 
   edit = output<Article>();
   delete = output<number>();
