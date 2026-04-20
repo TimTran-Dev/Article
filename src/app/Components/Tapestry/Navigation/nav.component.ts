@@ -42,11 +42,6 @@ export class NavComponent {
     this.isMenuOpen.set(false);
   }
 
-  async checkToken(): Promise<void> {
-    const token = await this.auth.getToken();
-    console.log('Current JWT:', token);
-  }
-
   private mountUserButton(): void {
     const clerk = this.auth.getClerkInstance();
     const appearance = {
